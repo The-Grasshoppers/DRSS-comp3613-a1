@@ -98,4 +98,4 @@ def delete_student_action(student_id):
 @jwt_required()
 def get_all_student_reviews_action(student_id):
     reviews = get_all_student_reviews(student_id)
-    return jsonify(reviews)
+    return jsonify(reviews), 200

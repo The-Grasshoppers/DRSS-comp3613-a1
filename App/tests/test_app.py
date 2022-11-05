@@ -4,15 +4,17 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from App.main import create_app
 from App.database import create_db
 from App.models import User, Student, Review
-from App.controllers import (
+from App.controllers.auth import authenticate
+from App.controllers.user import (
     create_user,
     get_all_users,
     get_all_users_json,
-    authenticate,
     get_user,
     get_user_by_username,
     update_user,
     delete_user,
+)
+from App.controllers.student import (
     create_student,
     get_students_by_name,
     get_student,
@@ -20,6 +22,18 @@ from App.controllers import (
     get_all_students_json,
     update_student,
     delete_student,
+)
+
+from App.controllers.review import (
+    create_review,
+    update_review,
+    delete_review,
+    get_review,
+    get_review_json,
+    get_all_reviews,
+    get_all_reviews_json,
+    upvote_review,
+    downvote_review,
 )
 
 from wsgi import app
@@ -31,7 +45,7 @@ LOGGER = logging.getLogger(__name__)
    Unit Tests
 """
 
-
+# Unit tests for User model
 class UserUnitTests(unittest.TestCase):
     def test_new_user(self):
         user = User("bob", "bobpass")
@@ -71,6 +85,7 @@ class UserUnitTests(unittest.TestCase):
         assert user.check_password(password)
 
 
+# Unit tests for Student model
 class StudentUnitTests(unittest.TestCase):
     def test_new_student(self):
         student = Student("bob", "FST", "Computer Science")
@@ -114,6 +129,7 @@ class StudentUnitTests(unittest.TestCase):
             self.assertEqual(student.get_karma(), -1)
 
 
+# Unit tests for Review model
 class ReviewUnitTests(unittest.TestCase):
     def test_new_review(self):
         review = Review(1, 1, "good")
@@ -237,7 +253,7 @@ def empty_db():
     # os.unlink(os.getcwd() + "/App/test.db")
 
 
-# NOTE: intergration tests are supposed to run in a particular order but since we are using the unitest thing, it runs the test simulataneously which is a problem. Would have to figure out how to run them within a suite.
+# Integration tests for User model
 class UsersIntegrationTests(unittest.TestCase):
     def test_authenticate(self):
         user = create_user("bob", "bobpass")
@@ -275,6 +291,7 @@ class UsersIntegrationTests(unittest.TestCase):
         assert get_user(uid) is None
 
 
+# Integration tests for Student model
 class StudentIntegrationTests(unittest.TestCase):
     def test_create_student(self):
         test_student = create_student("bob", "fst", "cs")
@@ -290,6 +307,7 @@ class StudentIntegrationTests(unittest.TestCase):
         students_json = get_all_students_json()
         assert students_json == [student.to_json() for student in students]
 
+    # tests updating a student's name, programme and/or faculty
     def test_update_student(self):
         with self.subTest("Update name"):
             student = create_student("bob", "fst", "cs")
@@ -315,3 +333,42 @@ class StudentIntegrationTests(unittest.TestCase):
         sid = student.id
         delete_student(sid)
         assert get_student(sid) is None
+
+
+# Integration tests for Review model
+class ReviewIntegrationTests(unittest.TestCase):
+    def test_create_review(self):
+        test_review = create_review(1, 1, "good")
+        review = get_review(test_review.id)
+        assert test_review.text == review.text
+
+    def test_update_review(self):
+        test_review = create_review(1, 1, "good")
+        update_review(test_review.id, "bad")
+        assert get_review(test_review.id).text == "bad"
+
+    def test_delete_review(self):
+        test_review = create_review(1, 1, "good")
+        rid = test_review.id
+        delete_review(rid)
+        assert get_review(rid) is None
+
+    def test_get_review_json(self):
+        test_review = create_review(1, 1, "good")
+        review_json = get_review_json(test_review.id)
+        assert review_json == test_review.to_json()
+
+    def test_get_all_reviews_json(self):
+        reviews = get_all_reviews()
+        reviews_json = get_all_reviews_json()
+        assert reviews_json == [review.to_json() for review in reviews]
+
+    def test_upvote_review(self):
+        test_review = create_review(1, 1, "good")
+        upvote_review(test_review.id, 1)
+        assert get_review(test_review.id).get_num_upvotes() == 1
+
+    def test_downvote_review(self):
+        test_review = create_review(1, 1, "good")
+        downvote_review(test_review.id, 1)
+        assert get_review(test_review.id).get_num_downvotes() == 1

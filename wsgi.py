@@ -82,6 +82,7 @@ def user_tests_command(type):
     else:
         sys.exit(pytest.main(["-k", "App"]))
 
+
 @test.command("student", help="Run Student tests")
 @click.argument("type", default="all")
 def user_tests_command(type):
@@ -92,6 +93,7 @@ def user_tests_command(type):
     else:
         sys.exit(pytest.main(["-k", "App"]))
 
+
 @test.command("review", help="Run Student tests")
 @click.argument("type", default="all")
 def user_tests_command(type):
@@ -101,4 +103,6 @@ def user_tests_command(type):
         sys.exit(pytest.main(["-k", "ReviewIntegrationTests"]))
     else:
         sys.exit(pytest.main(["-k", "App"]))
+
+
 app.cli.add_command(test)

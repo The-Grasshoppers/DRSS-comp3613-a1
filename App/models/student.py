@@ -3,6 +3,7 @@ from App.database import db
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    schoold_id= db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     faculty = db.Column(db.String(100), nullable=False)
     programme = db.Column(db.String(100), nullable=False)
@@ -14,6 +15,7 @@ class Student(db.Model):
         self.name = name
         self.faculty = faculty
         self.programme = programme
+        self.schoold_id= schoold_id
 
     def get_karma(self):
         karma = 0
@@ -24,6 +26,7 @@ class Student(db.Model):
     def to_json(self):
         return {
             "id": self.id,
+            "school_id": self.school_id,
             "name": self.name,
             "faculty": self.faculty,
             "programme": self.programme,

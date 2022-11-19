@@ -49,21 +49,12 @@ def get_all_student_reviews(id):
 
 
 # Updates a student given their id, name, programme and faculty
-# If name, programme or faculty is None, it is not updated
-def update_student(id, name=None, programme=None, faculty=None):
-    student = Student.query.get(id)
-    if student:
-        if name:
-            student.name = name
-        if programme:
-            student.programme = programme
-        if faculty:
-            student.faculty = faculty
-        db.session.add(student)
-        db.session.commit()
-        return student
-    return None
-
+def update_student(admin_id, student_id, name,school_id, programme, faculty):
+    student = Student.query.get(student_id)
+    admin= Admin.query.get(admin_id)
+    if student and admin:
+        return admin.update_student(student, name, school_id, programme, faculty)
+    return False
 
 # Deletes a student given their id
 def delete_student(id):

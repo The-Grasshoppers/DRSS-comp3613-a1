@@ -18,7 +18,7 @@ class Admin (User):
         }
     
     #only admin can create Student objects
-    def create_student(name,school_id,faculty, programme):
+    def create_student(self,name,school_id,programme, faculty):
         try:
             new_student = Student(name=name, school_id=school_id, programme=programme, faculty=faculty)
             db.session.add(new_student)
@@ -26,5 +26,19 @@ class Admin (User):
             return new_student
         except Exception as e:
             print('Error creating student', e)
+            db.session.rollback()
+            return None
+    
+    def update_student(self, student, name, school_id, programme, faculty):
+        try:
+            student.name=name
+            student.school_id=school_id
+            student.programme=programme
+            student.faculty=faculty
+            db.session.add(student)
+            db.session.commit()
+            return student
+        except Exception as e:
+            print('Error updating student', e)
             db.session.rollback()
             return None

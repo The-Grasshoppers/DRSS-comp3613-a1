@@ -57,10 +57,10 @@ def update_student(admin_id, student_id, name,school_id, programme, faculty):
     return False
 
 # Deletes a student given their id
-def delete_student(id):
-    student = Student.query.get(id)
-    if student:
-        db.session.delete(student)
-        db.session.commit()
-        return True
+def delete_student(student_id, admin_id):
+    student = Student.query.get(student_id)
+    admin= Admin.query.get(admin_id)
+    if student and admin:
+        return admin.delete_student(student)
     return False
+    

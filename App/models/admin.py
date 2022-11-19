@@ -42,3 +42,13 @@ class Admin (User):
             print('Error updating student', e)
             db.session.rollback()
             return None
+
+def delete_student(self, student):
+    try:
+        db.session.delete(student)
+        db.session.commit()
+        return True
+    except Exception as e:
+        print('Error deleting student', e)
+        db.session.rollback()
+        return False

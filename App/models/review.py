@@ -5,19 +5,22 @@ from sqlalchemy.ext.mutable import MutableDict
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
     text = db.Column(db.String(1000), nullable=False)
-    votes = db.Column(MutableDict.as_mutable(JSON), nullable=False)
-
-    def __init__(self, user_id, student_id, text):
-        self.user_id = user_id
+    rating = db.Column(db.Integer, nullable=False)
+    votes = db.relationship(
+        "Vote", backref="review", lazy=True, cascade="all, delete-orphan"
+    )
+    
+    def __init__(self, staff_id, student_id, text, rating):
+        self.staff_id = staff_id
         self.student_id = student_id
         self.text = text
-        self.votes = {"num_upvotes": 0, "num_downvotes": 0}
-
+        self.rating= rating
+"""
     def vote(self, user_id, vote):
-        self.votes.update({user_id: vote})
+        self.votes.update({staff_id: vote})
         self.votes.update(
             {"num_upvotes": len([vote for vote in self.votes.values() if vote == "up"])}
         )
@@ -40,6 +43,7 @@ class Review(db.Model):
 
     def get_all_votes(self):
         return self.votes
+"""
 
     def to_json(self):
         return {
@@ -47,6 +51,7 @@ class Review(db.Model):
             "user_id": self.user_id,
             "student_id": self.student_id,
             "text": self.text,
+            "rating": self.rating,
             "karma": self.get_karma(),
             "num_upvotes": self.get_num_upvotes(),
             "num_downvotes": self.get_num_downvotes(),

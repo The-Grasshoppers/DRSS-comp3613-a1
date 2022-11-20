@@ -11,15 +11,8 @@ class User(db.Model):
 
     def __init__(self, username, password):
         self.username = username
-        self.set_password(password)
-"""
-    def is_admin(self):
-        return self.access == ACCESS["admin"]
-
-    def allowed(self, access_level):
-        return self.access >= access_level
-"""
-
+        self.set_password(password)     
+    
     def to_json(self):
         return {"id": self.id, "username": self.username}
 

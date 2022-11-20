@@ -1,15 +1,10 @@
 from flask import jsonify
-from App.models import Student
 from App.database import db
-from App.models import Admin
+from App.models import Student, Admin
 
 # Creates a new student given their name, programme and faculty
 # Commits the student to the database and returns the student
 def create_student(admin_id, name,school_id, programme, faculty):
-    """new_student = Student(name=name, programme=programme, faculty=faculty)
-    db.session.add(new_student)
-    db.session.commit()
-    """
     admin= Admin.query.get(admin_id)
     if admin:
         return admin.create_student(name,school_id,programme,faculty)

@@ -51,14 +51,14 @@ class Review(db.Model):
             elif (self.rating==5):  #neutral review
                 return (self.rating + self.get_num_upvotes() - self.get_num_downvotes())
         
-""" #simpler way of getting karma score
-        if not self.votes:  # if there are no votes the karma score for this review is 0
-            return 0    
-        if (self.rating>=5):    # positive review
-            return (self.get_num_upvotes - self.get_num_downvotes)  
-        else:   # negative review 
-            return (self.get_num_downvotes- self.get_num_upvotes)
-"""
+    """ #simpler way of getting karma score
+            if not self.votes:  # if there are no votes the karma score for this review is 0
+                return 0    
+            if (self.rating>=5):    # positive review
+                return (self.get_num_upvotes - self.get_num_downvotes)  
+            else:   # negative review 
+                return (self.get_num_downvotes- self.get_num_upvotes)
+    """
 
     def to_json(self):
         return {

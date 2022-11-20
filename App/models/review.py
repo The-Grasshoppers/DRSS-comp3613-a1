@@ -18,31 +18,46 @@ class Review(db.Model):
         self.student_id = student_id
         self.text = text
         self.rating= rating
-"""
-    def vote(self, user_id, vote):
-        self.votes.update({staff_id: vote})
-        self.votes.update(
-            {"num_upvotes": len([vote for vote in self.votes.values() if vote == "up"])}
-        )
-        self.votes.update(
-            {
-                "num_downvotes": len(
-                    [vote for vote in self.votes.values() if vote == "down"]
-                )
-            }
-        )
 
     def get_num_upvotes(self):
-        return self.votes["num_upvotes"]
+        if not self.votes:
+            return 0
+        num_upvotes=0
+        for vote in self.votes:
+            if (vote.value=="UPVOTE"):
+                num_upvotes= num_upvotes+1
+        return num_upvotes
+    
+    def get_num_downvotes (self):
+        if not self.votes:
+            return 0
+        num_downvotes=0
+        for vote in self.votes:
+            if (vote.value=="DOWNVOTE"):
+                num_downvotes=num_downvotes+1
+        return num_downvotes
 
-    def get_num_downvotes(self):
-        return self.votes["num_downvotes"]
-
-    def get_karma(self):
-        return self.get_num_upvotes() - self.get_num_downvotes()
-
-    def get_all_votes(self):
-        return self.votes
+    #for a positive or negative review: increases the weight of an upvote or downvote by 1 for each rating above 5 
+    #e.g  rating 6/4= +/- 1, rating 7/3= +/- 2, rating 8/2= +/- 3, rating 9/1= +/- 4, rating 10= +/- 5
+    #for positive reviews: karma= upvotes-downvotes + rating
+    #for negative reviews: karma= downvotes-upvotes + (rating-10) since the rating from a negative review should not increase karma
+    # if a review has no votes, it will still have karma from its rating     
+    def get_karma (self):
+        
+            if (self.rating>5): #positive review
+                return (self.rating + (self.rating-5)*self.get_num_upvotes() - (self.rating-5)*self.get_num_downvotes() )
+            elif (self.rating<5):   #negative review
+                return ((self.rating-10) - (5-self.rating)*self.get_num_upvotes() + (5-self.rating)*self.get_num_downvotes() )
+            elif (self.rating==5):  #neutral review
+                return (self.rating + self.get_num_upvotes() - self.get_num_downvotes())
+        
+""" #simpler way of getting karma score
+        if not self.votes:  # if there are no votes the karma score for this review is 0
+            return 0    
+        if (self.rating>=5):    # positive review
+            return (self.get_num_upvotes - self.get_num_downvotes)  
+        else:   # negative review 
+            return (self.get_num_downvotes- self.get_num_upvotes)
 """
 
     def to_json(self):

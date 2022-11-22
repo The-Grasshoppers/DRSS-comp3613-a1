@@ -71,3 +71,5 @@ class Review(db.Model):
             "num_upvotes": self.get_num_upvotes(),
             "num_downvotes": self.get_num_downvotes(),
         }
+
+        

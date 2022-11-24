@@ -12,7 +12,7 @@ class Staff (User):
         self.set_password(password)
         self.access = "staff"
 
-    def toJSON(self):
+    def to_json(self):
         return{
             'id': self.id,
             'username': self.username,

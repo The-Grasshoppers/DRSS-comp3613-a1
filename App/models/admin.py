@@ -10,7 +10,7 @@ class Admin (User):
         self.access = "admin"
     
 
-    def toJSON(self):
+    def to_json(self):
         return{
             'id': self.id,
             'username': self.username,

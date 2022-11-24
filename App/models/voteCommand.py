@@ -8,9 +8,8 @@ class Action (enum.Enum):
     DOWNVOTE= "downvote"
     REMOVE= "remove"
 
-class VoteCommand (Command, db.Model):
+class VoteCommand (Command):
     __tablename__ = 'voteCommand'
-    id= db.Column(db.Integer, primary_key=True)
     staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"), nullable=False)
     review_id = db.Column(db.Integer, db.ForeignKey("review.id"), nullable=False)
     action= db.Column(db.Enum(Action), nullable=False)
@@ -26,6 +25,14 @@ class VoteCommand (Command, db.Model):
         elif (self.action==Action.REMOVE):
             self.remove_vote()
 
+    def to_json(self):
+        return{
+            "id" : self.id,
+            "staff_id":self.staff_id,
+            "review_id":self.review_id,
+            "action":self.action
+        }
+
     #handles creating and updating a vote
     def vote(self):
         try:
@@ -37,7 +44,8 @@ class VoteCommand (Command, db.Model):
                     vote= Vote(staff_id= self.staff_id, review_id= self.review_id, vote_command_id=self.id, value=Value.DOWNVOTE)
                 db.session.add(vote)
                 db.session.commit()
-                return vote
+                print('Succesful vote')
+                return None
             else:   #if changing a vote
                 if (self.action==Action.UPVOTE):
                     vote.value= Value.UPVOTE
@@ -57,7 +65,8 @@ class VoteCommand (Command, db.Model):
             if vote:
                 db.session.delete(vote)
                 db.session.commit()
-                return True
+                print ('Vote removed')
+                return None
             else:
                 print('Error removing vote')
                 return False 

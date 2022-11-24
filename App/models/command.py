@@ -1,8 +1,8 @@
-from __future__ import annotations
-from abc import ABC, abstractmethod
+from App.database import db
 
-class Command (ABC):
-    
-    @abstractmethod
+class Command (db.Model):
+    __abstract__ = True
+    id= db.Column(db.Integer, primary_key=True)
+
     def execute(self) -> None:
         pass

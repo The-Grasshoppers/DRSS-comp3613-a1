@@ -36,6 +36,10 @@
     {% endwith %}
 
     <div class="container" id="content">
+      <div class="heading-container">
+        <div class="heading">{% block content-heading %}{% endblock %}</div>
+        {% block button %}{% endblock %}
+      </div>
       {% block content %}{% endblock %}
     </div>
 

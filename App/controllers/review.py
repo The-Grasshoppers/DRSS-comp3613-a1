@@ -1,19 +1,19 @@
-from App.models import Review, Student, User
+from App.models import Review, Student, User, Staff
 from App.database import db
 
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise
-def create_review(student_id, user_id, text):
-    user = User.query.get(user_id)
+def create_review(student_id, staff_id, text, rating):
+    staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
-    if user and student:
-        review = Review(user_id, student_id, text)
+    if staff and student:
+        review = Review(staff_id, student_id, text, rating)
         db.session.add(review)
         db.session.commit()
-        user.reviews.append(review)
+        staff.reviews.append(review)
         student.reviews.append(review)
-        db.session.add(user)
+        db.session.add(staff)
         db.session.add(student)
         db.session.commit()
         return review

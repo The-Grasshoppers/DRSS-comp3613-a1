@@ -165,10 +165,11 @@ app.cli.add_command(staff)
 review_cli = AppGroup('review', help="Review object commands")
 @review_cli.command("create", help="Create a review")
 @click.argument("student_id", default="1")
-@click.argument("user_id", default="1")
+@click.argument("staff_id", default="1")
 @click.argument("text", default="good")
-def create_review_command(student_id, user_id, text):
-    create_review(student_id, user_id, text)
+@click.argument("rating", default="6")
+def create_review_command(student_id, staff_id, text, rating):
+    create_review(student_id, staff_id, text, rating)
     print(f'review created!')
 
 
@@ -176,7 +177,10 @@ def create_review_command(student_id, user_id, text):
 def list_review_command():
     reviews = get_all_reviews()
     for review in reviews:
-        print(review.user_id)
+        print(review.staff_id)
+        print(review.student_id)
+        print(review.text)
+        print()
     
 
 app.cli.add_command(review_cli)

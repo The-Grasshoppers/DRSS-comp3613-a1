@@ -162,6 +162,25 @@ app.cli.add_command(staff)
 
 
 
+review_cli = AppGroup('review', help="Review object commands")
+@review_cli.command("create", help="Create a review")
+@click.argument("student_id", default="1")
+@click.argument("user_id", default="1")
+@click.argument("text", default="good")
+def create_review_command(student_id, user_id, text):
+    create_review(student_id, user_id, text)
+    print(f'review created!')
+
+
+@review_cli.command("list", help="Lists staff in the database")
+def list_review_command():
+    reviews = get_all_reviews()
+    for review in reviews:
+        print(review.user_id)
+    
+
+app.cli.add_command(review_cli)
+
 
 student_cli = AppGroup('student', help="Student object commands")
 @student_cli.command("create", help="Create a student")

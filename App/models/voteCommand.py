@@ -56,7 +56,7 @@ class VoteCommand (Command):
                 db.session.add(vote)
                 db.session.commit()
                 print ('Vote updated')
-                return vote
+                return None
         except Exception as e:
             print('Error creating vote', e)
             db.session.rollback()
@@ -72,8 +72,8 @@ class VoteCommand (Command):
                 print ('Vote removed')
                 return None
             else:
-                print('Error removing vote')
-                return False 
+                print('Vote not found')
+                return None 
         except Exception as e:
             print('Error removing vote', e)
             db.session.rollback()

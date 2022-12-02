@@ -81,32 +81,7 @@ def get_reviews_by_user(user_id):
     reviews = Review.query.filter_by(user_id=user_id).all()
     return reviews
 
-
-# Upvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def upvote_review(review_id, user_id):
-    review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "up")
-        db.session.add(review)
-        db.session.commit()
-        return review
-    return None
-
-
-# Downvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def downvote_review(review_id, user_id):
-    review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "down")
-        db.session.add(review)
-        db.session.commit()
-        return review
-    return None
-
+#Handles voting on a review, updating a vote and removing a vote
 def vote(review_id, staff_id, action):
     review = Review.query.get(review_id)
     staff= Staff.query.get(staff_id)
@@ -121,7 +96,7 @@ def vote(review_id, staff_id, action):
         else:
             return ('invalid action')
         
-        #checking for removing a vote
+        #checking for removing a vote. Will remove if an upvote is upvoted or a downvote is downvoted again
         vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
         if vote:
             if (((vote.value==Value.UPVOTE) and (action==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (action==Action.DOWNVOTE))):
@@ -131,8 +106,10 @@ def vote(review_id, staff_id, action):
         db.session.add(new_voteCommand)
         db.session.commit()
         new_voteCommand.execute()
-
-
+        return new_voteCommand.to_json()
+    
+    else:
+        return ('Must have a Staff account to vote')
 
 
 # Gets all votes for a review given the review id

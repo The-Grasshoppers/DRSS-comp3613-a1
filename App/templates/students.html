@@ -12,7 +12,18 @@
 
 {% block content %}
 <div class="cards-container">
-  <div class="card">Student</div>
+  {% for student in students %}
+  <div class="card">
+    <div class="card-content">Profile Picture</div>
+    <div class="card-content">{{student.name}}</div>
+    <div class="card-content">{{student.school_id}}</div>
+    <div class="card-content">{{student.programme}}</div>
+    <div class="card-content">{{student.get_karma()}}</div>
+    <div class="card-content">
+      <div>Add Review</div>
+      <div>See Reviews</div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-
 {% endblock %}

@@ -61,7 +61,7 @@ def get_admin(id):
 
 
 # Gets a staff by their id
-def get_staff():
+def get_staff(id):
     return Staff.query.get(id)
 
 

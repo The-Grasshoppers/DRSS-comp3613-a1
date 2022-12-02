@@ -1,6 +1,7 @@
-from App.models import Review, Student, User, Staff, VoteCommand
+from App.models import Review, Student, User, Staff, VoteCommand, Vote
 from App.database import db
-
+from App.models.vote import Value
+from App.models.voteCommand import Action
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise

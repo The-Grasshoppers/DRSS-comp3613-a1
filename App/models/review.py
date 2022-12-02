@@ -3,7 +3,7 @@ from App.database import db
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.ext.mutable import MutableDict
 from .vote import Vote, Value
-from .command import Command, Action
+from .command import Command
 
 
 class Review(db.Model):

@@ -21,7 +21,10 @@ class VoteCommand (Command):
         self.action=action
 
     def execute(self)  -> None:
-        self.vote()
+        if (self.action==Action.UPVOTE or self.action==Action.DOWNVOTE):
+            self.vote()
+        elif (self.action==Action.REMOVE):
+            self.remove_vote()
      
 
     def to_json(self):
@@ -32,7 +35,7 @@ class VoteCommand (Command):
             "action":self.action
         }
 
-    #handles creating, updating and removing a vote
+    #handles creating and updating a vote
     def vote(self):
         try:
             vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
@@ -44,30 +47,37 @@ class VoteCommand (Command):
                 db.session.add(vote)
                 db.session.commit()
                 print('Vote created')
-                #return None
-                return self.to_json
+                return None
             else:   #if changing a vote
-                if ((self.action==Action.UPVOTE) and (vote.value==Value.DOWNVOTE)):
+                if (self.action==Action.UPVOTE):
                     vote.value= Value.UPVOTE
-                    db.session.add(vote)
-                    db.session.commit()
-                    print ('Vote updated')
-                    return vote
-                elif ((self.action==Action.DOWNVOTE) and (vote.value==Value.UPVOTE)):
+                elif (self.action==Action.DOWNVOTE):
                     vote.value= Value.DOWNVOTE
-                    db.session.add(vote)
-                    db.session.commit()
-                    print ('Vote updated')
-                    return vote
-                #to remove a vote
-                elif (((self.action==Action.UPVOTE) and (vote.value==Value.UPVOTE)) or ((self.action==Action.DOWNVOTE) and (vote.value==Value.DOWNVOTE))):
-                    db.session.delete(vote)
-                    db.session.commit()
-                    print ('Vote removed')
-                    return None
+                db.session.add(vote)
+                db.session.commit()
+                print ('Vote updated')
+                return vote
         except Exception as e:
-            print('Error handling this vote', e)
+            print('Error creating vote', e)
             db.session.rollback()
             return None
+        
+    #removes a vote if it is already and upvote and the user upvotes again or it is already a downvote and the user downvotes again
+    def remove_vote(self):
+        try:
+            vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
+            if vote:
+                db.session.delete(vote)
+                db.session.commit()
+                print ('Vote removed')
+                return None
+            else:
+                print('Error removing vote')
+                return False 
+        except Exception as e:
+            print('Error removing vote', e)
+            db.session.rollback()
+            return None    
+
         
     

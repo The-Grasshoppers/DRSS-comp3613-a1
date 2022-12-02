@@ -6,7 +6,6 @@ import enum
 class Action (enum.Enum):
     UPVOTE= "upvote"
     DOWNVOTE= "downvote"
-    REMOVE= "remove"
 
 class VoteCommand (Command):
     __tablename__ = 'voteCommand'
@@ -47,32 +46,24 @@ class VoteCommand (Command):
                 print('Succesful vote')
                 return None
             else:   #if changing a vote
-                if (self.action==Action.UPVOTE):
+                if ((self.action==Action.UPVOTE) and (vote.value==Value.DOWNVOTE)):
                     vote.value= Value.UPVOTE
-                elif (self.action==Action.DOWNVOTE):
+                    db.session.add(vote)
+                    db.session.commit()
+                    return vote
+                elif ((self.action==Action.DOWNVOTE) and (vote.value==Value.UPVOTE)):
                     vote.value= Value.DOWNVOTE
-                db.session.add(vote)
-                db.session.commit()
-                return vote
+                    db.session.add(vote)
+                    db.session.commit()
+                    return vote
+                elif (((self.action==Action.UPVOTE) and (vote.value==Value.UPVOTE)) or ((self.action==Action.DOWNVOTE) and (vote.value==Value.DOWNVOTE))):
+                    db.session.delete(vote)
+                    db.session.commit()
+                    print ('Vote removed')
+                    return None
         except Exception as e:
-            print('Error creating vote', e)
+            print('Error handling this vote', e)
             db.session.rollback()
             return None
         
-    def remove_vote(self):
-        try:
-            vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
-            if vote:
-                db.session.delete(vote)
-                db.session.commit()
-                print ('Vote removed')
-                return None
-            else:
-                print('Error removing vote')
-                return False 
-        except Exception as e:
-            print('Error removing vote', e)
-            db.session.rollback()
-            return None    
-
     

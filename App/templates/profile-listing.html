@@ -1,10 +1,16 @@
-{% extends "layout.html"}
+{% extends "staff-navbar.html" %}
 
 {{ super() }}
 
+{% block button %}
+<div class="button">
+  <a href="/" class="waves-effect waves-light btn">{% block button_text %}{% endblock %}</a>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="cards-container">
-  <div class="card"></div>
+  <div class="card">Student</div>
 </div>
 
 {% endblock %}

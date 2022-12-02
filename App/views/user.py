@@ -50,6 +50,11 @@ def signup_action():
     return jsonify({"message": "User not created"}), 400
 
 
+# @user_views.route("/signup", methods=["POST"])
+# def signup():
+
+
+
 # Get all users route
 # Must be an admin to access this route
 @user_views.route("/api/users", methods=["GET"])

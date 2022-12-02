@@ -1,6 +1,9 @@
+#Invoker
 from App.database import db
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.ext.mutable import MutableDict
+from .vote import Vote, Value
+from .command import Command, Action
 
 
 class Review(db.Model):
@@ -24,7 +27,7 @@ class Review(db.Model):
             return 0
         num_upvotes=0
         for vote in self.votes:
-            if (vote.value=="UPVOTE"):
+            if (vote.value==Value.UPVOTE):
                 num_upvotes= num_upvotes+1
         return num_upvotes
     
@@ -33,7 +36,7 @@ class Review(db.Model):
             return 0
         num_downvotes=0
         for vote in self.votes:
-            if (vote.value=="DOWNVOTE"):
+            if (vote.value==Value.DOWNVOTE):
                 num_downvotes=num_downvotes+1
         return num_downvotes
 

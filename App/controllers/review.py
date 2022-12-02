@@ -1,4 +1,4 @@
-from App.models import Review, Student, User, Staff
+from App.models import Review, Student, User, Staff, VoteCommand
 from App.database import db
 
 
@@ -106,6 +106,33 @@ def downvote_review(review_id, user_id):
         db.session.commit()
         return review
     return None
+
+def vote(review_id, staff_id, action):
+    review = Review.query.get(review_id)
+    staff= Staff.query.get(staff_id)
+
+    if review and staff:
+
+        #converting string action to enum
+        if (action=="upvote"):
+            action=Action.UPVOTE    
+        elif (action=="downvote"):
+            action=Action.DOWNVOTE
+        else:
+            return ('invalid action')
+        
+        #checking for removing a vote
+        vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
+        if vote:
+            if (((vote.value==Value.UPVOTE) and (action==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (action==Action.DOWNVOTE))):
+                action=Action.REMOVE
+
+        new_voteCommand= VoteCommand(staff_id, review_id,action)
+        db.session.add(new_voteCommand)
+        db.session.commit()
+        new_voteCommand.execute()
+
+
 
 
 # Gets all votes for a review given the review id

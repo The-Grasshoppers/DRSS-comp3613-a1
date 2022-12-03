@@ -64,7 +64,7 @@ def update_review_action(review_id):
     review = get_review(review_id)
     if review:
         if current_identity.id == review.user_id or current_identity.is_admin():
-            update_review(review_id, text=data["text"])
+            update_review(review_id, text=data["text"], rating=data["rating"])
             return jsonify({"message": "post updated successfully"}), 200
         else:
             return jsonify({"error": "Access denied"}), 403

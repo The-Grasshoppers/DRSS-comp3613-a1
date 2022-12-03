@@ -66,7 +66,7 @@ class Review(db.Model):
     def to_json(self):
         return {
             "id": self.id,
-            "user_id": self.user_id,
+            "staff_id": self.staff_id,
             "student_id": self.student_id,
             "text": self.text,
             "rating": self.rating,

@@ -49,7 +49,7 @@ def get_review_action(review_id):
 def vote_action(review_id, action):
     data= request.json()
     message= vote(review_id, current_identity.id, action)
-    if(message=="Vote created" or message=="Vote updated" or message=="Vote removed"):
+    if((message=="Vote created") or (message=="Vote updated") or (message=="Vote removed")):
         return jsonify(message), 200
     else:
         return jsonify(message), 400

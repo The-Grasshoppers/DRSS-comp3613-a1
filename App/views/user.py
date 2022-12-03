@@ -71,7 +71,7 @@ def signup():
     if data["username"] and data["password"]:
         if get_staff_by_username(data["username"]):
             flash("Username taken.")
-            return render_template("signup.html")
+            return render_template("staff-signup.html")
         user = create_staff(
             username=data["username"], password=data["password"]
         )
@@ -79,7 +79,7 @@ def signup():
             flash("Account created!")
             return render_template("students.html")
     flash("Error: There was a problem creating your account")
-    return render_template("signup.html")
+    return render_template("staff-signup.html")
 
 
 # Get all users route

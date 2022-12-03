@@ -82,28 +82,14 @@ def get_user_action(user_id):
     return jsonify({"message": "User not found"}), 404
 
 
-# Delete user route
-# Must be an admin to access this route
-@user_views.route("/api/users/<int:user_id>", methods=["DELETE"])
-@jwt_required()
-def delete_user_action(user_id):
-    if not current_identity.is_admin():
-        return jsonify({"message": "Access denied"}), 403
-    user = get_user(user_id)
-    if user:
-        delete_user(user_id)
-        return jsonify({"message": "User deleted"}), 200
-    return jsonify({"message": "User not found"}), 404
-
-
 # Get user by access level route
 # Must be an admin to access this route
-@user_views.route("/api/users/access/<int:access_level>", methods=["GET"])
+@user_views.route("/api/users/access/<string:access>", methods=["GET"])
 @jwt_required()
-def get_user_by_access_action(access_level):
+def get_user_by_access_action(access):
     if not current_identity.is_admin():
         return jsonify({"message": "Access denied"}), 403
-    users = get_users_by_access(access_level)
+    users = get_users_by_access(access)
     if users:
         return jsonify([user.to_json() for user in users]), 200
     return jsonify({"message": "No users found"}), 404

@@ -2,8 +2,8 @@ from App.models import User, Staff, Admin
 from App.database import db
 
 
-# Creates a new user given their username, password and access level
-def create_user(username, password, access=1):
+# Creates a new user given their username, password and access 
+def create_user(username, password, access):
     new_user = User(username=username, password=password)
     try:
         db.session.add(new_user)

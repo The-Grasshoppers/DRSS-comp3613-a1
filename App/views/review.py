@@ -42,7 +42,7 @@ def get_review_action(review_id):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
-#Upvote, downvote or remove vote given review_id, current indetity and action
+#Upvote, downvote or remove vote given review_id, current identity and action
 #If the action is upvote and the review is already upvoted the action changes to remove vote, same for downvote
 #Only the staff can vote
 @review_views.route("/api/reviews/<int:review_id>/<string: action>", methods=["PUT"])

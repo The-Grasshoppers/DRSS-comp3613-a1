@@ -23,10 +23,11 @@ def create_review(student_id, staff_id, text, rating):
 
 # Updates a review given a review id and updated review text
 # Returns the review object as a json if successful, None otherwise
-def update_review(id, text):
+def update_review(id, text, rating):
     review = Review.query.get(id)
     if review:
         review.text = text
+        review.rating= rating
         db.session.add(review)
         db.session.commit()
         return review

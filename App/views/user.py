@@ -53,6 +53,19 @@ def staff_login():
     return render_template("staff-login.html")
 
 
+@user_views.route("/admin-login", methods=["POST", "GET"])
+def admin_login():
+    if request.method == "POST":
+        data = request.form
+        admin = get_admin_by_username(data["username"])
+        if admin and admin.check_password(data["password"]):
+            flash("Log in successful!")
+            login_user(admin, True)
+            return render_template("students.html")
+        flash("Incorrect login credentials.")
+    return render_template("admin-login.html")
+
+
 # Sign up route
 @user_views.route("/api/users", methods=["POST"])
 def signup_action():

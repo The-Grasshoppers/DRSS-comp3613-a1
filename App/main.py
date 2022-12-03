@@ -44,6 +44,10 @@ def loadConfig(app, config):
     for key, value in config.items():
         app.config[key] = config[key]
 
+login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 def create_app(config={}):
     app = Flask(__name__, static_url_path="/static")
@@ -57,6 +61,7 @@ def create_app(config={}):
     configure_uploads(app, photos)
     add_views(app, views)
     create_db(app)
+    login_manager.init_app(app)
     setup_jwt(app)
     app.app_context().push()
     return app

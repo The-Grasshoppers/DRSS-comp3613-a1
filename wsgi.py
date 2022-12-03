@@ -10,13 +10,14 @@ from App.controllers import (
     create_admin, 
     create_student,
     create_review,
-    create_voteCommand,
     get_all_users_json, 
     get_all_users,  
     get_all_admins,
     get_all_staff,
     get_all_reviews,
-    get_all_students
+    get_all_students,
+    get_review_votes,
+    vote_on_review,
 )
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -181,7 +182,7 @@ def list_review_command():
         print(review.staff_id)
         print(review.student_id)
         print(review.text)
-        print(review.votes)
+        print(get_review_votes(review.id))
     
 
 app.cli.add_command(review_cli)
@@ -214,9 +215,9 @@ vote_cli = AppGroup('vote', help="Vote object commands")
 @vote_cli.command("upvote", help="Create a vote")
 @click.argument("review_id", default="1")
 @click.argument("staff_id", default="1")
-def create_review_command(review_id, staff_id):
+def create_vote_command(review_id, staff_id):
     action = "upvote"
-    vote = create_voteCommand(review_id,staff_id,action)
+    vote = vote_on_review(review_id,staff_id,action)
     print(vote)
 
     

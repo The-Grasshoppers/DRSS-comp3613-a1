@@ -2,6 +2,7 @@ from App.models import Review, Student, User, Staff, VoteCommand, Vote
 from App.database import db
 from App.models.vote import Value
 from App.models.voteCommand import Action
+from App.controllers.vote import get_votes
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise
@@ -19,6 +20,7 @@ def create_review(student_id, staff_id, text, rating):
         db.session.commit()
         return review
     return None
+
 
 
 # Updates a review given a review id and updated review text
@@ -83,7 +85,7 @@ def get_reviews_by_user(user_id):
     return reviews
 
 #Handles voting on a review, updating a vote and removing a vote
-def vote(review_id, staff_id, action):
+def vote_on_review(review_id, staff_id, action):
     review = Review.query.get(review_id)
     staff= Staff.query.get(staff_id)
 
@@ -98,7 +100,7 @@ def vote(review_id, staff_id, action):
             return ('invalid action')
         
         #checking for removing a vote. Will remove if an upvote is upvoted or a downvote is downvoted again
-        vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
+        vote= Vote.query.filter_by(staff_id=staff_id, review_id=review_id).first()
         if vote:
             if (((vote.value==Value.UPVOTE) and (action==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (action==Action.DOWNVOTE))):
                 action=Action.REMOVE
@@ -117,8 +119,10 @@ def vote(review_id, staff_id, action):
 def get_review_votes(id):
     review = Review.query.get(id)
     if review:
-        return review.get_votes()
-    return None
+        votes = get_votes(id)
+        if votes:
+            return votes
+    return None 
 
 
 # Gets a review's karma given the review id
@@ -127,3 +131,5 @@ def get_review_karma(id):
     if review:
         return review.get_karma()
     return None
+
+

@@ -15,6 +15,10 @@ def create_student(admin_id, name,school_id, programme, faculty):
 def get_students_by_name(name):
     return Student.query.filter_by(name=name).all()
 
+# Gets a student by their school_id
+def get_students_by_name(school_id):
+    return Student.query.filter_by(school_id=school_id).all()
+
 
 # Gets a student by their id
 def get_student(id):

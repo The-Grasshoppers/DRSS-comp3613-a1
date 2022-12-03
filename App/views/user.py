@@ -50,9 +50,20 @@ def signup_action():
     return jsonify({"message": "User not created"}), 400
 
 
-# @user_views.route("/signup", methods=["POST"])
-# def signup():
-
+@user_views.route("/", methods=["POST"])
+def signup():
+    data = request.form
+    if get_user_by_username(data["username"]):
+        flash("Username taken.")
+        return render_template("signup.html")
+    user = create_user(
+        username=data["username"], password=data["password"]
+    )
+    if user:
+        flash("Account created!")
+        return render_template("students.html")
+    flash("Error: There was a problem creating your account")
+    return render_template("signup.html")
 
 
 # Get all users route

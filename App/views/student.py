@@ -23,12 +23,14 @@ def create_student_action():
     if current_identity.is_admin():
         data = request.json
         student = create_student(
-            name=data["name"], programme=data["programme"], faculty=data["faculty"]
+            name=data["name"], school_id=data["school_id"] ,programme=data["programme"], faculty=data["faculty"]
         )
         if student:
             return jsonify(student.to_json()), 201
         return jsonify({"error": "student not created"}), 400
     return jsonify({"error": "unauthorized"}), 401
+
+
 
 
 # Updates student given student id, name, programme and faculty
@@ -41,6 +43,7 @@ def update_student_action(student_id):
         student = update_student(
             student_id,
             name=data["name"],
+            school_id=data["school_id"],
             programme=data["programme"],
             faculty=data["faculty"],
         )

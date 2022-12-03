@@ -10,7 +10,9 @@ from App.controllers import (
     get_users_by_access,
     delete_user,
     get_staff_by_username,
-    login_user
+    login_user,
+    create_admin,
+    get_admin_by_username
 )
 
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
@@ -66,7 +68,7 @@ def signup_action():
 
 
 @user_views.route("/", methods=["POST"])
-def signup():
+def staff_signup():
     data = request.form
     if data["username"] and data["password"]:
         if get_staff_by_username(data["username"]):
@@ -80,6 +82,24 @@ def signup():
             return render_template("students.html")
     flash("Error: There was a problem creating your account")
     return render_template("staff-signup.html")
+
+
+@user_views.route("/admin-signup", methods=["POST", "GET"])
+def admin_signup():
+    if request.method == "POST":
+        data = request.form
+        if data["username"] and data["password"]:
+            if get_admin_by_username(data["username"]):
+                flash("Username taken.")
+                return render_template("admin-signup.html")
+            user = create_admin(
+                username=data["username"], password=data["password"]
+            )
+            if user:
+                flash("Account created!")
+                return render_template("students.html")
+        flash("Error: There was a problem creating your account")
+    return render_template("admin-signup.html")
 
 
 # Get all users route

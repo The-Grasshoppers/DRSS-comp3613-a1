@@ -18,7 +18,7 @@ review_views = Blueprint("review_views", __name__, template_folder="../templates
 def create_review_action():
     data = request.json
     review = create_review(
-        user_id=data["user_id"], student_id=data["student_id"], text=data["text"]
+        student_id=data["student_id"],staff_id=data["staff_id"],  text=data["text"], rating=data["rating"]
     )
     if review:
         return jsonify(review.to_json()), 201

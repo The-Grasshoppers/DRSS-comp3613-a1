@@ -36,6 +36,14 @@ def identify_user_action():
     )
 
 
+# Log in route
+@user_views.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "POST":
+        return render_template("signup.html")
+    return render_template("login.html")
+
+
 # Sign up route
 @user_views.route("/api/users", methods=["POST"])
 def signup_action():

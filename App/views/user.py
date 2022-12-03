@@ -1,15 +1,15 @@
-from flask import Blueprint, render_template, jsonify, request, send_from_directory
+from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash
 from flask_jwt import jwt_required, current_identity
 
 
 from App.controllers import (
-    create_user,
+    create_staff,
     get_user,
     get_all_users,
     get_all_users_json,
     get_users_by_access,
     delete_user,
-    get_user_by_username,
+    get_staff_by_username,
 )
 
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
@@ -53,15 +53,16 @@ def signup_action():
 @user_views.route("/", methods=["POST"])
 def signup():
     data = request.form
-    if get_user_by_username(data["username"]):
-        flash("Username taken.")
-        return render_template("signup.html")
-    user = create_user(
-        username=data["username"], password=data["password"]
-    )
-    if user:
-        flash("Account created!")
-        return render_template("students.html")
+    if data["username"] and data["password"]:
+        if get_staff_by_username(data["username"]):
+            flash("Username taken.")
+            return render_template("signup.html")
+        user = create_staff(
+            username=data["username"], password=data["password"]
+        )
+        if user:
+            flash("Account created!")
+            return render_template("students.html")
     flash("Error: There was a problem creating your account")
     return render_template("signup.html")
 

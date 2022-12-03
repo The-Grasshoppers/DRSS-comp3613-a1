@@ -30,6 +30,26 @@ def create_student_action():
     return jsonify({"error": "unauthorized"}), 401
 
 
+@student_views.route("/add-student", methods=["POST", "GET"])
+@jwt_required()
+def create_student():
+    if request.method == "POST":
+        if current_identity.access == "admin":
+            data = request.form
+            if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
+                student = create_student(
+                    admin_id=current_identity.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
+                )
+                if student:
+                    flash("Student successfully added!")
+                    return render_template("admin-students.html")
+            flash("Error: There was a problem adding the student.")
+            return render_template("add-student.html")
+        flash("You are unauthorized to perform this action.")
+        return jsonify({"error": "unauthorized"}), 401
+    return render_template("add-student.html")
+
+
 # Updates student given student id, name, programme and faculty
 # Must be an admin to access this route
 @student_views.route("/api/students/<int:student_id>", methods=["PUT"])

@@ -48,7 +48,7 @@ def staff_login():
         if staff and staff.check_password(data["password"]):
             flash("Log in successful!")
             login_user(staff, True)
-            return render_template("students.html")
+            return render_template("staff-students.html")
         flash("Incorrect login credentials.")
     return render_template("staff-login.html")
 
@@ -61,7 +61,7 @@ def admin_login():
         if admin and admin.check_password(data["password"]):
             flash("Log in successful!")
             login_user(admin, True)
-            return render_template("students.html")
+            return render_template("admin-students.html")
         flash("Incorrect login credentials.")
     return render_template("admin-login.html")
 
@@ -92,7 +92,7 @@ def staff_signup():
         )
         if user:
             flash("Account created!")
-            return render_template("students.html")
+            return render_template("staff-students.html")
     flash("Error: There was a problem creating your account")
     return render_template("staff-signup.html")
 
@@ -110,7 +110,7 @@ def admin_signup():
             )
             if user:
                 flash("Account created!")
-                return render_template("students.html")
+                return render_template("admin-students.html")
         flash("Error: There was a problem creating your account")
     return render_template("admin-signup.html")
 

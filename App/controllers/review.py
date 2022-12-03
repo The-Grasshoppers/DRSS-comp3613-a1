@@ -106,9 +106,8 @@ def vote(review_id, staff_id, action):
         new_voteCommand= VoteCommand(staff_id, review_id,action)
         db.session.add(new_voteCommand)
         db.session.commit()
-        new_voteCommand.execute()
-        return new_voteCommand.to_json()
-    
+        message = new_voteCommand.execute()
+        return message
     else:
         return ('Must have a Staff account to vote')
 

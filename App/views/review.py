@@ -64,6 +64,12 @@ def downvote_review_action(review_id):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
+@review_views.route("/api/reviews/<int:review_id>/<string: action>", methods=["PUT"])
+def vote_action(review_id, action):
+    data= request.json()
+    message= vote(review_id, current_identity.id, action)
+    return jsonify(message)
+
 
 # Updates post given post id and new text
 # Only admins or the original reviewer can edit a review

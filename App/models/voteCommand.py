@@ -46,8 +46,7 @@ class VoteCommand (Command):
                     vote= Vote(staff_id= self.staff_id, review_id= self.review_id, vote_command_id=self.id, value=Value.DOWNVOTE)
                 db.session.add(vote)
                 db.session.commit()
-                print('Vote created')
-                return None
+                return ("Vote created")
             else:   #if changing a vote
                 if (self.action==Action.UPVOTE):
                     vote.value= Value.UPVOTE
@@ -55,12 +54,11 @@ class VoteCommand (Command):
                     vote.value= Value.DOWNVOTE
                 db.session.add(vote)
                 db.session.commit()
-                print ('Vote updated')
-                return None
+                return ("Vote updated")
         except Exception as e:
             print('Error creating vote', e)
             db.session.rollback()
-            return None
+            return ("Error creating vote")
         
     #removes a vote if it is already and upvote and the user upvotes again or it is already a downvote and the user downvotes again
     def remove_vote(self):
@@ -69,15 +67,13 @@ class VoteCommand (Command):
             if vote:
                 db.session.delete(vote)
                 db.session.commit()
-                print ('Vote removed')
-                return None
+                return ("Vote removed")
             else:
-                print('Vote not found')
-                return None 
+                return("Vote not found") 
         except Exception as e:
             print('Error removing vote', e)
             db.session.rollback()
-            return None    
+            return ("Error removing vote")   
 
         
     

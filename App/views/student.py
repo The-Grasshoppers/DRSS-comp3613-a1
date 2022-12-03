@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt import jwt_required, current_identity
+from flask import Flask, redirect, render_template, jsonify, request, send_from_directory, flash, url_for
 
 from App.controllers import (
     create_student,
@@ -84,13 +85,33 @@ def get_student_by_name_action(name):
     return jsonify({"error": "student not found"}), 404
 
 # Gets a student given their school_id
-@student_views.route("/api/students/name/<string:school_id>", methods=["GET"])
+@student_views.route("/api/students/school_id/<string:school_id>", methods=["GET"])
 @jwt_required()
 def get_student_by_school_id_action(school_id):
     students = get_students_by_school_id(school_id)
     if students:
         return jsonify([student.to_json() for student in students]), 200
     return jsonify({"error": "student not found"}), 404
+
+#Search Students
+@student_views.route("/students/search/val", methods=["GET"])
+@jwt_required()
+def search():
+    students=[]
+    student=get_student(val)
+    if student:
+        students.append(student)
+    groupA= get_students_by_name(val)
+    for student in groupA:
+        students.append(student)
+    groupB= get_students_by_school_id(val)
+    for student in groupB:
+        students.append(student)
+    if students:
+        return render_template('students.html', students=students)
+    else:
+        flash("No student found")
+
 
 
 # Lists all reviews for a given student.

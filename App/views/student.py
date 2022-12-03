@@ -83,19 +83,6 @@ def get_student_by_name_action(name):
     return jsonify({"error": "student not found"}), 404
 
 
-# Deletes a student given student id
-# Must be an admin to access this route
-@student_views.route("/api/students/<int:student_id>", methods=["DELETE"])
-@jwt_required()
-def delete_student_action(student_id):
-    if current_identity.is_admin():
-        outcome = delete_student(student_id)
-        if outcome:
-            return jsonify({"message": "student deleted"}), 200
-        return jsonify({"error": "student not deleted"}), 400
-    return jsonify({"error": "unauthorized"}), 401
-
-
 # Lists all reviews for a given student.
 @student_views.route("/api/students/<int:student_id>/reviews", methods=["GET"])
 @jwt_required()

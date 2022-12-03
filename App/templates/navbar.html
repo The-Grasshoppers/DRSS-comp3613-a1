@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{{ super() }}
+
+{% block links %}
+<div class="nav-wrapper">
+  <ul id="nav-mobile" class="left">
+      <li><a href="/login">Log In</a></li>
+      <li><a href="/staff-signup">Staff Sign Up</a></li>
+      <li><a href="/admin-signup">Admin Sign Up</a></li>
+  </ul>
+</div>
+{% endblock %}

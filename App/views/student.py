@@ -8,7 +8,6 @@ from App.controllers import (
     get_students_by_name,
     get_all_student_reviews,
     update_student,
-    delete_student,
 )
 
 

@@ -1,0 +1,11 @@
+{% extends "form.html" %}
+
+{{ super() }}
+
+{% block title %}Staff Log In | Student Conduct Tracker{% endblock %}
+{% block form_action %}"{{ url_for("user_views.staff_login")}}"{% endblock %}
+{% block form_heading %}Staff Log In{% endblock %}
+{% block button_text %}Log In{% endblock %}
+{% block question %}Don't have an account?{% endblock %}
+{% block question_link %}"/staff-signup"{% endblock %}
+{% block link_text %}Create an account.{% endblock %}

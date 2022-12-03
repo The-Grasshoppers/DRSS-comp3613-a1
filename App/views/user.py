@@ -40,8 +40,8 @@ def identify_user_action():
 
 
 # Log in route
-@user_views.route("/login", methods=["POST", "GET"])
-def login():
+@user_views.route("/staff-login", methods=["POST", "GET"])
+def staff_login():
     if request.method == "POST":
         data = request.form
         staff = get_staff_by_username(data["username"])
@@ -50,7 +50,7 @@ def login():
             login_user(staff, True)
             return render_template("students.html")
         flash("Incorrect login credentials.")
-    return render_template("login.html")
+    return render_template("staff-login.html")
 
 
 # Sign up route

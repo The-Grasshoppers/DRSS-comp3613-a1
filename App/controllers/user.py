@@ -118,11 +118,8 @@ def update_user(id, username):
         return db.session.commit()
     return None
 
+def is_staff(id):
+    return Staff.query.get(id) != None
 
-# Deletes a user given their id
-def delete_user(id):
-    user = get_user(id)
-    if user:
-        db.session.delete(user)
-        return db.session.commit()
-    return None
+def is_admin(id):
+    return Admin.query.get(id) != None

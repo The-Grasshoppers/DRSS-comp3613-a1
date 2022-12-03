@@ -10,6 +10,7 @@ from App.controllers import (
     get_users_by_access,
     delete_user,
     get_staff_by_username,
+    login_user
 )
 
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
@@ -40,7 +41,13 @@ def identify_user_action():
 @user_views.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        return render_template("signup.html")
+        data = request.form
+        staff = get_staff_by_username(data["username"])
+        if staff and staff.check_password(data["password"]):
+            flash("Log in successful!")
+            login_user(staff, True)
+            return render_template("students.html")
+        flash("Incorrect login credentials.")
     return render_template("login.html")
 
 

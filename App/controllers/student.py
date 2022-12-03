@@ -16,7 +16,7 @@ def get_students_by_name(name):
     return Student.query.filter_by(name=name).all()
 
 # Gets a student by their school_id
-def get_students_by_name(school_id):
+def get_students_by_school_id(school_id):
     return Student.query.filter_by(school_id=school_id).all()
 
 

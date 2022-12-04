@@ -400,38 +400,39 @@ class StudentIntegrationTests(unittest.TestCase):
 
 
 # Integration tests for Review model
- #class ReviewIntegrationTests(unittest.TestCase):
+class ReviewIntegrationTests(unittest.TestCase):
     
-    # def test_create_review(self):
-    #     test_review = create_review(1, 1, "good")
-    #     review = get_review(test_review.id)
-    #     assert test_review.text == review.text
+    def test_create_review(self):
+        test_review = create_review(1, 1, "good", 5)
+        review = get_review(test_review.id)
+        assert test_review.text == review.text
 
-    # def test_update_review(self):
-    #     test_review = create_review(1, 1, "good")
-    #     update_review(test_review.id, "bad")
-    #     assert get_review(test_review.id).text == "bad"
+    def test_update_review(self):
+        test_review = create_review(1, 1, "good", 5)
+        update_review(test_review.id, "bad")
+        assert get_review(test_review.id).text == "bad"
 
-    # def test_delete_review(self):
-    #     test_review = create_review(1, 1, "good")
-    #     rid = test_review.id
-    #     delete_review(rid)
-    #     assert get_review(rid) is None
+    def test_delete_review(self):
+        test_review = create_review(1, 1, "good", 5)
+        rid = test_review.id
+        delete_review(rid)
+        assert get_review(rid) is None
 
-    # def test_get_review_json(self):
-    #     test_review = create_review(1, 1, "good")
-    #     review_json = get_review_json(test_review.id)
-    #     assert review_json == test_review.to_json()
+    def test_get_review_json(self):
+        test_review = create_review(1, 1, "good", 5)
+        review_json = get_review_json(test_review.id)
+        assert review_json == test_review.to_json()
 
-    # def test_get_all_reviews_json(self):
-    #     reviews = get_all_reviews()
-    #     reviews_json = get_all_reviews_json()
-    #     assert reviews_json == [review.to_json() for review in reviews]
+    def test_get_all_reviews_json(self):
+        reviews = get_all_reviews()
+        reviews_json = get_all_reviews_json()
+        assert reviews_json == [review.to_json() for review in reviews]
 
-    # def test_upvote_review(self):
-    #     test_review = create_review(1, 1, "good")
-    #     upvote_review(test_review.id, 1)
-    #     assert get_review(test_review.id).get_num_upvotes() == 1
+    def test_upvote_review(self):
+        test_staff = Staff("bob", "bobpass")
+        test_review = create_review(1, 1, "good", 5)
+        vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+        assert get_review(test_review.id).get_num_upvotes() == 1
 
     # def test_downvote_review(self):
     #     test_review = create_review(1, 1, "good")

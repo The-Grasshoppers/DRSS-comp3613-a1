@@ -12,12 +12,19 @@ from App.controllers.user import (
     get_admin_by_username,
     get_staff_by_username,
     get_all_users,
+    get_all_admins,
     get_all_admins_json,
     get_all_staff_json,
     get_user,
+    get_admin,
+    get_staff,
     get_user_by_username,
     update_user,
+    update_admin,
+    update_staff,
     delete_user,
+    delete_admin,
+    delete_staff
 )
 from App.controllers.student import (
     create_student,
@@ -291,94 +298,104 @@ def empty_db():
 
 
 
-# Integration tests for User model
-#class UsersIntegrationTests(unittest.TestCase):
-    #when this is uncommented, it breaks the db
+#Integration tests for User model
+class UsersIntegrationTests(unittest.TestCase):
+    #delete the temp and test db before running each time
 
-    # def test_create_admin(self):
-    #     test_admin = create_admin("rick", "rickpass")
-    #     admin = get_admin_by_username("rick")
-    #     assert test_admin.username == admin.username and admin.access == "admin"
+    def test_create_admin(self):
+        test_admin = create_admin("rick", "rickpass")
+        admin = get_admin_by_username("rick")
+        assert test_admin.username == admin.username and admin.access == "admin"
 
-    # def test_create_staff(self):
-    #     test_staff = create_staff("john", "johnpass")
-    #     staff = get_staff(1)
-    #     assert staff.username == "john" and staff.access =="staff"
+    def test_create_staff(self):
+        test_staff = create_staff("rick", "rickpass")
+        staff = get_staff_by_username("rick")
+        assert staff.username == "rick" and staff.access =="staff"
 
-    # def test_get_admin(self):
-    #     test_admin = create_admin("rick", "rickpass")
-    #     admin = get_admin_by_username("rick")
-    #     assert test_admin.username == admin.username
+    def test_get_admin(self):
+        test_admin = create_admin("joe","joepass")
+        admin = get_admin_by_username("joe")
+        assert test_admin.username == admin.username
 
-    # def test_get_staff(self):
-    #     test_admin = create_admin("rick", "rickpass")
-    #     user = get_staff(1)
-    #     assert test_staff.username == user.username
+    def test_get_staff(self):
+        test_staff = create_staff("joe", "joepass")
+        user = get_staff_by_username("joe")
+        assert test_staff.username == user.username
 
-    # def test_get_all_admins_json(self):
-    #     admins = get_all_admins()
-    #     admins_json = get_all_admins_json()
-    #     assert admins_json == [admin.to_json() for admin in admins]
+    def test_get_all_admins_json(self):
+        admins = get_all_admins()
+        admins_json = get_all_admins_json()
+        assert admins_json == [admin.to_json() for admin in admins]
 
-    # def test_update_user(self):
-    #     user = create_user("danny", "johnpass", 1)
-    #     update_user(user.id, "daniel")
-    #     assert get_user(user.id).username == "daniel"
+    def test_update_admin(self):
+        admin = create_admin("kyle","pass")
+        update_admin(admin.id, "Daniel")
+        assert get_admin(admin.id).username == "Daniel"
 
-    # def test_delete_user(self):
-    #     user = create_user("bobby", "bobbypass", 1)
-    #     uid = user.id
-    #     delete_user(uid)
-    #     assert get_user(uid) is None
+    def test_update_staff(self):
+        staff = create_staff("kyle","pass")
+        update_staff(staff.id, "Daniel")
+        assert get_staff(staff.id).username == "Daniel"
+
+    def test_delete_admin(self):
+        admin = create_admin("rob", "robpass")
+        aid = admin.id
+        delete_admin(aid)
+        assert get_admin(aid) is None
+    
+    def test_delete_staff(self):
+        staff = create_staff("rob", "robpass")
+        sid = staff.id
+        delete_staff(sid)
+        assert get_staff(sid) is None
 
 
 
 
 
 # Integration tests for Student model
-#class StudentIntegrationTests(unittest.TestCase):
+class StudentIntegrationTests(unittest.TestCase):
     
-    # def test_create_student(self):
-    #     test_admin = create_admin("rick", "rickpass")
-    #     test_student = create_student(1, "billy", 1,"CS","FST")
-    #     student = get_student(1)
-    #     assert test_student.name == student.name
+    def test_create_student(self):
+        test_student = create_student(1, "billy", 1,"CS","FST")
+        student = get_student(1)
+        assert "billy" == student.name
 
-    # def test_get_students_by_name(self):
-    #     students = get_students_by_name("billy")
-    #     assert students[0].name == "billy"
+    def test_get_students_by_name(self):
+        students = get_students_by_name("billy")
+        assert students[0].name == "billy"
 
-    # def test_get_all_students_json(self):
-    #     students = get_all_students()
-    #     students_json = get_all_students_json()
-    #     assert students_json == [student.to_json() for student in students]
+    def test_get_all_students_json(self):
+        students = get_all_students()
+        students_json = get_all_students_json()
+        assert students_json == [student.to_json() for student in students]
 
     # # tests updating a student's name, programme and/or faculty
-    # def test_update_student(self):
-    #     with self.subTest("Update name"):
-    #         student = create_student("bob", "fst", "cs")
-    #         update_student(student.id, "bobby")
-    #         assert get_student(student.id).name == "bobby"
-    #     with self.subTest("Update programme"):
-    #         student = create_student("bob", "fst", "cs")
-    #         update_student(student.id, programme="it")
-    #         assert get_student(student.id).programme == "it"
-    #     with self.subTest("Update faculty"):
-    #         student = create_student("bob", "fst", "cs")
-    #         update_student(student.id, faculty="fss")
-    #         assert get_student(student.id).faculty == "fss"
-    #     with self.subTest("Update all"):
-    #         student = create_student("bob", "fst", "cs")
-    #         update_student(student.id, "bobby", "it", "fss")
-    #         assert get_student(student.id).name == "bobby"
-    #         assert get_student(student.id).programme == "it"
-    #         assert get_student(student.id).faculty == "fss"
+    def test_update_student(self):
+        with self.subTest("Update name"):
+            test_student = create_student(1, "billy", 1,"CS","FST")
+            update_student(1, test_student.id, "bobby", 1, "CS", "FST")
+            assert get_student(test_student.id).name == "bobby"
+        with self.subTest("Update programme"):
+            test_student = create_student(1, "billy", 1,"CS","FST")
+            update_student(1, test_student.id, test_student.name, 1, "IT", "FST")
+            assert get_student(test_student.id).programme == "IT"
+        with self.subTest("Update faculty"):
+            test_student = create_student(1, "billy", 1,"CS","FST")
+            update_student(1, test_student.id, test_student.name, 1, "CS", "FSS")
+            assert get_student(test_student.id).faculty == "FSS"
+        with self.subTest("Update all"):
+            test_student = create_student(1, "billy", 1,"CS","FST")
+            update_student(1, test_student.id, "bobby", 1, "IT", "FSS")
+            assert get_student(test_student.id).name == "bobby"
+            assert get_student(test_student.id).programme == "IT"
+            assert get_student(test_student.id).faculty == "FSS"
 
-    # def test_delete_student(self):
-    #     student = create_student("bob", "fst", "cs")
-    #     sid = student.id
-    #     delete_student(sid)
-    #     assert get_student(sid) is None
+    def test_delete_student(self):
+        test_student = create_student(1, "billy", 1,"CS","FST")
+        sid = test_student.id
+        delete_student(sid,1)
+        assert get_student(sid) is None
 
 
 

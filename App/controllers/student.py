@@ -7,9 +7,7 @@ from App.models import Student, Admin
 def create_student(admin_id, name,school_id, programme, faculty):
     admin= Admin.query.get(admin_id)
     if admin:
-        student = Student(school_id=school_id,name=name, faculty=faculty, programme=programme)
-        return student
-        # return admin.create_student(name,school_id,programme,faculty)
+        return admin.create_student(name,school_id,programme,faculty)
     return False
 
 
@@ -55,9 +53,11 @@ def update_student(admin_id, student_id, name,school_id, programme, faculty):
 
 # Deletes a student given their id
 def delete_student(student_id, admin_id):
-    student = Student.query.get(student_id)
+    student = get_student(student_id)
     admin= Admin.query.get(admin_id)
     if student and admin:
-        return admin.delete_student(student)
-    return False
+        db.session.delete(student)
+        db.session.commit()
+        return None
+    return None
     

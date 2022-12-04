@@ -95,7 +95,7 @@ def get_all_users_json():
 
 # Gets all admins and returns them as a JSON object
 def get_all_admins_json():
-    admins = Admins.query.all()
+    admins = Admin.query.all()
     if not admins:
         return []
     return [admin.to_json() for admin in admins]
@@ -119,9 +119,40 @@ def update_user(id, username):
     return None
 
 
+def update_admin(id, username):
+    user = get_admin(id)
+    if user:
+        user.username = username
+        db.session.add(user)
+        return db.session.commit()
+    return None
+
+def update_staff(id, username):
+    user = get_staff(id)
+    if user:
+        user.username = username
+        db.session.add(user)
+        return db.session.commit()
+    return None
+
+
 # Deletes a user given their id
 def delete_user(id):
     user = get_user(id)
+    if user:
+        db.session.delete(user)
+        return db.session.commit()
+    return None
+
+def delete_admin(id):
+    user = get_admin(id)
+    if user:
+        db.session.delete(user)
+        return db.session.commit()
+    return None
+
+def delete_staff(id):
+    user = get_staff(id)
     if user:
         db.session.delete(user)
         return db.session.commit()

@@ -78,7 +78,7 @@ def admin_login():
         if admin and admin.check_password(data["password"]):
             login_user(admin)
             flash(f"Log in successful! Welcome, {current_user.username}!")
-            return redirect(url_for('student_views.show_all_students'))
+            return redirect(url_for('student_views.admin_show_all_students'))
         flash("Incorrect login credentials.")
     return render_template("admin-login.html")
 
@@ -129,7 +129,7 @@ def admin_signup():
             if user:
                 login_user(user)
                 flash(f"Account created! Welcome, {current_user.username}!")
-                return render_template("admin-students.html")
+                return redirect(url_for('student_views.admin_show_all_students'))
         flash("Error: There was a problem creating your account")
     return render_template("admin-signup.html")
 

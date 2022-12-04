@@ -43,7 +43,7 @@ def add_student():
                     )
                 if student:
                     flash("Student successfully added!")
-                    return redirect(url_for('student_views.show_all_students'))
+                    return redirect(url_for('student_views.admin_show_all_students'))
             flash("Error: There was a problem adding the student.")
             return render_template("add-student.html")
         flash("You are unauthorized to perform this action.")
@@ -82,7 +82,7 @@ def get_all_students_action():
 
 @student_views.route("/admin-students", methods=["GET"])
 @login_required
-def show_all_students():
+def admin_show_all_students():
     students = get_all_students()
     return render_template("admin-students.html", students=students)
 

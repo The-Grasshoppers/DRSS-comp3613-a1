@@ -36,7 +36,7 @@ def get_all_reviews_action():
 
 @review_views.route("/admin-reviews", methods=["GET"])
 @login_required
-def show_all_reviews():
+def admin_show_all_reviews():
     reviews = get_all_reviews()
     return render_template("admin-reviews.html", reviews=reviews)
 

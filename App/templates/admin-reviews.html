@@ -1,28 +1,6 @@
-{% extends "admin-navbar.html" %}
+{% extends "reviews.html" %}
 
 {{ super() }}
 
-{% block title %}Reviews | Student Conduct Tracker{% endblock %}
-
-{% block content_heading %}All Reviews{% endblock %}
-
-{% block content %}
-<div class="reviews-container">
-  {% if reviews %}
-    {% for review in reviews %}
-    <div class="review">
-      <div class="review-header">
-        <div>{{review.student_id}}</div>
-        <div>{{review.staff_id}}</div>
-        <div>{{review.rating}}</div>
-      </div>
-      <div class="review-text">
-        <div>{{review.text}}</div>
-      </div>
-    </div>
-    {% endfor %}
-  {% else %}
-    <div>No reviews found.</div>
-  {% endif %}
-</div>
-{% endblock %}
+{% block students_link %}"/admin-students"{% endblock %}
+{% block reviews_link %}"/admin-reviews"{% endblock %}

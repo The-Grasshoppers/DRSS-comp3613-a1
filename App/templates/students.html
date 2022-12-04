@@ -1,4 +1,4 @@
-{% extends "admin-navbar.html" %}
+{% extends "navbar2.html" %}
 
 {{ super() }}
 
@@ -6,11 +6,7 @@
 
 {% block content_heading %}All Students{% endblock %}
 
-{% block button %}
-<div class="button">
-  <a href="/add-student" class="waves-effect waves-light btn indigo lighten-2">Add Student +</a>
-</div>
-{% endblock %}
+{% block button %}{% endblock %}
 
 {% block content %}
 <div class="cards-container">
@@ -36,9 +32,7 @@
       </div>
       <div class="card-btn">
         <div class="card-content">
-          <div class="button">
-            <a href="/reviews" class="waves-effect waves-light btn indigo lighten-2">See Reviews</a>
-          </div>
+          {% block card_buttons %}{% endblock %}
         </div>
       </div>
     </div>

@@ -1,10 +1,9 @@
-{% extends "admin-navbar.html" %}
+{% extends "students.html" %}
 
 {{ super() }}
 
-{% block title %}Students | Student Conduct Tracker{% endblock %}
-
-{% block content_heading %}All Students{% endblock %}
+{% block students_link %}"/admin-students"{% endblock %}
+{% block reviews_link %}"/admin-reviews"{% endblock %}
 
 {% block button %}
 <div class="button">
@@ -12,39 +11,8 @@
 </div>
 {% endblock %}
 
-{% block content %}
-<div class="cards-container">
-  {% if students %}
-    {% for student in students %}
-    <div class="card">
-      <div class="student-info">
-        <div class="card-content">
-          <span class="card-label">Name: </span><span>{{student.name}}</span>
-        </div>
-        <div class="card-content">
-          <span class="card-label">Student ID: </span><span>{{student.school_id}}</span>
-        </div>
-        <div class="card-content">
-          <span class="card-label">Degree Programme: </span><span>{{student.programme}}</span>
-        </div>
-        <div class="card-content">
-          <span class="card-label">Faculty: </span><span>{{student.faculty}}</span>
-        </div>
-        <div class="card-content">
-          <span class="card-label">Karma Score: </span><span>{{student.get_karma()}}</span>
-        </div>
-      </div>
-      <div class="card-btn">
-        <div class="card-content">
-          <div class="button">
-            <a href="/reviews" class="waves-effect waves-light btn indigo lighten-2">See Reviews</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  {% else %}
-    <div>No students found.</div>
-  {% endif %}
+{% block card_buttons %}
+<div class="button">
+  <a href="/admin-reviews" class="waves-effect waves-light btn indigo lighten-2">See Reviews</a>
 </div>
 {% endblock %}

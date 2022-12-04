@@ -168,6 +168,7 @@ def list_students_command():
     students = get_all_students()
     for student in students:
         print(student.name)
+        #print(student.get_karma)
     
 
 app.cli.add_command(student_cli)

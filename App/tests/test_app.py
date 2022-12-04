@@ -37,7 +37,6 @@ from App.controllers.review import (
     get_review_json,
     get_all_reviews,
     get_all_reviews_json,
-    get_num_upvotes,
     vote_on_review
     # upvote_review,
     # downvote_review,
@@ -68,7 +67,6 @@ class UserUnitTests(unittest.TestCase):
         assert staff.username == "bob"
         assert staff.access == "staff"
 
-    # pure function no side effects or integrations called
     def test_admin_to_json(self):
         admin = Admin("bob", "bobpass")
         admin_json = admin.to_json()
@@ -143,7 +141,12 @@ class StudentUnitTests(unittest.TestCase):
 class ReviewUnitTests(unittest.TestCase):
     def test_new_review(self):
         review = Review(1, 1, "good", 1)
-        assert review.student_id == 1 and review.staff_id == 1 and review.text == "good"
+        assert (
+            review.student_id == 1
+            and review.staff_id == 1 
+            and review.text == "good"
+         )
+
 
     def test_review_to_json(self):
         review = Review(1, 1, "good", 5)
@@ -165,14 +168,16 @@ class ReviewUnitTests(unittest.TestCase):
     #not working
     def test_review_vote(self):
         with self.subTest("Upvote"):
-            review = Review(1, 1, "good", 1)
-            self.assertEqual(review.id, 1)
-            self.assertEqual(get_num_upvotes(review.id), 1)
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"upvote")
+            self.assertEqual(review.student_id, 1)
+            self.assertEqual(review.get_num_upvotes(), 1)
 
         with self.subTest("Downvote"):
             review = Review(1, 1, "good", 1)
             vote_on_review(1, 1, "downvote")
-            self.assertEqual(review.get_num_downvotes(), 1)
+            self.assertEqual(get_num_upvotes(), 1)
 
     def test_review_get_num_upvotes(self):
         with self.subTest("No votes"):

@@ -10,6 +10,16 @@
 <div class="reviews-container">
   {% if reviews %}
     {% for review in reviews %}
+    <div class="review">
+      <div class="review-header">
+        <div>{{review.student_id}}</div>
+        <div>{{review.staff_id}}</div>
+        <div>{{review.rating}}</div>
+      </div>
+      <div class="review-text">
+        <div>{{review.text}}</div>
+      </div>
+    </div>
     {% endfor %}
   {% else %}
     <div>No reviews found.</div>

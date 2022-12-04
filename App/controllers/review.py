@@ -4,20 +4,28 @@ from App.database import db
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise
-def create_review(student_id, user_id, text):
-    user = User.query.get(user_id)
+def create_review(student_id, staff_id, text, rating):
+    staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
-    if user and student:
-        review = Review(user_id, student_id, text)
+
+   # review=Review.query.filter_by(staff_id=staff_id, student_id=student_id)
+   # if review:
+    #    return("You already left a review on this student")
+   # else:
+    #if staff and student:
+    try:
+        review = Review(staff_id, student_id, text, rating)
         db.session.add(review)
         db.session.commit()
-        user.reviews.append(review)
-        student.reviews.append(review)
-        db.session.add(user)
-        db.session.add(student)
-        db.session.commit()
-        return review
-    return None
+        #staff.reviews.append(review)
+        # student.reviews.append(review)
+        # db.session.add(staff)
+        #db.session.add(student)
+        #db.session.commit()
+        return ("Review made")
+    except:
+        return ("Review not created")
+
 
 
 # Updates a review given a review id and updated review text

@@ -22,23 +22,23 @@ class Review(db.Model):
         self.text = text
         self.rating= rating
 
-    def get_num_upvotes(self):
-        if not self.votes:
-            return 0
-        num_upvotes=0
-        for vote in self.votes:
-            if (vote.value==Value.UPVOTE):
-                num_upvotes= num_upvotes+1
-        return num_upvotes
+    # def get_num_upvotes(self):
+    #     if not self.votes:
+    #         return 0
+    #     num_upvotes=0
+    #     for vote in self.votes:
+    #         if (vote.value==Value.UPVOTE):
+    #             num_upvotes= num_upvotes+1
+    #     return num_upvotes
     
-    def get_num_downvotes (self):
-        if not self.votes:
-            return 0
-        num_downvotes=0
-        for vote in self.votes:
-            if (vote.value==Value.DOWNVOTE):
-                num_downvotes=num_downvotes+1
-        return num_downvotes
+    # def get_num_downvotes (self):
+    #     if not self.votes:
+    #         return 0
+    #     num_downvotes=0
+    #     for vote in self.votes:
+    #         if (vote.value==Value.DOWNVOTE):
+    #             num_downvotes=num_downvotes+1
+    #     return num_downvotes
 
     #for a positive or negative review: increases the weight of an upvote or downvote by 1 for each rating above 5 
     #e.g  rating 6/4= +/- 1, rating 7/3= +/- 2, rating 8/2= +/- 3, rating 9/1= +/- 4, rating 10= +/- 5

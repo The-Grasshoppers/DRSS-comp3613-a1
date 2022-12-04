@@ -83,43 +83,6 @@ def initialize():
 Test Commands
 """
 
-test = AppGroup("test", help="Testing commands")
-
-
-@test.command("user", help="Run User tests")
-@click.argument("type", default="all")
-def user_tests_command(type):
-    if type == "unit":
-        sys.exit(pytest.main(["-k", "UserUnitTests"]))
-    elif type == "int":
-        sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
-    else:
-        sys.exit(pytest.main(["-k", "App"]))
-
-
-@test.command("student", help="Run Student tests")
-@click.argument("type", default="all")
-def user_tests_command(type):
-    if type == "unit":
-        sys.exit(pytest.main(["-k", "StudentUnitTests"]))
-    elif type == "int":
-        sys.exit(pytest.main(["-k", "StudentIntegrationTests"]))
-    else:
-        sys.exit(pytest.main(["-k", "App"]))
-
-
-@test.command("review", help="Run Student tests")
-@click.argument("type", default="all")
-def user_tests_command(type):
-    if type == "unit":
-        sys.exit(pytest.main(["-k", "ReviewUnitTests"]))
-    elif type == "int":
-        sys.exit(pytest.main(["-k", "ReviewIntegrationTests"]))
-    else:
-        sys.exit(pytest.main(["-k", "App"]))
-
-
-app.cli.add_command(test)
 
 
 
@@ -148,7 +111,7 @@ staff = AppGroup("staff", help="Testing staff")
 @staff.command("create", help="Creates a staff")
 @click.argument("username", default="Sue")
 @click.argument("password", default="suepass")
-def create_admin_command(username, password):
+def create_staff_command(username, password):
     create_staff(username, password)
     print(f"{username} created!")
 
@@ -158,7 +121,7 @@ def list_staff_command():
     staffs = get_all_staff()
     for staff in staffs:
         print(staff.username)
-    
+        print(staff.id)
 
 app.cli.add_command(staff)
 
@@ -223,3 +186,42 @@ def create_vote_command(review_id, staff_id):
     
 
 app.cli.add_command(vote_cli)
+
+
+test = AppGroup("test", help="Testing commands")
+
+
+@test.command("user", help="Run User tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "UserUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+
+@test.command("student", help="Run Student tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "StudentUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "StudentIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+
+@test.command("review", help="Run Student tests")
+@click.argument("type", default="all")
+def user_tests_command(type):
+    if type == "unit":
+        sys.exit(pytest.main(["-k", "ReviewUnitTests"]))
+    elif type == "int":
+        sys.exit(pytest.main(["-k", "ReviewIntegrationTests"]))
+    else:
+        sys.exit(pytest.main(["-k", "App"]))
+
+
+app.cli.add_command(test)

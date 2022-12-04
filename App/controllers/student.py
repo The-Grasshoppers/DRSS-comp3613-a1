@@ -7,7 +7,9 @@ from App.models import Student, Admin
 def create_student(admin_id, name,school_id, programme, faculty):
     admin= Admin.query.get(admin_id)
     if admin:
-        return admin.create_student(name,school_id,programme,faculty)
+        student = Student(school_id=school_id,name=name, faculty=faculty, programme=programme)
+        return student
+        # return admin.create_student(name,school_id,programme,faculty)
     return False
 
 

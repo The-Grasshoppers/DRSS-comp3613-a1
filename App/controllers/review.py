@@ -132,4 +132,19 @@ def get_review_karma(id):
         return review.get_karma()
     return None
 
+def get_num_upvotes(id):
+    review = Review.query.get(id)
+    upvotes = 0
+    if review:
+        votes = get_review_votes(id)
+        if votes:
+            for vote in votes:
+                if vote.Value==Value.UPVOTE:
+                    upvotes = upvotes + 1
+                return upvotes
+        return "No votes"
+    return "No review found" 
+        
+
+
 

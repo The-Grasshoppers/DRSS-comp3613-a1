@@ -1,23 +1,15 @@
-{% extends "staff-navbar.html" %}
+{% extends "students.html" %}
 
 {{ super() }}
 
-{% block content_heading %}All Students{% endblock %}
+{% block students_link %}"/staff-students"{% endblock %}
+{% block reviews_link %}"/staff-reviews"{% endblock %}
 
-{% block content %}
-<div class="cards-container">
-  {% for student in students %}
-  <div class="card">
-    <div class="card-content">Profile Picture</div>
-    <div class="card-content">{{student.name}}</div>
-    <div class="card-content">{{student.school_id}}</div>
-    <div class="card-content">{{student.programme}}</div>
-    <div class="card-content">{{student.get_karma()}}</div>
-    <div class="card-content">
-      <div>Add Review</div>
-      <div>See Reviews</div>
-    </div>
-  </div>
-  {% endfor %}
+{% block card_buttons %}
+<div class="button">
+  <a href="/staff-reviews" class="waves-effect waves-light btn indigo lighten-2">See Reviews</a>
+</div>
+<div class="button">
+  <a href="/add-review" class="waves-effect waves-light btn indigo lighten-2">Write Review</a>
 </div>
 {% endblock %}

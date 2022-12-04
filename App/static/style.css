@@ -60,10 +60,11 @@ body{
     padding-left: 40px;
     padding-right: 40px;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .card{
-    width: 250px;
+    width: 18vw;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;

@@ -5,3 +5,14 @@
 {% block title %}Reviews | Student Conduct Tracker{% endblock %}
 
 {% block content_heading %}All Reviews{% endblock %}
+
+{% block content %}
+<div class="reviews-container">
+  {% if reviews %}
+    {% for review in reviews %}
+    {% endfor %}
+  {% else %}
+    <div>No reviews found.</div>
+  {% endif %}
+
+{% endblock %}

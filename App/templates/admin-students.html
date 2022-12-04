@@ -6,23 +6,28 @@
 
 {% block button %}
 <div class="button">
-  <a href="/add-student" class="waves-effect waves-light btn">Add Student +</a>
+  <a href="/add-student" class="waves-effect waves-light btn indigo lighten-2">Add Student +</a>
 </div>
 {% endblock %}
 
 {% block content %}
 <div class="cards-container">
-  {% for student in students %}
-  <div class="card">
-    <div class="card-content">Profile Picture</div>
-    <div class="card-content">{{student.name}}</div>
-    <div class="card-content">{{student.school_id}}</div>
-    <div class="card-content">{{student.programme}}</div>
-    <div class="card-content">{{student.get_karma()}}</div>
-    <div class="card-content">
-      <div>See Reviews</div>
+  {% if students %}
+    {% for student in students %}
+    <div class="card">
+      <div class="card-content">Profile Picture</div>
+      <div class="card-content">{{student.name}}</div>
+      <div class="card-content">{{student.school_id}}</div>
+      <div class="card-content">{{student.programme}}</div>
+      <div class="card-content">{{student.faculty}}</div>
+      <div class="card-content">{{student.get_karma()}}</div>
+      <div class="card-content">
+        <div>See Reviews</div>
+      </div>
     </div>
-  </div>
-  {% endfor %}
+    {% endfor %}
+  {% else %}
+    <div>No students found.</div>
+  {% endif %}
 </div>
 {% endblock %}

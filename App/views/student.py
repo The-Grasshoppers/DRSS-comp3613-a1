@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template, flash
+from flask import Blueprint, jsonify, request, render_template, flash, redirect, url_for
 from flask_jwt import jwt_required, current_identity
 from flask_login import current_user, login_required
 
@@ -43,7 +43,7 @@ def add_student():
                     )
                 if student:
                     flash("Student successfully added!")
-                    return render_template("admin-students.html")
+                    return redirect(url_for('student_views.show_all_students'))
             flash("Error: There was a problem adding the student.")
             return render_template("add-student.html")
         flash("You are unauthorized to perform this action.")
@@ -80,10 +80,11 @@ def get_all_students_action():
     return jsonify({"error": "students not found"}), 404
 
 
-# @student_views.route("/students", methods=["GET"])
-# @login_required
-# def show_all_students():
-
+@student_views.route("/students", methods=["GET"])
+@login_required
+def show_all_students():
+    students = get_all_students()
+    return render_template("admin-students.html", students=students)
 
 
 # Gets a student given student id

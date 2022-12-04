@@ -80,7 +80,7 @@ def get_all_students_action():
     return jsonify({"error": "students not found"}), 404
 
 
-@student_views.route("/students", methods=["GET"])
+@student_views.route("/admin-students", methods=["GET"])
 @login_required
 def show_all_students():
     students = get_all_students()

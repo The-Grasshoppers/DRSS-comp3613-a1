@@ -33,6 +33,13 @@ def get_all_reviews_action():
     return jsonify([review.to_json() for review in reviews]), 200
 
 
+@review_views.route("/admin-reviews", methods=["GET"])
+@login_required
+def show_all_reviews():
+    reviews = get_all_reviews()
+    return render_template("admin-reviews.html", reviews=reviews)
+
+
 # Gets review given review id
 @review_views.route("/api/reviews/<int:review_id>", methods=["GET"])
 @jwt_required()

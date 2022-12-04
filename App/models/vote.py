@@ -12,10 +12,9 @@ class Vote (db.Model):
     staff_id = db.Column(db.Integer, db.ForeignKey("staff.id"), nullable=False)
     review_id = db.Column(db.Integer, db.ForeignKey("review.id"), nullable=False)
     vote_command_id= db.Column(db.Integer, db.ForeignKey("voteCommand.id"), nullable=False)
-    time= db.Column(db.DateTime, default=datetime.utcnow)
     value= db.Column(db.Enum(Value), nullable=False)
 
-    def __init__(self,id, staff_id, review_id, vote_command_id,time, value):
+    def __init__(self, staff_id, review_id, vote_command_id, value):
         self.staff_id= staff_id
         self.review_id=review_id
         self.vote_command_id= vote_command_id
@@ -23,11 +22,10 @@ class Vote (db.Model):
     
     def to_json(self):
         return{
-            "id": self.id,
+            #"id": self.id,
             "staff_id":self.staff_id,
             "review_id": self.review_id,
             "vote_command_id":self.vote_command_id,
-            "time":self.time,
             "value":self.value
         }
        

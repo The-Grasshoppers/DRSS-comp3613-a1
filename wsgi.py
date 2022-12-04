@@ -181,8 +181,8 @@ vote_cli = AppGroup('vote', help="Vote object commands")
 @click.argument("staff_id", default="1")
 def create_vote_command(review_id, staff_id):
     action = "upvote"
-    vote = vote_on_review(review_id,staff_id,action)
-    print(vote)
+    voteCommand = vote_on_review(review_id,staff_id,action)
+    print(voteCommand)
 
     
 

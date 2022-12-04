@@ -16,6 +16,7 @@ body{
     height: 100px;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     margin: 0px;
     width: 100vw;
 }
@@ -49,4 +50,31 @@ body{
 
 .form-btn{
     margin-bottom: 20px;
+}
+
+.cards-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100vw;
+    padding-left: 40px;
+    padding-right: 40px;
+    gap: 15px;
+}
+
+.card{
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.card-content{
+    padding: 20px;
+}
+
+.card-label{
+    font-size: larger;
+    font-weight: bold;
 }

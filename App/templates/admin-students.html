@@ -15,14 +15,29 @@
   {% if students %}
     {% for student in students %}
     <div class="card">
-      <div class="card-content">Profile Picture</div>
-      <div class="card-content">{{student.name}}</div>
-      <div class="card-content">{{student.school_id}}</div>
-      <div class="card-content">{{student.programme}}</div>
-      <div class="card-content">{{student.faculty}}</div>
-      <div class="card-content">{{student.get_karma()}}</div>
-      <div class="card-content">
-        <div>See Reviews</div>
+      <div class="student-info">
+        <div class="card-content">
+          <span class="card-label">Name: </span><span>{{student.name}}</span>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Student ID: </span><span>{{student.school_id}}</span>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Degree Programme: </span><span>{{student.programme}}</span>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Faculty: </span><span>{{student.faculty}}</span>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Karma Score: </span><span>{{student.get_karma()}}</span>
+        </div>
+      </div>
+      <div class="card-btn">
+        <div class="card-content">
+          <div class="button">
+            <a href="/reviews" class="waves-effect waves-light btn indigo lighten-2">See Reviews</a>
+          </div>
+        </div>
       </div>
     </div>
     {% endfor %}

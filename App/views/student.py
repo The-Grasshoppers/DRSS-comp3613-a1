@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, request, render_template, flash
 from flask_jwt import jwt_required, current_identity
 from flask_login import current_user, login_required
 
@@ -36,6 +36,7 @@ def create_student_action():
 def create_student():
     if request.method == "POST":
         if current_user.access == "admin":
+            return jsonify({"error": "test"})
             data = request.form
             if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
                 student = create_student(
@@ -47,7 +48,7 @@ def create_student():
             flash("Error: There was a problem adding the student.")
             return render_template("add-student.html")
         flash("You are unauthorized to perform this action.")
-        return jsonify({"error": "unauthorized"}), 401
+        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
     return render_template("add-student.html")
 
 

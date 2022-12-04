@@ -15,8 +15,8 @@ def identity(payload):
     return User.query.get(payload["identity"])
 
 
-def login_user(user, remember):
-    return flask_login.login_user(user, remember=remember)
+def login_user(user):
+    return flask_login.login_user(user)
 
 
 def logout_user():

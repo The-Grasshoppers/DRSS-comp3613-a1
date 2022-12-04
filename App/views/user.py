@@ -11,6 +11,7 @@ from App.controllers import (
     delete_user,
     get_staff_by_username,
     login_user,
+    logout_user,
     create_admin,
     get_admin_by_username
 )
@@ -39,6 +40,14 @@ def identify_user_action():
     )
 
 
+# Log out route
+@user_views.route("/logout")
+def logout():
+    logout_user()
+    flash("Log out successful.")
+    return render_template("staff-signup.html")
+
+
 # Log in route
 @user_views.route("/staff-login", methods=["POST", "GET"])
 def staff_login():
@@ -47,7 +56,7 @@ def staff_login():
         staff = get_staff_by_username(data["username"])
         if staff and staff.check_password(data["password"]):
             flash("Log in successful!")
-            login_user(staff, True)
+            login_user(staff)
             return render_template("staff-students.html")
         flash("Incorrect login credentials.")
     return render_template("staff-login.html")
@@ -60,7 +69,7 @@ def admin_login():
         admin = get_admin_by_username(data["username"])
         if admin and admin.check_password(data["password"]):
             flash("Log in successful!")
-            login_user(admin, True)
+            login_user(admin)
             return render_template("admin-students.html")
         flash("Incorrect login credentials.")
     return render_template("admin-login.html")
@@ -91,7 +100,7 @@ def staff_signup():
             username=data["username"], password=data["password"]
         )
         if user:
-            login_user(user, True)
+            login_user(user)
             flash("Account created!")
             return render_template("staff-students.html")
     flash("Error: There was a problem creating your account")
@@ -110,7 +119,7 @@ def admin_signup():
                 username=data["username"], password=data["password"]
             )
             if user:
-                login_user(user, True)
+                login_user(user)
                 flash("Account created!")
                 return render_template("admin-students.html")
         flash("Error: There was a problem creating your account")

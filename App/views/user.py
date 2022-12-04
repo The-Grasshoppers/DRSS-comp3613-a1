@@ -57,8 +57,7 @@ def signup_action():
         return jsonify({"message": f"user {data['username']} created"}), 201
     return jsonify({"message": "User not created"}), 400
 
-
-# Get all users route
+# Get all users route for Postman
 # Must be an admin to access this route
 @user_views.route("/api/users", methods=["GET"])
 @jwt_required()
@@ -67,7 +66,6 @@ def get_users_action():
         users = get_all_users_json()
         return jsonify(users), 200
     return jsonify({"message": "Access denied"}), 403
-
 
 # Get user by id route
 # Must be an admin to access this route
@@ -98,12 +96,67 @@ def delete_user_action(user_id):
 
 # Get user by access level route
 # Must be an admin to access this route
-@user_views.route("/api/users/access/<int:access_level>", methods=["GET"])
+@user_views.route("/api/users/access/<string:access>", methods=["GET"])
 @jwt_required()
-def get_user_by_access_action(access_level):
+def get_user_by_access_action(access):
     if not current_identity.is_admin():
         return jsonify({"message": "Access denied"}), 403
     users = get_users_by_access(access_level)
     if users:
         return jsonify([user.to_json() for user in users]), 200
     return jsonify({"message": "No users found"}), 404
+
+#POSTMAN ROUTES
+
+# Staff Log in route for Postman
+@user_views.route("/staff-login", methods=["POST", "GET"])
+def staff_login():
+    if request.method == "POST":
+        data = request.json
+        staff = get_staff_by_username(data["username"])
+        if staff and staff.check_password(data["password"]):
+            login_user(staff)
+            return jsonify({ "message":f"Log in successful! Welcome, {current_user.username}!"}), 200
+        return jsonify({"message": "Incorrect username or password"}), 401
+
+# Admin Log in route for Postman
+@user_views.route("/admin-login", methods=["POST", "GET"])
+def admin_login():
+    if request.method == "POST":
+        data = request.json
+        admin = get_admin_by_username(data["username"])
+        if admin and admin.check_password(data["password"]):
+            login_user(admin)
+            return jsonify({ "message":f"Log in successful! Welcome, {current_user.username}!"}), 200
+        return jsonify({"message": "Incorrect username or password"}), 401
+
+# Staff Sign up route for Postman 
+@user_views.route("/", methods=["POST"])
+def staff_signup():
+    data = request.json
+    if data["username"] and data["password"]:
+        if get_staff_by_username(data["username"]):
+            return jsonify({"message": "Username taken."}), 400
+        user = create_staff(
+            username=data["username"], password=data["password"]
+        )
+        if user:
+            login_user(user)
+            return jsonify({"message": f"user {data['username']} created"}), 201
+        return jsonify({"message": "User not created"}), 400
+
+#Admin Sign up route for Postman
+@user_views.route("/admin-signup", methods=["POST", "GET"])
+def admin_signup():
+    if request.method == "POST":
+        data = request.json
+        if data["username"] and data["password"]:
+            if get_admin_by_username(data["username"]):
+                return jsonify({"message": "Username taken."}), 400
+            user = create_admin(
+                username=data["username"], password=data["password"]
+            )
+            if user:
+                login_user(user)
+                 return jsonify({"message": f"user {data['username']} created"}), 201
+            return jsonify({"message": "User not created"}), 400

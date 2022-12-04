@@ -118,13 +118,12 @@ def vote_on_review(review_id, staff_id, action):
                 actionEnum=Action.REMOVE
                 print("Action changed to remove")
 
-        print("Vote not found")
         new_voteCommand= VoteCommand(staff_id, review_id,actionEnum)
 
         db.session.add(new_voteCommand)
         db.session.commit()
         new_voteCommand.execute()
-        return new_voteCommand.to_json
+        return new_voteCommand.to_json()
     else:
         return ('Must have a Staff account to vote')
 

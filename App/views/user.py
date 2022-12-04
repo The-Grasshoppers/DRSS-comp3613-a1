@@ -91,6 +91,7 @@ def staff_signup():
             username=data["username"], password=data["password"]
         )
         if user:
+            login_user(user, True)
             flash("Account created!")
             return render_template("staff-students.html")
     flash("Error: There was a problem creating your account")
@@ -109,6 +110,7 @@ def admin_signup():
                 username=data["username"], password=data["password"]
             )
             if user:
+                login_user(user, True)
                 flash("Account created!")
                 return render_template("admin-students.html")
         flash("Error: There was a problem creating your account")

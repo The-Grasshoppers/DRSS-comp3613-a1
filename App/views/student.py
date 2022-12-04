@@ -3,7 +3,7 @@ from flask_jwt import jwt_required, current_identity
 from flask_login import current_user, login_required
 
 from App.controllers import (
-    create_student,
+    add_student,
     get_student,
     get_all_students,
     get_students_by_name,
@@ -22,9 +22,9 @@ student_views = Blueprint("student_views", __name__, template_folder="../templat
 def create_student_action():
     if current_identity.is_admin():
         data = request.json
-        student = create_student(
-            name=data["name"], programme=data["programme"], faculty=data["faculty"]
-        )
+        # student = create_student(
+        #     name=data["name"], programme=data["programme"], faculty=data["faculty"]
+        # )
         if student:
             return jsonify(student.to_json()), 201
         return jsonify({"error": "student not created"}), 400
@@ -36,12 +36,11 @@ def create_student_action():
 def create_student():
     if request.method == "POST":
         if current_user.access == "admin":
-            return jsonify({"error": "test"})
             data = request.form
             if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
-                student = create_student(
+                student = add_student(
                     admin_id=current_user.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
-                )
+                    )
                 if student:
                     flash("Student successfully added!")
                     return render_template("admin-students.html")

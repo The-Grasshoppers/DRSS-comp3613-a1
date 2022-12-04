@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from flask_jwt import jwt_required, current_identity
+from flask_login import current_user, login_required
 
 from App.controllers import (
     create_student,
@@ -31,14 +32,14 @@ def create_student_action():
 
 
 @student_views.route("/add-student", methods=["POST", "GET"])
-@jwt_required()
+@login_required
 def create_student():
     if request.method == "POST":
-        if current_identity.access == "admin":
+        if current_user.access == "admin":
             data = request.form
             if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
                 student = create_student(
-                    admin_id=current_identity.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
+                    admin_id=current_user.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
                 )
                 if student:
                     flash("Student successfully added!")

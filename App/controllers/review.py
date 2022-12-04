@@ -50,7 +50,10 @@ def delete_review(id):
 
 # Returns a review given the review id
 def get_review(id):
-    return Review.query.get(id)
+    review = Review.query.get(id)
+    if not review:
+        return None
+    return review
 
 
 # Returns a review as a json given the review id

@@ -145,8 +145,7 @@ def list_review_command():
         print(review.staff_id)
         print(review.student_id)
         print(review.text)
-        print(get_review_votes(review.id))
-    
+        print(get_review_votes(review.id).value)
 
 app.cli.add_command(review_cli)
 
@@ -181,6 +180,14 @@ vote_cli = AppGroup('vote', help="Vote object commands")
 @click.argument("staff_id", default="1")
 def create_vote_command(review_id, staff_id):
     action = "upvote"
+    voteCommand = vote_on_review(review_id,staff_id,action)
+    print(voteCommand)
+
+@vote_cli.command("downvote", help="Create a vote")
+@click.argument("review_id", default="1")
+@click.argument("staff_id", default="2")
+def create_vote_command(review_id, staff_id):
+    action = "downvote"
     voteCommand = vote_on_review(review_id,staff_id,action)
     print(voteCommand)
 

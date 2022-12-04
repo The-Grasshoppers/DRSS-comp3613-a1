@@ -34,6 +34,7 @@ from App.controllers.review import (
     update_review,
     delete_review,
     get_review,
+    get_review_votes,
     get_review_json,
     get_all_reviews,
     get_all_reviews_json,
@@ -117,6 +118,7 @@ class StudentUnitTests(unittest.TestCase):
 
 
     #karma score needs to be checked
+    #karma is returning 5 
     def test_student_karma(self):
         with self.subTest("No reviews"):
             student = Student(1, "bob", "FST", "Computer Science")
@@ -127,14 +129,14 @@ class StudentUnitTests(unittest.TestCase):
             mockReview = Review(1, 1, "good", 5)
             vote_on_review(1, 1, "upvote")
             student.reviews.append(mockReview)
-            self.assertEqual(student.get_karma(), 5)
+            self.assertEqual(student.get_karma(), 6)
 
         with self.subTest("One negative review"):
             student = Student(1, "bob", "FST", "Computer Science")
             mockReview1 = Review(1, 1, "good", 5)
             vote_on_review(1, 1, "downvote")
             student.reviews.append(mockReview1)
-            self.assertEqual(student.get_karma(), 5)
+            self.assertEqual(student.get_karma(), 4)
 
 
 # Unit tests for Review model
@@ -171,83 +173,100 @@ class ReviewUnitTests(unittest.TestCase):
             staff = Staff("Jill","jillpass")
             review = Review(1, 1, "good", 5)
             vote_on_review(1,1,"upvote")
-            self.assertEqual(review.student_id, 1)
             self.assertEqual(review.get_num_upvotes(), 1)
 
         with self.subTest("Downvote"):
-            review = Review(1, 1, "good", 1)
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
             vote_on_review(1, 1, "downvote")
-            self.assertEqual(get_num_upvotes(), 1)
+            self.assertEqual(review.get_num_downvotes(), 1)
 
     def test_review_get_num_upvotes(self):
         with self.subTest("No votes"):
-            review = Review(1, 1, "good", 1)
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
             self.assertEqual(review.get_num_upvotes(), 0)
+            self.assertEqual(review.get_num_downvotes(), 0)           
 
         with self.subTest("One upvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "up")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"upvote")
             self.assertEqual(review.get_num_upvotes(), 1)
+            self.assertEqual(review.get_num_downvotes(), 0)           
 
         with self.subTest("One downvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "down")
-            self.assertEqual(review.get_num_upvotes(), 0)
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"downvote")
+            self.assertEqual(review.get_num_downvotes(), 1)
+            self.assertEqual(review.get_num_upvotes(), 0)           
 
     def test_review_get_num_downvotes(self):
         with self.subTest("No votes"):
-            review = Review(1, 1, "good")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
             self.assertEqual(review.get_num_downvotes(), 0)
 
         with self.subTest("One upvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "up")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"upvote")
             self.assertEqual(review.get_num_downvotes(), 0)
 
         with self.subTest("One downvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "down")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"downvote")
             self.assertEqual(review.get_num_downvotes(), 1)
 
     def test_review_get_karma(self):
         with self.subTest("No votes"):
-            review = Review(1, 1, "good")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
             self.assertEqual(review.get_karma(), 0)
 
         with self.subTest("One upvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "up")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"upvote")
             self.assertEqual(review.get_karma(), 1)
 
         with self.subTest("One downvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "down")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 5)
+            vote_on_review(1,1,"downvote")
             self.assertEqual(review.get_karma(), -1)
 
     def test_review_get_all_votes(self):
         with self.subTest("No votes"):
-            review = Review(1, 1, "good")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 1)
+            votes = get_review_votes(review.id)
             self.assertEqual(
-                review.get_all_votes(), {"num_upvotes": 0, "num_downvotes": 0}
+                None, votes
             )
 
         with self.subTest("One upvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "up")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 1)
+            vote_on_review(1,1,"upvote")
             self.assertEqual(
                 review.get_all_votes(), {1: "up", "num_upvotes": 1, "num_downvotes": 0}
             )
 
         with self.subTest("One downvote"):
-            review = Review(1, 1, "good")
-            review.vote(1, "down")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 1)
+            vote_on_review(1,1,"downvote")
             self.assertEqual(
                 review.get_all_votes(),
                 {1: "down", "num_upvotes": 0, "num_downvotes": 1},
             )
 
         with self.subTest("One upvote and one downvote"):
-            review = Review(1, 1, "good")
+            staff = Staff("Jill","jillpass")
+            review = Review(1, 1, "good", 1)
             review.vote(1, "up")
             review.vote(2, "down")
             self.assertEqual(

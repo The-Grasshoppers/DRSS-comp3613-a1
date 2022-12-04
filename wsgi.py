@@ -17,6 +17,9 @@ from App.controllers import (
     get_all_reviews,
     get_all_students,
     get_review_votes,
+    get_staff,
+    get_review,
+    delete_review,
     vote_on_review,
 )
 
@@ -101,6 +104,7 @@ def list_admin_command():
     admins = get_all_admins()
     for admin in admins:
         print(admin.username)
+        print (admin.id)
 
 app.cli.add_command(admin)
 
@@ -123,6 +127,17 @@ def list_staff_command():
         print(staff.username)
         print(staff.id)
 
+@staff.command("get", help="Get a staff member by their id")
+def get_staff_by_id_command():
+    id=1
+    staff=get_staff(1)
+    if staff:
+        print(staff.id)
+        print(staff.username)
+        print(staff.access)
+    else:
+        print("Staff not found")
+
 app.cli.add_command(staff)
 
 
@@ -134,19 +149,41 @@ review_cli = AppGroup('review', help="Review object commands")
 @click.argument("text", default="good")
 @click.argument("rating", default="6")
 def create_review_command(student_id, staff_id, text, rating):
-    create_review(student_id, staff_id, text, rating)
-    print(f'review created!')
+    message = create_review(student_id, staff_id, text, rating)
+    print(message)
 
 
-@review_cli.command("list", help="Lists staff in the database")
+@review_cli.command("list", help="Lists reviews in the database")
 def list_review_command():
     reviews = get_all_reviews()
-    for review in reviews:
-        print(review.staff_id)
-        print(review.student_id)
+    if reviews:
+        for review in reviews:
+            print("Here's a review")
+            print(review.staff_id)
+            print(review.student_id)
+            print(review.text)
+            print(get_review_votes(review.id))
+    else:
+        print("No reviews")
+
+@review_cli.command("get", help="Get a review by its id")
+def get_review_by_id_command():
+    id=1
+    review= get_review(id)
+    if review:
         print(review.text)
-        print(get_review_votes(review.id))
+        print(review.rating)
+    else:
+        print("Review not found")
     
+@review_cli.command("delete", help="Delete a review")
+def delete_review_by_id_command():
+    id=1
+    deleted=delete_review(1)
+    if (deleted==True):
+        print("Review deleted")
+    else:
+        print("Not deleted")
 
 app.cli.add_command(review_cli)
 
@@ -163,7 +200,7 @@ def create_review_command(admin_id, name, school_id, programme, faculty):
     print(f'Student created!')
 
 
-@student_cli.command("list", help="Lists staff in the database")
+@student_cli.command("list", help="Lists students in the database")
 def list_students_command():
     students = get_all_students()
     for student in students:
@@ -181,8 +218,8 @@ vote_cli = AppGroup('vote', help="Vote object commands")
 @click.argument("staff_id", default="1")
 def create_vote_command(review_id, staff_id):
     action = "upvote"
-    vote = vote_on_review(review_id,staff_id,action)
-    print(vote)
+    voteCommand = vote_on_review(review_id,staff_id,action)
+    print(voteCommand)
 
     
 

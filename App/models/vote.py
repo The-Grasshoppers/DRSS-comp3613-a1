@@ -15,12 +15,12 @@ class Vote (db.Model):
     time= db.Column(db.DateTime, default=datetime.utcnow)
     value= db.Column(db.Enum(Value), nullable=False)
 
-    def __init__(self,id, staff_id, review_id, vote_command_id,time, value):
-        self.id= id
+    def __init__(self, staff_id, review_id, vote_command_id, value):
+        #self.id= id
         self.staff_id= staff_id
         self.review_id=review_id
         self.vote_command_id= vote_command_id
-        self.time= time
+        #self.time= time
         self.value= value
     
     def to_json(self):

@@ -3,13 +3,13 @@
 {{ super() }}
 
 {% block title %}Add Student | Student Conduct Tracker{% endblock %}
-{% block content_heading %}Add Student{% endblock %}
 
 {% block content %}
 <div>
   <div class="form">
     <div class="row">
       <form class="col s12">
+        <div class="form-heading">Add Student</div>
         <div class="row">
           <div class="input-field col s12">
             <input placeholder="eg. 816024000" id="student_id" name="school_id" type="text" class="validate">
@@ -34,7 +34,7 @@
             <label for="student-faculty">Faculty</label>
           </div>
         </div>
-        <a class="waves-effect waves-light btn indigo lighten-2">Add Student</a>
+        <a class="waves-effect waves-light btn col s12 indigo lighten-2">Add Student</a>
       </form>
     </div>
   </div>

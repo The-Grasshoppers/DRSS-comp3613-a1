@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash
 from flask_jwt import jwt_required, current_identity
-
+from flask_login import current_user
 
 from App.controllers import (
     create_staff,
@@ -40,6 +40,14 @@ def identify_user_action():
     )
 
 
+@user_views.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    response.cache_control.private = True
+    response.cache_control.public = False
+    return response
+
+
 # Log out route
 @user_views.route("/logout")
 def logout():
@@ -55,8 +63,8 @@ def staff_login():
         data = request.form
         staff = get_staff_by_username(data["username"])
         if staff and staff.check_password(data["password"]):
-            flash("Log in successful!")
             login_user(staff)
+            flash(f"Log in successful! Welcome, {current_user.username}!")
             return render_template("staff-students.html")
         flash("Incorrect login credentials.")
     return render_template("staff-login.html")
@@ -68,8 +76,8 @@ def admin_login():
         data = request.form
         admin = get_admin_by_username(data["username"])
         if admin and admin.check_password(data["password"]):
-            flash("Log in successful!")
             login_user(admin)
+            flash(f"Log in successful! Welcome, {current_user.username}!")
             return render_template("admin-students.html")
         flash("Incorrect login credentials.")
     return render_template("admin-login.html")
@@ -101,7 +109,7 @@ def staff_signup():
         )
         if user:
             login_user(user)
-            flash("Account created!")
+            flash(f"Account created! Welcome, {current_user.username}!")
             return render_template("staff-students.html")
     flash("Error: There was a problem creating your account")
     return render_template("staff-signup.html")
@@ -120,7 +128,7 @@ def admin_signup():
             )
             if user:
                 login_user(user)
-                flash("Account created!")
+                flash(f"Account created! Welcome, {current_user.username}!")
                 return render_template("admin-students.html")
         flash("Error: There was a problem creating your account")
     return render_template("admin-signup.html")

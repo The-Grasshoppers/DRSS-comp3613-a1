@@ -1,0 +1,34 @@
+{% extends "staff-navbar.html" %}
+
+{{ super() }}
+
+{% block title %}Add Review | Student Conduct Tracker{% endblock %}
+
+{% block content %}
+<div>
+  <div class="form">
+    <div class="row">
+      <form class="materialize-form" action="{{ url_for("review_views.add_review")}}" method="POST">
+        <div class="form-heading">Add Review</div>
+        <div class="input-field col s12">
+          <input placeholder="eg. 816024000" id="student_id" name="student_id" type="text" class="validate">
+          <label for="student_id">Student ID</label>
+        </div>
+        <div class="input-field col s12">
+            <textarea id="review-text" name="text" class="materialize-textarea"></textarea>
+            <label for="review-text">Write your review here</label>
+        </div>  
+        <div class="input-field col s12">
+          <select class="browser-default">
+            <option value="" disabled selected>Choose your rating</option>
+            <option value="1">1 star</option>
+            <option value="2">2 stars</option>
+            <option value="3">3 stars</option>
+          </select>
+        </div>
+        <button type="submit" class="waves-effect waves-light btn col s12 indigo lighten-2">Add Review</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

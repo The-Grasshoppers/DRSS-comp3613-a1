@@ -3,7 +3,7 @@ from flask_jwt import jwt_required, current_identity
 from flask_login import current_user, login_required
 
 from App.controllers import (
-    add_student,
+    create_student,
     get_student,
     get_all_students,
     get_students_by_name,
@@ -33,12 +33,12 @@ def create_student_action():
 
 @student_views.route("/add-student", methods=["POST", "GET"])
 @login_required
-def create_student():
+def add_student():
     if request.method == "POST":
         if current_user.access == "admin":
             data = request.form
             if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
-                student = add_student(
+                student = create_student(
                     admin_id=current_user.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
                     )
                 if student:
@@ -78,6 +78,12 @@ def get_all_students_action():
     if students:
         return jsonify([student.to_json() for student in students]), 200
     return jsonify({"error": "students not found"}), 404
+
+
+# @student_views.route("/students", methods=["GET"])
+# @login_required
+# def show_all_students():
+
 
 
 # Gets a student given student id

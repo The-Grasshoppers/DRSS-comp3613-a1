@@ -4,7 +4,7 @@ from App.models import Student, Admin
 
 # Creates a new student given their name, programme and faculty
 # Commits the student to the database and returns the student
-def add_student(admin_id, name,school_id, programme, faculty):
+def create_student(admin_id, name,school_id, programme, faculty):
     admin= Admin.query.get(admin_id)
     if admin:
         return admin.create_student(name=name,school_id=school_id,programme=programme,faculty=faculty)

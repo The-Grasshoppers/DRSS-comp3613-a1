@@ -87,6 +87,13 @@ def admin_show_all_students():
     return render_template("admin-students.html", students=students)
 
 
+@student_views.route("/staff-students", methods=["GET"])
+@login_required
+def staff_show_all_students():
+    students = get_all_students()
+    return render_template("staff-students.html", students=students)
+
+
 # Gets a student given student id
 @student_views.route("/api/students/<int:student_id>", methods=["GET"])
 @jwt_required()

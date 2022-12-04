@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash
+from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt import jwt_required, current_identity
 from flask_login import current_user
 
@@ -78,7 +78,7 @@ def admin_login():
         if admin and admin.check_password(data["password"]):
             login_user(admin)
             flash(f"Log in successful! Welcome, {current_user.username}!")
-            return render_template("admin-students.html")
+            return redirect(url_for('student_views.show_all_students'))
         flash("Incorrect login credentials.")
     return render_template("admin-login.html")
 

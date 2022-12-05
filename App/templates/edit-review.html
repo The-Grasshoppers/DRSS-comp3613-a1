@@ -1,0 +1,9 @@
+{% extends "review-form.html" %}
+
+{{ super() }}
+
+{% block title %}Edit Review | Student Conduct Tracker{% endblock %}
+{% block form_action %}"{{ url_for("review_views.edit_review", review_id="{{review.id}}") }}"{% endblock %}
+{% block form_heading %}Edit Review{% endblock %}
+{% block label %}Edit your review here{% endblock %}
+{% block button_text %}Edit Review{% endblock %}

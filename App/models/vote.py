@@ -22,7 +22,6 @@ class Vote (db.Model):
     
     def to_json(self):
         return{
-            #"id": self.id,
             "staff_id":self.staff_id,
             "review_id": self.review_id,
             "vote_command_id":self.vote_command_id,

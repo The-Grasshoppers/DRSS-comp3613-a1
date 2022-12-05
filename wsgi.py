@@ -146,7 +146,7 @@ def list_review_command():
         print(review.staff_id)
         print(review.student_id)
         print(review.text)
-        print(get_review_votes(review.id).value)
+        print(get_review_votes(review.id))
 
 @review_cli.command("upvotes", help="Lists staff in the database")
 @click.argument("review_id", default="1")

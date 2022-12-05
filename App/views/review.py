@@ -18,7 +18,7 @@ review_views = Blueprint("review_views", __name__, template_folder="../templates
 def create_review_action():
     data = request.json
     review = create_review(
-        user_id=data["user_id"], student_id=data["student_id"], text=data["text"]
+        student_id=data["student_id"],staff_id=data["staff_id"],  text=data["text"], rating=data["rating"]
     )
     if review:
         return jsonify(review.to_json()), 201
@@ -42,28 +42,17 @@ def get_review_action(review_id):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
-
-# Upvotes post given post id and user id
-@review_views.route("/api/reviews/<int:review_id>/upvote", methods=["PUT"])
-@jwt_required()
-def upvote_review_action(review_id):
-    review = get_review(review_id)
-    if review:
-        review.vote(current_identity.id, "up")
-        return jsonify(review.to_json()), 200
-    return jsonify({"error": "review not found"}), 404
-
-
-# Downvotes post given post id and user id
-@review_views.route("/api/reviews/<int:review_id>/downvote", methods=["PUT"])
-@jwt_required()
-def downvote_review_action(review_id):
-    review = get_review(review_id)
-    if review:
-        review.vote(current_identity.id, "down")
-        return jsonify(review.to_json()), 200
-    return jsonify({"error": "review not found"}), 404
-
+#Upvote, downvote or remove vote given review_id, current identity and action
+#If the action is upvote and the review is already upvoted the action changes to remove vote, same for downvote
+#Only the staff can vote
+@review_views.route("/api/reviews/<int:review_id>/<string: action>", methods=["PUT"])
+def vote_action(review_id, action):
+    data= request.json()
+    message= vote(review_id, current_identity.id, action)
+    if((message=="Vote created") or (message=="Vote updated") or (message=="Vote removed")):
+        return jsonify(message), 200
+    else:
+        return jsonify(message), 400
 
 # Updates post given post id and new text
 # Only admins or the original reviewer can edit a review

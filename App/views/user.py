@@ -158,5 +158,5 @@ def admin_signup():
             )
             if user:
                 login_user(user)
-                 return jsonify({"message": f"user {data['username']} created"}), 201
+                return jsonify({"message": f"user {data['username']} created"}), 201
             return jsonify({"message": "User not created"}), 400

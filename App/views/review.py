@@ -30,7 +30,7 @@ def create_review_action():
 def add_review_by_student(student_id):
     if request.method == "POST":
         if current_user.access == "staff":
-            data = request.form
+            data = request.json
             if data["student_id"] and data["text"] and data["rating"]:
                 review = create_review(
                     student_id=data["student_id"],

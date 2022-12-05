@@ -119,3 +119,43 @@ body{
     display: flex;
     gap: 50px;
 }
+
+.upvote{
+    color: green;
+}
+
+.downvote{
+    color: red;
+}
+
+.upvote.btn-flat{
+    color: green;
+}
+
+.upvote.btn-flat:visited{
+    background-color: #66bb6a;
+}
+
+.upvote.btn-flat:hover{
+    background-color: #66bb6a;
+}
+
+.upvote.btn-flat:active{
+    background-color: #66bb6a;
+}
+
+.downvote.btn-flat{
+    color: red;
+}
+
+.downvote.btn-flat:visited{
+    background-color: #e57373;
+}
+
+.downvote.btn-flat:hover{
+    background-color: #e57373;
+}
+
+.downvote.btn-flat:active{
+    background-color: #e57373;
+}

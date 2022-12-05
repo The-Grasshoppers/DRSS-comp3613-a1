@@ -24,8 +24,7 @@
           <span class="review-label">Rating: </span><span>{{review.rating}}</span>
         </div>
         <div>
-          <span>{{review.get_num_upvotes()}} up</span>
-          <span>{{review.get_num_downvotes()}} down</span>
+          {% block votes scoped %}{% endblock %}
         </div>
       </div>
       <div class="review-text">

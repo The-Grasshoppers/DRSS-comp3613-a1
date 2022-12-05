@@ -72,6 +72,29 @@ def update_student_action(student_id):
     return jsonify({"error": "unauthorized"}), 401
 
 
+@student_views.route("/edit-student/<school_id>", methods=["POST", "GET"])
+@login_required
+def edit_student(school_id):
+    student = get_student_by_school_id(school_id)
+    if not student:
+        return jsonify({"error": "student not found"}), 404
+    if request.method == "POST":
+        if current_user.access == "admin":
+            data = request.form
+            if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
+                updated_student = update_student(
+                    admin_id=current_user.id, student_id=student.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
+                    )
+                if updated_student:
+                    flash("Student successfully edited!")
+                    return redirect(url_for('student_views.admin_show_all_students'))
+            flash("Error: There was a problem editing the student.")
+            return render_template("edit-student.html", student=student)
+        flash("You are unauthorized to perform this action.")
+        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    return render_template("edit-student.html", student=student)
+
+
 # Lists all students
 @student_views.route("/api/students", methods=["GET"])
 @jwt_required()

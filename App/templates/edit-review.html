@@ -3,11 +3,17 @@
 {{ super() }}
 
 {% block title %}Edit Review | Student Conduct Tracker{% endblock %}
+
 {% block form_action %}"{{ url_for("review_views.edit_review", review_id=review.id) }}"{% endblock %}
+
 {% block form_heading %}Edit Review{% endblock %}
+
 {% block disable %}disabled{% endblock %}
+
 {% block id_value %}value="{{review.student_id}}"{% endblock %}
+
 {% block text_value %}{{review.text}}{% endblock %}
+
 {% block label %}Edit your review here{% endblock %}
 
 {% block options %}

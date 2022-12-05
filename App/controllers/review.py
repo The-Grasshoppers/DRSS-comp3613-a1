@@ -120,7 +120,7 @@ def vote_on_review(review_id, staff_id, action):
         new_voteCommand.execute()
         return new_voteCommand.to_json()
     else:
-        return ('Must have a Staff account to vote')
+        return "Must have a Staff account to vote"
 
 
 # Upvotes a post given a review id and user id

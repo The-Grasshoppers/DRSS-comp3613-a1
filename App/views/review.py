@@ -8,6 +8,7 @@ from App.controllers import (
     get_all_reviews,
     update_review,
     delete_review,
+    vote_on_review
 )
 
 review_views = Blueprint("review_views", __name__, template_folder="../templates")
@@ -83,7 +84,7 @@ def admin_show_all_reviews():
     return render_template("admin-reviews.html", reviews=reviews)
 
 
-@review_views.route("/staff-reviews", methods=["GET", "DELETE"])
+@review_views.route("/staff-reviews", methods=["GET", "DELETE", "PUT"])
 @login_required
 def staff_show_all_reviews():
     reviews = get_all_reviews()
@@ -109,6 +110,23 @@ def upvote_review_action(review_id):
         review.vote(current_identity.id, "up")
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
+
+
+@review_views.route("/vote-review/<int:review_id>/<string:action>", methods=["PUT", "GET"])
+@login_required
+def vote_on_review_action(review_id, action):
+    review = get_review(review_id)
+    if not review:
+        return jsonify({"error": "review not found"}), 404
+    if current_user.access == "staff":
+        message = vote_on_review(review_id, current_user.id, action)
+        if (message != "Must have a Staff account to vote"):
+            flash("Your vote has been recorded.")
+            return redirect(url_for('review_views.staff_show_all_reviews'))
+        flash("Error: There was a problem recording your vote.")
+        return redirect(url_for('review_views.staff_show_all_reviews'))
+    flash("You are unauthorized to perform this action.")
+    return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
 
 
 # Downvotes post given post id and user id

@@ -1,6 +1,9 @@
+#Invoker
 from App.database import db
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.ext.mutable import MutableDict
+from .vote import Vote, Value
+from .command import Command
 
 
 class Review(db.Model):
@@ -24,7 +27,7 @@ class Review(db.Model):
             return 0
         num_upvotes=0
         for vote in self.votes:
-            if (vote.value=="UPVOTE"):
+            if (vote.value==Value.UPVOTE):
                 num_upvotes= num_upvotes+1
         return num_upvotes
     
@@ -33,7 +36,7 @@ class Review(db.Model):
             return 0
         num_downvotes=0
         for vote in self.votes:
-            if (vote.value=="DOWNVOTE"):
+            if (vote.value==Value.DOWNVOTE):
                 num_downvotes=num_downvotes+1
         return num_downvotes
 
@@ -43,13 +46,12 @@ class Review(db.Model):
     #for negative reviews: karma= downvotes-upvotes + (rating-10) since the rating from a negative review should not increase karma
     # if a review has no votes, it will still have karma from its rating     
     def get_karma (self):
-        
-            if (self.rating>5): #positive review
-                return (self.rating + (self.rating-5)*self.get_num_upvotes() - (self.rating-5)*self.get_num_downvotes() )
-            elif (self.rating<5):   #negative review
-                return ((self.rating-10) - (5-self.rating)*self.get_num_upvotes() + (5-self.rating)*self.get_num_downvotes() )
-            elif (self.rating==5):  #neutral review
-                return (self.rating + self.get_num_upvotes() - self.get_num_downvotes())
+        if (self.rating>5): #positive review
+            return (self.rating + (self.rating-5)*self.get_num_upvotes() - (self.rating-5)*self.get_num_downvotes() )
+        elif (self.rating<5):   #negative review
+            return ((self.rating-10) - (5-self.rating)*self.get_num_upvotes() + (5-self.rating)*self.get_num_downvotes() )
+        elif (self.rating==5):  #neutral review
+            return (self.rating + self.get_num_upvotes() - self.get_num_downvotes())
         
     """ #simpler way of getting karma score
             if not self.votes:  # if there are no votes the karma score for this review is 0
@@ -63,7 +65,7 @@ class Review(db.Model):
     def to_json(self):
         return {
             "id": self.id,
-            "user_id": self.user_id,
+            "staff_id": self.staff_id,
             "student_id": self.student_id,
             "text": self.text,
             "rating": self.rating,
@@ -71,5 +73,3 @@ class Review(db.Model):
             "num_upvotes": self.get_num_upvotes(),
             "num_downvotes": self.get_num_downvotes(),
         }
-
-        

@@ -1,41 +1,9 @@
-{% extends "staff-navbar.html" %}
+{% extends "review-form.html" %}
 
 {{ super() }}
 
 {% block title %}Add Review | Student Conduct Tracker{% endblock %}
-
-{% block content %}
-<div>
-  <div class="form">
-    <div class="row">
-      <form class="materialize-form" action="{{ url_for("review_views.add_review")}}" method="POST">
-        <div class="form-heading">Add Review</div>
-        <div class="input-field col s12">
-          <input placeholder="eg. 816024000" id="student_id" name="student_id" type="text" class="validate">
-          <label for="student_id">Student ID</label>
-        </div>
-        <div class="input-field col s12">
-          <textarea id="review-text" name="text" class="materialize-textarea"></textarea>
-          <label for="review-text">Write your review here</label>
-        </div>  
-        <div class="input-field col s12">
-          <select name="rating" class="browser-default">
-            <option value="" disabled selected>Choose your rating</option>
-            <option value="1">1 star</option>
-            <option value="2">2 stars</option>
-            <option value="3">3 stars</option>
-            <option value="4">4 stars</option>
-            <option value="5">5 stars</option>
-            <option value="6">6 stars</option>
-            <option value="7">7 stars</option>
-            <option value="8">8 stars</option>
-            <option value="9">9 stars</option>
-            <option value="10">10 stars</option>
-          </select>
-        </div>
-        <button type="submit" class="waves-effect waves-light btn col s12 indigo lighten-2">Add Review</button>
-      </form>
-    </div>
-  </div>
-</div>
-{% endblock %}
+{% block form_action %}"{{ url_for("review_views.add_review")}}"{% endblock %}
+{% block form_heading %}Add Review{% endblock %}
+{% block label %}Write your review here{% endblock %}
+{% block button_text %}Add Review{% endblock %}

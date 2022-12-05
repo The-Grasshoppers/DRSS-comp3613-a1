@@ -5,9 +5,11 @@ from flask_login import current_user, login_required
 from App.controllers import (
     create_student,
     get_student,
+    get_student_by_school_id,
     get_all_students,
     get_students_by_name,
     get_all_student_reviews,
+    get_reviews_by_student,
     update_student,
 )
 
@@ -133,3 +135,11 @@ def delete_student_action(student_id):
 def get_all_student_reviews_action(student_id):
     reviews = get_all_student_reviews(student_id)
     return jsonify(reviews), 200
+
+
+@student_views.route("/students/<student_id>", methods=["GET", "DELETE"])
+@login_required
+def staff_show_all_reviews_for_student(student_id):
+    student = get_student_by_school_id(student_id)
+    reviews = get_reviews_by_student(student_id)
+    return render_template("staff-student-reviews.html", reviews=reviews, current_user=current_user, student=student)

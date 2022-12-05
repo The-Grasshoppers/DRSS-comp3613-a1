@@ -21,6 +21,11 @@ def get_student(id):
     return Student.query.get(id)
 
 
+# Gets a student by their school id
+def get_student_by_school_id(school_id):
+    return Student.query.filter_by(school_id=school_id).first()
+
+
 # Gets all students in the database
 def get_all_students():
     return Student.query.all()

@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block votes %}
-<span class="upvote waves-effect waves-green btn-flat">{{review.get_num_upvotes()}} up</span>
-<span class="downvote waves-effect waves-red btn-flat">{{review.get_num_downvotes()}} down</span>
+<a href="" class="upvote waves-effect waves-green btn-flat">{{review.get_num_upvotes()}} up</a>
+<a href="" class="downvote waves-effect waves-red btn-flat">{{review.get_num_downvotes()}} down</a>
 {% endblock %}
 
 {% block edit_button %}

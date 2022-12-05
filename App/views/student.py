@@ -102,7 +102,7 @@ def get_all_student_reviews_action(student_id):
     
 
 #Search Students for Postman
-@student_views.route("/api/students/search/val", methods=["GET"])
+@student_views.route("/api/students/search/<string:val>", methods=["GET"])
 @jwt_required()
 def search():
     students=[]

@@ -18,7 +18,7 @@ student_views = Blueprint("student_views", __name__, template_folder="../templat
 # Create student given name, programme and faculty for Postman
 # Must be an admin to access this route
 @student_views.route("/api/add-student", methods=["POST", "GET"])
-@login_required
+@jwt_required
 def add_student():
     if request.method == "POST":
         if current_user.access == "admin":

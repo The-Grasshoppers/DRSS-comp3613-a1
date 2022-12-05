@@ -26,7 +26,7 @@ def create_review_action():
 
 #Add reviews by student for Postman testing
 @review_views.route("/api/add-review/<student_id>", methods=["POST", "GET"])
-@login_required
+@jwt_required
 def add_review_by_student(student_id):
     if request.method == "POST":
         if current_user.access == "staff":
@@ -62,6 +62,7 @@ def get_review_action(review_id):
 #If the action is upvote and the review is already upvoted the action changes to remove vote, same for downvote
 #Only the staff can vote
 @review_views.route("/api/reviews/<int:review_id>/<string: action>", methods=["PUT"])
+@jwt_required
 def vote_action(review_id, action):
     data= request.json()
     message= vote_on_review(review_id, current_identity.id, action)

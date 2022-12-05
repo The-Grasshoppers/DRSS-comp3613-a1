@@ -1,0 +1,7 @@
+{% extends "admin-reviews.html" %}
+
+{{ super() }}
+
+{% block content_heading %}
+Reviews for {{student.name}} (ID: {{student.school_id}})
+{% endblock %}

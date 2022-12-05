@@ -13,6 +13,6 @@
 
 {% block card_buttons %}
 <div class="button">
-  <a href="/admin-reviews" class="waves-effect waves-light btn indigo lighten-2">See Reviews</a>
+  <a href="{{ url_for("student_views.admin_show_all_reviews_for_student", student_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">View Reviews</a>
 </div>
 {% endblock %}

@@ -52,17 +52,17 @@ def vote_action(review_id, action):
     if((message=="Vote created") or (message=="Vote updated") or (message=="Vote removed")):
         return jsonify(message), 200
     else:
-        return jsonify(message), 400
+        return jsonify({"message": f"{message}"}), 400
 
 # Updates post given post id and new text for Postman
-# Only admins or the original reviewer can edit a review
+# Only the original reviewer can edit a review
 @review_views.route("/api/reviews/<int:review_id>", methods=["PUT"])
 @jwt_required()
 def update_review_action(review_id):
     data = request.json
     review = get_review(review_id)
     if review:
-        if current_identity.id == review.user_id or current_identity.is_admin():
+        if (current_identity.id == review.user_id):
             update_review(review_id, text=data["text"])
             return jsonify({"message": "post updated successfully"}), 200
         else:

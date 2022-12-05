@@ -1,4 +1,4 @@
-from App.models import Review, Student, User
+from App.models import Review, Student, User, Staff
 from App.database import db
 
 

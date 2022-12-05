@@ -12,7 +12,7 @@ from App.controllers import (
 review_views = Blueprint("review_views", __name__, template_folder="../templates")
 
 
-# Create review given user id, student id and text
+# Create review given user id, student id and text for Postman
 @review_views.route("/api/reviews", methods=["POST"])
 @jwt_required()
 def create_review_action():
@@ -25,7 +25,7 @@ def create_review_action():
     return jsonify({"error": "review not created"}), 400
 
 
-# List all reviews
+# List all reviews for Postman
 @review_views.route("/api/reviews", methods=["GET"])
 @jwt_required()
 def get_all_reviews_action():
@@ -33,7 +33,7 @@ def get_all_reviews_action():
     return jsonify([review.to_json() for review in reviews]), 200
 
 
-# Gets review given review id
+# Gets review given review id for Postman
 @review_views.route("/api/reviews/<int:review_id>", methods=["GET"])
 @jwt_required()
 def get_review_action(review_id):
@@ -42,7 +42,7 @@ def get_review_action(review_id):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
-#Upvote, downvote or remove vote given review_id, current identity and action
+#Upvote, downvote or remove vote given review_id, current identity and action for Postman
 #If the action is upvote and the review is already upvoted the action changes to remove vote, same for downvote
 #Only the staff can vote
 @review_views.route("/api/reviews/<int:review_id>/<string: action>", methods=["PUT"])
@@ -54,7 +54,7 @@ def vote_action(review_id, action):
     else:
         return jsonify(message), 400
 
-# Updates post given post id and new text
+# Updates post given post id and new text for Postman
 # Only admins or the original reviewer can edit a review
 @review_views.route("/api/reviews/<int:review_id>", methods=["PUT"])
 @jwt_required()
@@ -70,7 +70,7 @@ def update_review_action(review_id):
     return jsonify({"error": "review not found"}), 404
 
 
-# Deletes post given post id
+# Deletes post given post id for Postman
 # Only admins or the original reviewer can delete a review
 @review_views.route("/api/reviews/<int:review_id>", methods=["DELETE"])
 @jwt_required()

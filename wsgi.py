@@ -10,6 +10,7 @@ from App.controllers import (
     create_admin, 
     create_student,
     create_review,
+    get_review,
     get_all_users_json, 
     get_all_users,  
     get_all_admins,
@@ -146,6 +147,15 @@ def list_review_command():
         print(review.student_id)
         print(review.text)
         print(get_review_votes(review.id).value)
+
+@review_cli.command("upvotes", help="Lists staff in the database")
+@click.argument("review_id", default="1")
+def review_upvotes_command(review_id):
+    review = get_review(review_id)
+    if not review:
+        print("No review found")
+    num_upvotes = review.get_num_upvotes()
+    print(num_upvotes)
 
 app.cli.add_command(review_cli)
 

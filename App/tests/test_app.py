@@ -174,20 +174,6 @@ class ReviewUnitTests(unittest.TestCase):
             },
         )
 
-    #not working
-    def test_review_vote(self):
-        with self.subTest("Upvote"):
-            staff = Staff("Jill","jillpass")
-            review = Review(1, 1, "good", 5)
-            vote_on_review(1,1,"upvote")
-            self.assertEqual(review.get_num_upvotes(), 1)
-
-        with self.subTest("Downvote"):
-            staff = Staff("Jill","jillpass")
-            review = Review(1, 1, "good", 5)
-            vote_on_review(1, 1, "downvote")
-            self.assertEqual(review.get_num_downvotes(), 1)
-
     def test_review_get_num_upvotes(self):
         with self.subTest("No votes"):
             staff = Staff("Jill","jillpass")
@@ -298,7 +284,7 @@ def empty_db():
 
 
 
-#Integration tests for User model
+# #Integration tests for User model
 class UsersIntegrationTests(unittest.TestCase):
     #delete the temp and test db before running each time
 
@@ -353,7 +339,7 @@ class UsersIntegrationTests(unittest.TestCase):
 
 
 
-# Integration tests for Student model
+# # Integration tests for Student model
 class StudentIntegrationTests(unittest.TestCase):
     
     def test_create_student(self):
@@ -390,7 +376,7 @@ class StudentIntegrationTests(unittest.TestCase):
             assert get_student(test_student.id).name == "bobby"
             assert get_student(test_student.id).programme == "IT"
             assert get_student(test_student.id).faculty == "FSS"
-
+    
     def test_delete_student(self):
         test_student = create_student(1, "billy", 1,"CS","FST")
         sid = test_student.id
@@ -399,7 +385,7 @@ class StudentIntegrationTests(unittest.TestCase):
 
 
 
-# Integration tests for Review model
+# # Integration tests for Review model
 class ReviewIntegrationTests(unittest.TestCase):
     
     def test_create_review(self):
@@ -429,12 +415,32 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert reviews_json == [review.to_json() for review in reviews]
 
     def test_upvote_review(self):
-        test_staff = Staff("bob", "bobpass")
-        test_review = create_review(1, 1, "good", 5)
-        vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
-        assert get_review(test_review.id).get_num_upvotes() == 1
+        test_review = create_review(1, 2, "good", 5)
+        i = test_review.get_num_upvotes()
+        vote_command = vote_on_review(test_review.id, 1, "upvote")
+        assert i == 0
+        assert test_review.get_num_upvotes() == 1
 
-    # def test_downvote_review(self):
-    #     test_review = create_review(1, 1, "good")
-    #     downvote_review(test_review.id, 1)
-    #     assert get_review(test_review.id).get_num_downvotes() == 1
+    def test_downvote_review(self):
+        test_review = create_review(2, 2, "good", 5)
+        i = test_review.get_num_downvotes()
+        vote_command = vote_on_review(test_review.id, 1, "downvote")
+        assert i == 0
+        assert test_review.get_num_downvotes() == 1
+
+    def test_review_get_karma(self):
+        with self.subTest("No votes"):
+            test_review = create_review(3, 2, "good", 5)
+            self.assertEqual(test_review.get_karma(), 5)
+        
+        with self.subTest("One upvote"):
+            test_review = create_review(4, 2, "good", 5)
+            vote_command = vote_on_review(test_review.id, 1, "upvote")
+            self.assertEqual(test_review.get_num_upvotes(), 1)
+            self.assertEqual(test_review.get_karma(), 6)
+        
+        with self.subTest("One Downvote"):
+            test_review = create_review(5, 2, "good", 5)
+            vote_command = vote_on_review(test_review.id, 1, "downvote")
+            self.assertEqual(test_review.get_num_downvotes(), 1)
+            self.assertEqual(test_review.get_karma(), 4)

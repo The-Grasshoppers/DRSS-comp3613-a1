@@ -394,18 +394,20 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert test_review.text == review.text
 
     def test_update_review(self):
-        test_review = create_review(1, 1, "good", 5)
+        test_review = create_review(1, 2, "good", 5)
+        assert test_review.text == "good"
         update_review(test_review.id, "bad")
         assert get_review(test_review.id).text == "bad"
 
     def test_delete_review(self):
-        test_review = create_review(1, 1, "good", 5)
-        rid = test_review.id
-        delete_review(rid)
-        assert get_review(rid) is None
+        test_review = create_review(1, 3, "good", 5)
+        assert test_review.text == "good"
+        delete_review(test_review.id)
+        assert get_review(test_review.id) == None
 
     def test_get_review_json(self):
-        test_review = create_review(1, 1, "good", 5)
+        test_staff = create_staff("kimber", "pass")
+        test_review = create_review(1, test_staff.id, "good", 5)
         review_json = get_review_json(test_review.id)
         assert review_json == test_review.to_json()
 
@@ -415,14 +417,16 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert reviews_json == [review.to_json() for review in reviews]
 
     def test_upvote_review(self):
-        test_review = create_review(1, 2, "good", 5)
+        test_staff = create_staff("jimmy", "pass")
+        test_review = create_review(1, test_staff.id, "good", 5)
         i = test_review.get_num_upvotes()
         vote_command = vote_on_review(test_review.id, 1, "upvote")
         assert i == 0
         assert test_review.get_num_upvotes() == 1
 
     def test_downvote_review(self):
-        test_review = create_review(2, 2, "good", 5)
+        test_staff = create_staff("johnathon", "pass")
+        test_review = create_review(1, test_staff.id, "good", 5)
         i = test_review.get_num_downvotes()
         vote_command = vote_on_review(test_review.id, 1, "downvote")
         assert i == 0
@@ -430,17 +434,38 @@ class ReviewIntegrationTests(unittest.TestCase):
 
     def test_review_get_karma(self):
         with self.subTest("No votes"):
-            test_review = create_review(3, 2, "good", 5)
+            test_admin = create_admin("winston", "pass")
+            test_staff = create_staff("winston", "pass")
+            test_student = create_student(test_admin.id,"larry",100, "CS", "FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
             self.assertEqual(test_review.get_karma(), 5)
         
         with self.subTest("One upvote"):
-            test_review = create_review(4, 2, "good", 5)
-            vote_command = vote_on_review(test_review.id, 1, "upvote")
+            test_admin = create_admin("vinny", "pass")
+            test_staff = create_staff("vinny", "pass")
+            test_student = create_student(test_admin.id,"larry",200, "CS", "FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             self.assertEqual(test_review.get_num_upvotes(), 1)
             self.assertEqual(test_review.get_karma(), 6)
+
+        with self.subTest("Upvote twice by same staff"):
+            test_admin = create_admin("jean", "pass")
+            test_staff = create_staff("jean", "pass")
+            test_student = create_student(test_admin.id,"larry",300, "CS", "FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+            self.assertEqual(test_review.get_num_upvotes(), 1)
+            self.assertEqual(test_review.get_karma(), 6)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+            self.assertEqual(test_review.get_num_upvotes(), 0)
+            self.assertEqual(test_review.get_karma(), 5)
         
         with self.subTest("One Downvote"):
-            test_review = create_review(5, 2, "good", 5)
-            vote_command = vote_on_review(test_review.id, 1, "downvote")
+            test_admin = create_admin("gerald", "pass")
+            test_staff = create_staff("gerald", "pass")
+            test_student = create_student(test_admin.id,"larry",400, "CS", "FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
             self.assertEqual(test_review.get_num_downvotes(), 1)
             self.assertEqual(test_review.get_karma(), 4)

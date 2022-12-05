@@ -12,14 +12,14 @@ def create_review(student_id, staff_id, text, rating):
     if staff and student:
         review = Review.query.filter_by(staff_id=staff_id, student_id=student_id).first()
         if review:
+            return "Review exists"
+        try:
+            review = Review(staff_id, student_id, text, rating)
+            db.session.add(review)
+            db.session.commit()
+            return review
+        except:
             return None
-    try:
-        review = Review(staff_id, student_id, text, rating)
-        db.session.add(review)
-        db.session.commit()
-        return review
-    except:
-        return None
 
 
 

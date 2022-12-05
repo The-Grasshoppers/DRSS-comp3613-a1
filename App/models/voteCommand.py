@@ -65,7 +65,7 @@ class VoteCommand (Command):
     #removes a vote if it is already and upvote and the user upvotes again or it is already a downvote and the user downvotes again
     def remove_vote(self):
         try:
-            vote= Vote.query.filter(staff_id=self.staff_id, review_id=self.review_id).first()
+            vote= Vote.query.filter_by(staff_id=self.staff_id, review_id=self.review_id).first()
             if vote:
                 db.session.delete(vote)
                 db.session.commit()

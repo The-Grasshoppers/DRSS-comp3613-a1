@@ -7,24 +7,23 @@ from App.database import db
 def create_review(student_id, staff_id, text, rating):
     staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
-
-   # review=Review.query.filter_by(staff_id=staff_id, student_id=student_id)
-   # if review:
-    #    return("You already left a review on this student")
-   # else:
-    #if staff and student:
-    try:
-        review = Review(staff_id, student_id, text, rating)
-        db.session.add(review)
-        db.session.commit()
-        #staff.reviews.append(review)
-        # student.reviews.append(review)
-        # db.session.add(staff)
-        #db.session.add(student)
-        #db.session.commit()
-        return ("Review made")
-    except:
-        return ("Review not created")
+    review=Review.query.filter_by(staff_id=staff_id, student_id=student_id)
+    if review:
+        return None
+    else:
+        if staff and student:
+            try:
+                review = Review(staff_id, student_id, text, rating)
+                db.session.add(review)
+                db.session.commit()
+                #staff.reviews.append(review)
+                # student.reviews.append(review)
+                # db.session.add(staff)
+                #db.session.add(student)
+                #db.session.commit()
+                return review
+            except:
+                return None
 
 
 

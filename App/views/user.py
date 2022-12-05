@@ -132,14 +132,14 @@ def admin_login_action():
     return jsonify({"message": "User not created"}), 400
 
 # Staff Sign up route for Postman 
-@user_views.route("/api/staff-signup", methods=["POST", "GET"])
+@user_views.route("/api/staff-signup", methods=['POST','GET'])
 def staff_signup():
     data=request.get_json()
     if (data["username"] and data["password"]):
         if get_staff_by_username(data["username"]):
             return jsonify({"message": "Username taken."}), 400
         user = create_staff(
-            username=data["username"], password=data["password"], access=data["access"]
+            username=data["username"], password=data["password"]
         )
         if user:
             login_user(user)
@@ -148,16 +148,17 @@ def staff_signup():
             return jsonify({"message": "User not created"}), 400
     return jsonify({"message": "User not created"}), 400
 
+
 #Admin Sign up route for Postman
 @user_views.route("/api/admin-signup", methods=["POST", "GET"])
 def admin_signup():
-    if request.method == "POST":
-        data = request.get_json() 
+    if (request.method=="POST"):
+        data=request.get_json() 
         if data["username"] and data["password"]:
             if get_admin_by_username(data["username"]):
                 return jsonify({"message": "Username taken."}), 400
             user = create_admin(
-                username=data["username"], password=data["password"], access=data["access"]
+                username=data["username"], password=data["password"]
             )
             if user:
                 login_user(user)

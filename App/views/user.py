@@ -109,7 +109,7 @@ def get_user_by_access_action(access):
 #POSTMAN ROUTES
 
 # Staff Log in route for Postman
-@user_views.route("/staff-login", methods=["POST", "GET"])
+@user_views.route("/api/staff-login", methods=["POST", "GET"])
 def staff_login():
     if request.method == "POST":
         data = request.json
@@ -120,7 +120,7 @@ def staff_login():
         return jsonify({"message": "Incorrect username or password"}), 401
 
 # Admin Log in route for Postman
-@user_views.route("/admin-login", methods=["POST", "GET"])
+@user_views.route("/api/admin-login", methods=["POST", "GET"])
 def admin_login():
     if request.method == "POST":
         data = request.json
@@ -131,7 +131,7 @@ def admin_login():
         return jsonify({"message": "Incorrect username or password"}), 401
 
 # Staff Sign up route for Postman 
-@user_views.route("/", methods=["POST"])
+@user_views.route("/api/staff-signup", methods=["POST"])
 def staff_signup():
     data = request.json
     if data["username"] and data["password"]:
@@ -146,7 +146,7 @@ def staff_signup():
         return jsonify({"message": "User not created"}), 400
 
 #Admin Sign up route for Postman
-@user_views.route("/admin-signup", methods=["POST", "GET"])
+@user_views.route("/api/admin-signup", methods=["POST", "GET"])
 def admin_signup():
     if request.method == "POST":
         data = request.json

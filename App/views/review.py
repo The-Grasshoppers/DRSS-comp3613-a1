@@ -24,6 +24,22 @@ def create_review_action():
         return jsonify(review.to_json()), 201
     return jsonify({"error": "review not created"}), 400
 
+#Add reviews by student for Postman testing
+@review_views.route("/api/add-review/<student_id>", methods=["POST", "GET"])
+@login_required
+def add_review_by_student(student_id):
+    if request.method == "POST":
+        if current_user.access == "staff":
+            data = request.form
+            if data["student_id"] and data["text"] and data["rating"]:
+                review = create_review(
+                    student_id=data["student_id"],
+                    staff_id=current_user.id, text=data["text"], rating=data["rating"]
+                    )
+                if review:
+                    return jsonify(review.to_json()), 201
+            return jsonify({"error": "review not created"}), 400
+        return jsonify({"error": "Access denied"}), 403
 
 # List all reviews for Postman
 @review_views.route("/api/reviews", methods=["GET"])

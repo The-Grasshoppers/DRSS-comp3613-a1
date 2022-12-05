@@ -117,6 +117,26 @@ def update_review_action(review_id):
     return jsonify({"error": "review not found"}), 404
 
 
+@review_views.route("/update-review/<review_id>", methods=["POST", "GET"])
+@login_required
+def edit_review(review_id):
+    if request.method == "POST":
+        if current_user.access == "staff":
+            data = request.form
+            if data["text"]:
+                review = update_review(
+                    id=review_id, text=data["text"]
+                    )
+                if review:
+                    flash("Review successfully edited!")
+                    return redirect(url_for('review_views.staff_show_all_reviews'))
+            flash("Error: There was a problem editing the review.")
+            return render_template("edit-review.html")
+        flash("You are unauthorized to perform this action.")
+        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    return render_template("edit-review.html")
+
+
 # Deletes post given post id
 # Only admins or the original reviewer can delete a review
 @review_views.route("/api/reviews/<int:review_id>", methods=["DELETE"])

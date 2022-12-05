@@ -389,6 +389,64 @@ class StudentIntegrationTests(unittest.TestCase):
         student = get_student_by_school_id(1)
         assert student.school_id == test_student.school_id
 
+    def test_student_karma(self):
+        with self.subTest("No Review"):
+            test_student = create_student(1, "billy", 10 ,"CS","FST")
+            assert test_student.get_karma() == 0
+
+        with self.subTest("One review"):
+            test_staff = create_staff("reiner", "pass")
+            test_student = create_student(1, "billy", 20 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            assert test_student.get_karma() == 5
+
+        with self.subTest("One review == 5, one upvote"):
+            test_staff = create_staff("armin", "pass")
+            test_student = create_student(1, "billy",30 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+            assert test_review.get_num_upvotes() == 1
+            assert test_student.get_karma() == 6
+        
+        with self.subTest("One review == 5, one downvote"):
+            test_staff = create_staff("annie", "pass")
+            test_student = create_student(1, "billy",40 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            assert test_review.get_num_downvotes() == 1
+            assert test_student.get_karma() == 4
+        
+        with self.subTest("One review > 5, one upvote"):
+            test_staff = create_staff("connie", "pass")
+            test_student = create_student(1, "billy",50 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 6)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+            assert test_review.get_num_upvotes() == 1
+            assert test_student.get_karma() == 7
+
+        with self.subTest("One review > 5, one downvote"):
+            test_staff = create_staff("hanji", "pass")
+            test_student = create_student(1, "billy",60 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 6)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            assert test_review.get_num_downvotes() == 1
+            assert test_student.get_karma() == 5
+
+        with self.subTest("One review < 5, one upvote"):
+            test_staff = create_staff("mikasa", "pass")
+            test_student = create_student(1, "billy", 70 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 4)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+            assert test_review.get_num_upvotes() == 1
+            assert test_student.get_karma() == 5
+        
+        with self.subTest("One review > 5, one downvote"):
+            test_staff = create_staff("erwin", "pass")
+            test_student = create_student(1, "billy", 80 ,"CS","FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 4)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            assert test_review.get_num_downvotes() == 1
+            assert test_student.get_karma() == 3
 
 
 

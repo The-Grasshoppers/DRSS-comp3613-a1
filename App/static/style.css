@@ -63,7 +63,7 @@ body{
     flex-wrap: wrap;
 }
 
-.card{
+.cards-container > .card{
     width: 18vw;
     display: flex;
     flex-direction: column;
@@ -75,7 +75,8 @@ body{
     padding: 20px;
 }
 
-.card-label{
+.card-label,
+.review-label{
     font-size: larger;
     font-weight: bold;
 }
@@ -85,4 +86,23 @@ body{
     flex-direction: column;
     gap: 10px;
     align-items: center;
+}
+
+.reviews-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review{
+    padding:15px 25px;
+    width: 80vw;
+}
+
+.review-header{
+    margin-bottom: 20px;
+    border-bottom: 1px black solid;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
 }

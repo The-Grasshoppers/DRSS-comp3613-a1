@@ -12,11 +12,17 @@
 <div class="reviews-container">
   {% if reviews %}
     {% for review in reviews %}
-    <div class="review">
+    <div class="review card">
       <div class="review-header">
-        <div>{{review.student_id}}</div>
-        <div>{{review.staff_id}}</div>
-        <div>{{review.rating}}</div>
+        <div>
+          <span class="review-label">Student ID: </span><span>{{review.student_id}}</span>
+        </div>
+        <div>
+          <span class="review-label">Staff ID: </span><span>{{review.staff_id}}</span>
+        </div>
+        <div>
+          <span class="review-label">Rating: </span><span>{{review.rating}}</span>
+        </div>
       </div>
       <div class="review-text">
         <div>{{review.text}}</div>

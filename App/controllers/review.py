@@ -9,15 +9,13 @@ from App.controllers.vote import get_votes
 def create_review(student_id, staff_id, text, rating):
     staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
-    # if staff and student:
+    if staff and student:
+        review = Review.query.filter_by(staff_id=staff_id, student_id=student_id).first()
+        if review:
+            return None
     try:
         review = Review(staff_id, student_id, text, rating)
         db.session.add(review)
-        # db.session.commit()
-        # staff.reviews.append(review)
-        # student.reviews.append(review)
-        # db.session.add(staff)
-        # db.session.add(student)
         db.session.commit()
         return review
     except:

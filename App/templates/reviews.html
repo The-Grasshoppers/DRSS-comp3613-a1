@@ -31,10 +31,12 @@
       <div class="review-text">
         <div>{{review.text}}</div>
       </div>
+      {% if current_user.id == review.staff_id %}
       <div class="review-buttons">
         {% block edit_button scoped %}{% endblock %}
         {% block delete_button scoped %}{% endblock%}
       </div>
+      {% endif %}
     </div>
     {% endfor %}
   {% else %}

@@ -66,7 +66,7 @@ def admin_show_all_reviews():
 @login_required
 def staff_show_all_reviews():
     reviews = get_all_reviews()
-    return render_template("staff-reviews.html", reviews=reviews)
+    return render_template("staff-reviews.html", reviews=reviews, current_user=current_user)
 
 
 # Gets review given review id

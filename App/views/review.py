@@ -124,7 +124,7 @@ def edit_review(review_id):
     if not review:
         return jsonify({"error": "review not found"}), 404
     if request.method == "POST":
-        if current_user.access == "staff":
+        if current_user.access == "staff" and current_user.id == review.staff_id:
             data = request.form
             if data["text"]:
                 updated_review = update_review(
@@ -161,7 +161,7 @@ def remove_review(review_id):
     review = get_review(review_id)
     if not review:
         return jsonify({"error": "review not found"}), 404
-    if current_user.access == "staff":
+    if current_user.access == "staff" and current_user.id == review.staff_id:
         if delete_review(review_id):
             flash("Your review has been deleted.")
             return redirect(url_for('review_views.staff_show_all_reviews'))

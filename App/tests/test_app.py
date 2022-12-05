@@ -30,6 +30,7 @@ from App.controllers.student import (
     create_student,
     get_students_by_name,
     get_student,
+    get_student_by_school_id,
     get_all_students,
     get_all_students_json,
     update_student,
@@ -283,10 +284,10 @@ def empty_db():
 
 
 
-
-# #Integration tests for User model
+#Delete the test db before running each time
+#Integration tests for User model
 class UsersIntegrationTests(unittest.TestCase):
-    #delete the temp and test db before running each time
+    
 
     def test_create_admin(self):
         test_admin = create_admin("rick", "rickpass")
@@ -350,7 +351,7 @@ class StudentIntegrationTests(unittest.TestCase):
     def test_get_students_by_name(self):
         students = get_students_by_name("billy")
         assert students[0].name == "billy"
-
+        
     def test_get_all_students_json(self):
         students = get_all_students()
         students_json = get_all_students_json()
@@ -382,6 +383,13 @@ class StudentIntegrationTests(unittest.TestCase):
         sid = test_student.id
         delete_student(sid,1)
         assert get_student(sid) is None
+    
+    def test_get_student_by_school_id(self):
+        test_student = create_student(1, "billy", 1,"CS","FST")
+        student = get_student_by_school_id(1)
+        assert student.school_id == test_student.school_id
+
+
 
 
 
@@ -467,5 +475,30 @@ class ReviewIntegrationTests(unittest.TestCase):
             test_student = create_student(test_admin.id,"larry",400, "CS", "FST")
             test_review = create_review(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            self.assertEqual(test_review.get_num_downvotes(), 1)
+            self.assertEqual(test_review.get_karma(), 4)
+
+        with self.subTest("Downvote twice by same staff"):
+            test_admin = create_admin("eren", "pass")
+            test_staff = create_staff("eren", "pass")
+            test_student = create_student(test_admin.id,"larry",500, "CS", "FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            self.assertEqual(test_review.get_num_downvotes(), 1)
+            self.assertEqual(test_review.get_karma(), 4)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            self.assertEqual(test_review.get_num_downvotes(), 0)
+            self.assertEqual(test_review.get_karma(), 5)
+
+        with self.subTest("Upvote then downvote by same staff"):
+            test_admin = create_admin("levi", "pass")
+            test_staff = create_staff("levi", "pass")
+            test_student = create_student(test_admin.id,"larry",600, "CS", "FST")
+            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+            self.assertEqual(test_review.get_num_upvotes(), 1)
+            self.assertEqual(test_review.get_karma(), 6)
+            vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
+            self.assertEqual(test_review.get_num_upvotes(), 0)
             self.assertEqual(test_review.get_num_downvotes(), 1)
             self.assertEqual(test_review.get_karma(), 4)

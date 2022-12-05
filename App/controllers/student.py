@@ -60,4 +60,7 @@ def delete_student(student_id, admin_id):
         db.session.commit()
         return None
     return None
+
+def get_student_by_school_id(school_id):
+    return Student.query.filter_by(school_id=school_id).first()
     

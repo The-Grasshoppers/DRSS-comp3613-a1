@@ -66,10 +66,11 @@ def get_review_action(review_id):
 def vote_action(review_id, action):
     data= request.json()
     message= vote_on_review(review_id, current_identity.id, action)
-    if((message=="Vote created") or (message=="Vote updated") or (message=="Vote removed")):
-        return jsonify(message), 200
-    else:
+    if (message=="Must have a Staff account to vote")
         return jsonify({"message": f"{message}"}), 400
+    else:   
+        return jsonify(message), 200
+
 
 # Updates post given post id and new text for Postman
 # Only the original reviewer can edit a review

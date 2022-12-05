@@ -112,3 +112,9 @@ body{
     display: flex;
     justify-content: flex-end;
 }
+
+.review-form-btns{
+    margin-top: 40px;
+    display: flex;
+    gap: 50px;
+}

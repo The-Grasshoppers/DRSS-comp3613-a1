@@ -47,7 +47,7 @@ def identify_user_action():
 # Sign up route
 @user_views.route("/api/users", methods=["POST"])
 def signup_action():
-    data = request.json
+    data = request.get_json() 
     if get_user_by_username(data["username"]):
         return jsonify({"message": "Username taken."}), 400
     user = create_user(
@@ -109,10 +109,10 @@ def get_user_by_access_action(access):
 #POSTMAN ROUTES
 
 # Staff Log in route for Postman
-@user_views.route("/api/staff-login", methods=["POST", "GET"])
+@user_views.route("/api/staff-login", methods=["POST"])
 def staff_login():
     if request.method == "POST":
-        data = request.json
+        data = request.get_json()
         staff = get_staff_by_username(data["username"])
         if staff and staff.check_password(data["password"]):
             login_user(staff)
@@ -120,10 +120,10 @@ def staff_login():
         return jsonify({"message": "Incorrect username or password"}), 401
 
 # Admin Log in route for Postman
-@user_views.route("/api/admin-login", methods=["POST", "GET"])
+@user_views.route("/api/admin-login", methods=["POST"])
 def admin_login():
     if request.method == "POST":
-        data = request.json
+        data = request.get_json()
         admin = get_admin_by_username(data["username"])
         if admin and admin.check_password(data["password"]):
             login_user(admin)
@@ -133,7 +133,7 @@ def admin_login():
 # Staff Sign up route for Postman 
 @user_views.route("/api/staff-signup", methods=["POST"])
 def staff_signup():
-    data = request.json
+    data = request.get_json()
     if data["username"] and data["password"]:
         if get_staff_by_username(data["username"]):
             return jsonify({"message": "Username taken."}), 400
@@ -146,10 +146,10 @@ def staff_signup():
         return jsonify({"message": "User not created"}), 400
 
 #Admin Sign up route for Postman
-@user_views.route("/api/admin-signup", methods=["POST", "GET"])
+@user_views.route("/api/admin-signup", methods=["POST"])
 def admin_signup():
     if request.method == "POST":
-        data = request.json
+        data = request.get_json() 
         if data["username"] and data["password"]:
             if get_admin_by_username(data["username"]):
                 return jsonify({"message": "Username taken."}), 400

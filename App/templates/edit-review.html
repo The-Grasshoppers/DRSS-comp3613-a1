@@ -9,4 +9,17 @@
 {% block id_value %}value="{{review.student_id}}"{% endblock %}
 {% block text_value %}{{review.text}}{% endblock %}
 {% block label %}Edit your review here{% endblock %}
+
+{% if review.rating|int == 1 %}
+    {% block select_1 %}selected{% endblock %}
+{% endif %}
+
+{% if review.rating|int == 2 %}
+    {% block select_2 %}selected{% endblock %}
+{% endif %}
+
+{% if review.rating|int == 3 %}
+    {% block select_3 %}selected{% endblock %}
+{% endif %}
+
 {% block button_text %}Edit Review{% endblock %}

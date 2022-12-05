@@ -147,9 +147,9 @@ def edit_review(review_id):
     if request.method == "POST":
         if current_user.access == "staff" and current_user.id == review.staff_id:
             data = request.form
-            if data["text"]:
+            if data["text"] and data["rating"]:
                 updated_review = update_review(
-                    id=review_id, text=data["text"]
+                    id=review_id, text=data["text"], rating=data["rating"]
                     )
                 if updated_review:
                     flash("Review successfully edited!")

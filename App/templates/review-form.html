@@ -18,17 +18,17 @@
         </div>  
         <div class="input-field col s12">
           <select name="rating" class="browser-default">
-            <option value="" disabled selected>Choose your rating</option>
-            <option value="1">1 star</option>
-            <option value="2">2 stars</option>
-            <option value="3">3 stars</option>
-            <option value="4">4 stars</option>
-            <option value="5">5 stars</option>
-            <option value="6">6 stars</option>
-            <option value="7">7 stars</option>
-            <option value="8">8 stars</option>
-            <option value="9">9 stars</option>
-            <option value="10">10 stars</option>
+            <option value="" disabled {% block select_a %}{% endblock %}>Choose your rating</option>
+            <option value="1" {% block select_1 %}{% endblock %}>1 star</option>
+            <option value="2" {% block select_2 %}{% endblock %}>2 stars</option>
+            <option value="3" {% block select_3 %}{% endblock %}>3 stars</option>
+            <option value="4" {% block select_e %}{% endblock %}>4 stars</option>
+            <option value="5" {% block select_f %}{% endblock %}>5 stars</option>
+            <option value="6" {% block select_g %}{% endblock %}>6 stars</option>
+            <option value="7" {% block select_h %}{% endblock %}>7 stars</option>
+            <option value="8" {% block select_i %}{% endblock %}>8 stars</option>
+            <option value="9" {% block select_j %}{% endblock %}>9 stars</option>
+            <option value="10" {% block select_k %}{% endblock %}>10 stars</option>
           </select>
         </div>
         <div class="review-form-btns">

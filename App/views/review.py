@@ -62,7 +62,7 @@ def admin_show_all_reviews():
     return render_template("admin-reviews.html", reviews=reviews)
 
 
-@review_views.route("/staff-reviews", methods=["GET"])
+@review_views.route("/staff-reviews", methods=["GET", "DELETE"])
 @login_required
 def staff_show_all_reviews():
     reviews = get_all_reviews()
@@ -153,6 +153,23 @@ def delete_review_action(review_id):
         else:
             return jsonify({"error": "Access denied"}), 403
     return jsonify({"error": "review not found"}), 404
+
+
+@review_views.route("/delete-review/<review_id>", methods=["DELETE", "GET"])
+@login_required
+def remove_review(review_id):
+    review = get_review(review_id)
+    if not review:
+        return jsonify({"error": "review not found"}), 404
+    if current_user.access == "staff":
+        if delete_review(review_id):
+            flash("Your review has been deleted.")
+            return redirect(url_for('review_views.staff_show_all_reviews'))
+        flash("Error: There was a problem deleting your review.")
+        return redirect(url_for('review_views.staff_show_all_reviews'))
+    flash("You are unauthorized to perform this action.")
+    return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    
 
 
 # Gets all votes for a given review

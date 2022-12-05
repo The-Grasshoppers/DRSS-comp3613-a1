@@ -31,7 +31,10 @@
       <div class="review-text">
         <div>{{review.text}}</div>
       </div>
-      {% block edit_button scoped %}{% endblock %}
+      <div class="review-buttons">
+        {% block edit_button scoped %}{% endblock %}
+        {% block delete_button scoped %}{% endblock%}
+      </div>
     </div>
     {% endfor %}
   {% else %}

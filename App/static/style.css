@@ -107,10 +107,11 @@ body{
     justify-content: space-between;
 }
 
-.review > .button{
+.review-buttons{
     margin-top: 20px;
     display: flex;
     justify-content: flex-end;
+    gap: 20px;
 }
 
 .review-form-btns{

@@ -1,10 +1,24 @@
 import click, pytest, sys
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
-
+from App.models.vote import Value
 from App.database import create_db, get_migrate
 from App.main import create_app
-from App.controllers import create_user, get_all_users_json, get_all_users
+from App.controllers import (
+    create_staff,
+    create_admin, 
+    create_student,
+    create_review_by_student_id,
+    get_review,
+    get_all_users_json, 
+    get_all_users,  
+    get_all_admins,
+    get_all_staff,
+    get_all_reviews,
+    get_all_students,
+    get_review_votes,
+    vote_on_review,
+)
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
@@ -68,6 +82,130 @@ def initialize():
 """
 Test Commands
 """
+
+
+
+
+admin = AppGroup("admin", help="Testing admin")
+
+@admin.command("create", help="Creates an admin")
+@click.argument("username", default="bob")
+@click.argument("password", default="bobpass")
+def create_admin_command(username, password):
+    create_admin(username, password)
+    print(f"{username} created!")
+
+
+@admin.command("list", help="Lists admins in the database")
+def list_admin_command():
+    admins = get_all_admins()
+    for admin in admins:
+        print(admin.username)
+
+app.cli.add_command(admin)
+
+
+
+staff = AppGroup("staff", help="Testing staff")
+
+@staff.command("create", help="Creates a staff")
+@click.argument("username", default="Sue")
+@click.argument("password", default="suepass")
+def create_staff_command(username, password):
+    create_staff(username, password)
+    print(f"{username} created!")
+
+
+@staff.command("list", help="Lists staff in the database")
+def list_staff_command():
+    staffs = get_all_staff()
+    for staff in staffs:
+        print(staff.username)
+        print(staff.id)
+
+app.cli.add_command(staff)
+
+
+
+review_cli = AppGroup('review', help="Review object commands")
+@review_cli.command("create", help="Create a review")
+@click.argument("student_id", default="1")
+@click.argument("staff_id", default="1")
+@click.argument("text", default="good")
+@click.argument("rating", default="6")
+def create_review_command(student_id, staff_id, text, rating):
+    create_review(student_id, staff_id, text, rating)
+    print(f'review created!')
+
+
+@review_cli.command("list", help="Lists staff in the database")
+def list_review_command():
+    reviews = get_all_reviews()
+    for review in reviews:
+        print(review.staff_id)
+        print(review.student_id)
+        print(review.text)
+        votes = get_review_votes(review.id)
+        for vote in votes:
+            print(vote.value)
+
+@review_cli.command("upvotes", help="Lists staff in the database")
+@click.argument("review_id", default="1")
+def review_upvotes_command(review_id):
+    review = get_review(review_id)
+    if not review:
+        print("No review found")
+    num_upvotes = review.get_num_upvotes()
+    print(num_upvotes)
+
+app.cli.add_command(review_cli)
+
+
+student_cli = AppGroup('student', help="Student object commands")
+@student_cli.command("create", help="Create a student")
+@click.argument("admin_id", default="1")
+@click.argument("name", default="Joe")
+@click.argument("school_id", default="1")
+@click.argument("programme", default="CS")
+@click.argument("faculty", default="FST")
+def create_review_command(admin_id, name, school_id, programme, faculty):
+    create_student(admin_id, name, school_id, programme, faculty)
+    print(f'Student created!')
+
+
+@student_cli.command("list", help="Lists staff in the database")
+def list_students_command():
+    students = get_all_students()
+    for student in students:
+        print(student.name)
+        #print(student.get_karma)
+    
+
+app.cli.add_command(student_cli)
+
+
+
+vote_cli = AppGroup('vote', help="Vote object commands")
+@vote_cli.command("upvote", help="Create a vote")
+@click.argument("review_id", default="1")
+@click.argument("staff_id", default="1")
+def create_vote_command(review_id, staff_id):
+    action = "upvote"
+    voteCommand = vote_on_review(review_id,staff_id,action)
+    print(voteCommand)
+
+@vote_cli.command("downvote", help="Create a vote")
+@click.argument("review_id", default="1")
+@click.argument("staff_id", default="2")
+def create_vote_command(review_id, staff_id):
+    action = "downvote"
+    voteCommand = vote_on_review(review_id,staff_id,action)
+    print(voteCommand)
+
+    
+
+app.cli.add_command(vote_cli)
+
 
 test = AppGroup("test", help="Testing commands")
 

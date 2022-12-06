@@ -14,7 +14,7 @@ class Admin (User):
         return{
             'id': self.id,
             'username': self.username,
-            'access': 'admin'
+            'access': self.access
         }
     
     #only admin can create Student objects

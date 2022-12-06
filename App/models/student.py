@@ -19,6 +19,10 @@ class Student(db.Model):
 
     def get_karma(self):
         karma = 0
+        reviews = self.reviews
+        if not reviews:
+            return karma
+
         for review in self.reviews:
             karma += review.get_karma()
         return karma

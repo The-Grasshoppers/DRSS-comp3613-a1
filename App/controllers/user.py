@@ -2,17 +2,6 @@ from App.models import User, Staff, Admin
 from App.database import db
 
 
-# Creates a new user given their username, password and access level
-def create_user(username, password, access=1):
-    new_user = User(username=username, password=password)
-    try:
-        db.session.add(new_user)
-        db.session.commit()
-        return new_user
-    except:
-        return None
-
-
 # Creates a new admin given their username and password
 def create_admin(username, password):
     new_admin = Admin(username=username, password=password)
@@ -35,9 +24,15 @@ def create_staff(username, password):
         return None
 
 
-# Gets a user by their username
-def get_user_by_username(username):
-    return User.query.filter_by(username=username).first()
+# Creates a new staff given their username, password
+def create_staff(username, password):
+    new_staff = Staff(username=username, password=password)
+    try:
+        db.session.add(new_staff)
+        db.session.commit()
+        return new_staff
+    except:
+        return None
 
 
 # Gets admin by their username
@@ -50,9 +45,14 @@ def get_staff_by_username(username):
     return Staff.query.filter_by(username=username).first()
 
 
-# Gets a user by their id
-def get_user(id):
-    return User.query.get(id)
+# Gets an admin by their id
+def get_admin(id):
+    return Admin.query.get(id)
+
+
+# Gets a staff by their id
+def get_staff(id):
+    return Staff.query.get(id)
 
 
 # Gets an admin by their id
@@ -95,7 +95,7 @@ def get_all_users_json():
 
 # Gets all admins and returns them as a JSON object
 def get_all_admins_json():
-    admins = Admins.query.all()
+    admins = Admin.query.all()
     if not admins:
         return []
     return [admin.to_json() for admin in admins]
@@ -119,9 +119,40 @@ def update_user(id, username):
     return None
 
 
+def update_admin(id, username):
+    user = get_admin(id)
+    if user:
+        user.username = username
+        db.session.add(user)
+        return db.session.commit()
+    return None
+
+def update_staff(id, username):
+    user = get_staff(id)
+    if user:
+        user.username = username
+        db.session.add(user)
+        return db.session.commit()
+    return None
+
+
 # Deletes a user given their id
 def delete_user(id):
     user = get_user(id)
+    if user:
+        db.session.delete(user)
+        return db.session.commit()
+    return None
+
+def delete_admin(id):
+    user = get_admin(id)
+    if user:
+        db.session.delete(user)
+        return db.session.commit()
+    return None
+
+def delete_staff(id):
+    user = get_staff(id)
     if user:
         db.session.delete(user)
         return db.session.commit()

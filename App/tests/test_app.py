@@ -50,6 +50,10 @@ from App.controllers.review import (
     vote_on_review
 )
 
+from App.controllers.vote import (
+    get_staff_votes
+)
+
 from wsgi import app
 
 
@@ -229,6 +233,17 @@ class UsersIntegrationTests(unittest.TestCase):
         delete_staff(sid)
         assert get_staff(sid) is None
 
+    def test_staff_get_votes(self):
+        test_staff = create_staff("brock", "pass")
+        test_student1 = create_student(1, "billy", 998,"CS","FST")
+        test_student2 = create_student(1, "billy", 997,"CS","FST")
+        test_review1 = create_review(test_student1.id, test_staff.id, "good", 5)
+        test_review2 = create_review(test_student2.id, test_staff.id, "good", 5)
+        vote_command1 = vote_on_review(test_review1.id, test_staff.id, "upvote")
+        vote_command2 = vote_on_review(test_review2.id, test_staff.id, "upvote")
+        votes = get_staff_votes(test_staff.id)
+        for vote in votes:
+            self.assertEqual(vote.staff_id, test_staff.id)
 
 
 
@@ -382,7 +397,7 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert get_review(test_review.id).text == "bad"
 
     def test_delete_review(self):
-        test_review = create_review(1, 3, "good", 5)
+        test_review = create_review(1, 4, "good", 5)
         assert test_review.text == "good"
         delete_review(test_review.id)
         assert get_review(test_review.id) == None

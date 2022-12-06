@@ -116,7 +116,7 @@ def get_user_by_access_action(access):
 
 # Staff Log in route for Postman
 @user_views.route("/api/staff-login", methods=['GET'])
-def staff_login_action():
+def staff_login_action_postman():
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')
@@ -128,7 +128,7 @@ def staff_login_action():
 
 # Admin Log in route for Postman
 @user_views.route("/api/admin-login", methods=['GET'])
-def admin_login_action():
+def admin_login_action_postman():
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')
@@ -139,7 +139,7 @@ def admin_login_action():
 
 # Staff Sign up route for Postman 
 @user_views.route("/api/staff-signup", methods=['GET'])
-def staff_signup():
+def staff_signup_postman():
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')
@@ -151,7 +151,7 @@ def staff_signup():
 
 #Admin Sign up route for Postman
 @user_views.route("/api/admin-signup", methods=['GET'])
-def admin_signup():
+def admin_signup_postman():
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')

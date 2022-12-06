@@ -5,8 +5,8 @@
 {% block title %}Add Review | Student Conduct Tracker{% endblock %}
 
 {% block form_action %}
-    {% if student_id %}
-        "{{ url_for("review_views.add_review_by_student", student_id=student_id)}}"
+    {% if school_id %}
+        "{{ url_for("review_views.add_review_by_student", school_id=school_id)}}"
     {% else %}
         "{{ url_for("review_views.add_review")}}"
     {% endif %}
@@ -14,8 +14,8 @@
 
 {% block form_heading %}Add Review{% endblock %}
 
-{% if student_id %}
-    {% block id_value %}value="{{student_id}}"{% endblock %}
+{% if school_id %}
+    {% block id_value %}value="{{school_id}}"{% endblock %}
 {% endif %}
 
 {% block label %}Write your review here{% endblock %}

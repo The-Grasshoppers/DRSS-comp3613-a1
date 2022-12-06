@@ -13,6 +13,7 @@ from App.controllers.user import (
     get_staff_by_username,
     get_all_users,
     get_all_admins,
+    get_all_staff,
     get_all_admins_json,
     get_all_staff_json,
     get_admin,
@@ -198,6 +199,7 @@ class UsersIntegrationTests(unittest.TestCase):
         admin = get_admin_by_username("joe")
         assert test_admin.username == admin.username
 
+
     def test_get_staff(self):
         test_staff = create_staff("joe", "joepass")
         user = get_staff_by_username("joe")
@@ -207,6 +209,11 @@ class UsersIntegrationTests(unittest.TestCase):
         admins = get_all_admins()
         admins_json = get_all_admins_json()
         assert admins_json == [admin.to_json() for admin in admins]
+
+    def test_get_all_staff_json(self):
+        staffs = get_all_staff()
+        staffs_json = get_all_staff_json()
+        assert staffs_json == [staff.to_json() for staff in staffs]
 
     def test_update_admin(self):
         admin = create_admin("kyle","pass")

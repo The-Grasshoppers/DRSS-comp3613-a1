@@ -12,6 +12,10 @@
     {% endif %}
 {% endblock %}
 
+{% if school_id %}
+    {% block disable %}disabled{% endblock %}
+{% endif %}
+
 {% block form_heading %}Add Review{% endblock %}
 
 {% if school_id %}

@@ -17,19 +17,21 @@ student_views = Blueprint("student_views", __name__, template_folder="../templat
 
 # Create student given name, programme and faculty for Postman
 # Must be an admin to access this route
-@student_views.route("/api/add-student", methods=["POST", "GET"])
+@student_views.route("/api/add-student", methods=['GET'])
 @jwt_required
 def add_student():
-    #if request.method == "POST":
-    if current_user.access == "admin":
-        data = request.json
-        if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
-            student = create_student(admin_id=current_user.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"])
-            if student:
-                return jsonify(student.to_json()), 201
-        return jsonify({"error": "student not created"}), 400
-        #return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
-
+    data=request.form
+    admin_id= request.args.get('admin_id')
+    name= request.args.get('name')
+    school_id= request.args.get('school_id')
+    programme= request.args.get('programme')
+    faculty= request.args.get('faculty')
+    if name and school_id and programme and faculty:
+        student = create_student(admin_id, name, school_id, programme, faculty)
+        if student:
+            return jsonify({student}), 201
+    return jsonify({"error": "student not created"}), 400
+    return jsonify({"error": "unauthorized access"}), 401
 
 # Updates student given student id, name, programme and faculty for Postman
 # Must be an admin to access this route

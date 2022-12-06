@@ -2,17 +2,17 @@ from App.models import Review, Student, User, Staff
 from App.database import db
 
 
-# Creates a review given a student id, user id and review text
+# Creates a review given a student's school id, user id, review text, and rating
 # Returns the review object if successful, None otherwise
-def create_review(student_id, staff_id, text, rating):
+def create_review(school_id, staff_id, text, rating):
     staff = Staff.query.get(staff_id)
-    student = Student.query.get(student_id)
+    student = Student.query.filter_by(school_id=school_id).first()
     if staff and student:
-        review = Review.query.filter_by(staff_id=staff_id, student_id=student_id).first()
+        review = Review.query.filter_by(staff_id=staff_id, student_id=student.id).first()
         if review:
             return None
         try:
-            review = Review(staff_id, student_id, text, rating)
+            review = Review(staff_id=staff_id, student_id=student.id, text=text, rating=rating)
             db.session.add(review)
             db.session.commit()
             return review

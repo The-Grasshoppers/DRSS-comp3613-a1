@@ -47,6 +47,7 @@ from App.controllers.review import (
     get_review_json,
     get_all_reviews,
     get_all_reviews_json,
+    get_reviews_by_student,
     vote_on_review
 )
 
@@ -488,5 +489,14 @@ class ReviewIntegrationTests(unittest.TestCase):
         votes = get_review_votes(test_review.id)
         for vote in votes:
             self.assertEqual(vote.value, Value.UPVOTE)
+    
+    def test_get_review_by_student(self):
+        test_admin = create_admin("misty", "pass")
+        test_staff = create_staff("misty", "pass")
+        test_student = create_student(test_admin.id,"larry",800, "CS", "FST")
+        test_review = create_review(test_student.id, test_staff.id, "good", 5)       
+        reviews = get_reviews_by_student(test_student.id)
+        for review in reviews:
+            self.assertEqual(test_review.id, review.id)
 
         

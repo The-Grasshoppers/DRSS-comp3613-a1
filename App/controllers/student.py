@@ -7,7 +7,7 @@ from App.models import Student, Admin
 def create_student(admin_id, name,school_id, programme, faculty):
     admin= Admin.query.get(admin_id)
     if admin:
-        return admin.create_student(name,school_id,programme,faculty)
+        return admin.create_student(name=name,school_id=school_id,programme=programme,faculty=faculty)
     return False
 
 
@@ -19,6 +19,11 @@ def get_students_by_name(name):
 # Gets a student by their id
 def get_student(id):
     return Student.query.get(id)
+
+
+# Gets a student by their school id
+def get_student_by_school_id(school_id):
+    return Student.query.filter_by(school_id=school_id).first()
 
 
 # Gets all students in the database
@@ -60,7 +65,3 @@ def delete_student(student_id, admin_id):
         db.session.commit()
         return None
     return None
-
-def get_student_by_school_id(school_id):
-    return Student.query.filter_by(school_id=school_id).first()
-    

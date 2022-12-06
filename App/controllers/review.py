@@ -4,8 +4,9 @@ from App.models.vote import Value
 from App.models.voteCommand import Action
 from App.controllers.vote import get_votes
 
-# Creates a review given a student id, user id and review text
+# Creates a review given a student's school id, user id, review text, and rating
 # Returns the review object if successful, None otherwise
+
 def create_review_by_student_id(student_id, staff_id, text, rating):
     staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
@@ -15,6 +16,17 @@ def create_review_by_student_id(student_id, staff_id, text, rating):
             return "Review exists"
         try:
             review = Review(staff_id, student_id, text, rating)
+
+
+def create_review(school_id, staff_id, text, rating):
+    staff = Staff.query.get(staff_id)
+    student = Student.query.filter_by(school_id=school_id).first()
+    if staff and student:
+        review = Review.query.filter_by(staff_id=staff_id, student_id=student.id).first()
+        if review:
+            return None
+        try:
+            review = Review(staff_id=staff_id, student_id=student.id, text=text, rating=rating)
             db.session.add(review)
             db.session.commit()
             return review
@@ -25,10 +37,11 @@ def create_review_by_student_id(student_id, staff_id, text, rating):
 
 # Updates a review given a review id and updated review text
 # Returns the review object as a json if successful, None otherwise
-def update_review(id, text):
+def update_review(id, text, rating):
     review = Review.query.get(id)
     if review:
         review.text = text
+        review.rating= rating
         db.session.add(review)
         db.session.commit()
         return review

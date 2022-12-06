@@ -1,0 +1,32 @@
+{% extends "navbar1.html" %}
+
+{{ super() }}
+
+{% block content %}
+<div>
+  <div class="form">
+    <div class="row">
+      <form class="col s12 materialize-form" action={% block form_action %}{% endblock %} method="POST">
+        <div class="form-heading">{% block form_heading %}{% endblock %}</div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="username" name="username" type="text" class="validate">
+            <label for="username">Username</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" name="password" type="password" class="validate">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <button type="submit" class="waves-effect waves-light btn form-btn col s12 indigo lighten-2">{% block button_text %}{% endblock %}</button>
+        <div class="question">
+          {% block question %}{% endblock %}
+          <a href={% block question_link %}{% endblock %}>{% block link_text %}{% endblock %}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

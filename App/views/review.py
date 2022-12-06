@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template, flash, redirect, url_for
 from flask_jwt import jwt_required, current_identity
+from flask_login import current_user, login_required
 
 from App.controllers import (
     create_review_by_student_id,
@@ -25,12 +26,68 @@ def create_review_action():
     return jsonify({"error": "review not created"}), 400
 
 
+@review_views.route("/add-review", methods=["POST", "GET"])
+@login_required
+def add_review():
+    if request.method == "POST":
+        if current_user.access == "staff":
+            data = request.form
+            if data["school_id"] and data["text"] and data["rating"]:
+                review = create_review(
+                    school_id=data["school_id"],
+                    staff_id=current_user.id, text=data["text"], rating=data["rating"]
+                    )
+                if review:
+                    flash("Review successfully added!")
+                    return redirect(url_for('review_views.staff_show_all_reviews'))
+            flash("Error: There was a problem adding the review.")
+            return render_template("add-review.html")
+        flash("You are unauthorized to perform this action.")
+        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    return render_template("add-review.html")
+
+
+@review_views.route("/add-review/<school_id>", methods=["POST", "GET"])
+@login_required
+def add_review_by_student(school_id):
+    if request.method == "POST":
+        if current_user.access == "staff":
+            data = request.form
+            if data["school_id"] and data["text"] and data["rating"]:
+                review = create_review(
+                    school_id=data["school_id"],
+                    staff_id=current_user.id, text=data["text"], rating=data["rating"]
+                    )
+                if review:
+                    flash("Review successfully added!")
+                    return redirect(url_for('review_views.staff_show_all_reviews'))
+            flash("Error: There was a problem adding the review.")
+            return render_template("add-review.html", school_id=school_id)
+        flash("You are unauthorized to perform this action.")
+        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    return render_template("add-review.html", school_id=school_id)
+
+
 # List all reviews
 @review_views.route("/api/reviews", methods=["GET"])
 @jwt_required()
 def get_all_reviews_action():
     reviews = get_all_reviews()
     return jsonify([review.to_json() for review in reviews]), 200
+
+
+@review_views.route("/admin-reviews", methods=["GET"])
+@login_required
+def admin_show_all_reviews():
+    reviews = get_all_reviews()
+    return render_template("admin-reviews.html", reviews=reviews)
+
+
+@review_views.route("/staff-reviews", methods=["GET", "DELETE"])
+@login_required
+def staff_show_all_reviews():
+    reviews = get_all_reviews()
+    return render_template("staff-reviews.html", reviews=reviews, current_user=current_user)
 
 
 # Gets review given review id
@@ -81,6 +138,29 @@ def update_review_action(review_id):
     return jsonify({"error": "review not found"}), 404
 
 
+@review_views.route("/update-review/<review_id>", methods=["POST", "GET"])
+@login_required
+def edit_review(review_id):
+    review = get_review(review_id)
+    if not review:
+        return jsonify({"error": "review not found"}), 404
+    if request.method == "POST":
+        if current_user.access == "staff" and current_user.id == review.staff_id:
+            data = request.form
+            if data["text"] and data["rating"]:
+                updated_review = update_review(
+                    id=review_id, text=data["text"], rating=data["rating"]
+                    )
+                if updated_review:
+                    flash("Review successfully edited!")
+                    return redirect(url_for('review_views.staff_show_all_reviews'))
+            flash("Error: There was a problem editing the review.")
+            return render_template("edit-review.html", review=review)
+        flash("You are unauthorized to perform this action.")
+        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    return render_template("edit-review.html", review=review)
+
+
 # Deletes post given post id
 # Only admins or the original reviewer can delete a review
 @review_views.route("/api/reviews/<int:review_id>", methods=["DELETE"])
@@ -94,6 +174,23 @@ def delete_review_action(review_id):
         else:
             return jsonify({"error": "Access denied"}), 403
     return jsonify({"error": "review not found"}), 404
+
+
+@review_views.route("/delete-review/<review_id>", methods=["DELETE", "GET"])
+@login_required
+def remove_review(review_id):
+    review = get_review(review_id)
+    if not review:
+        return jsonify({"error": "review not found"}), 404
+    if current_user.access == "staff" and current_user.id == review.staff_id:
+        if delete_review(review_id):
+            flash("Your review has been deleted.")
+            return redirect(url_for('review_views.staff_show_all_reviews'))
+        flash("Error: There was a problem deleting your review.")
+        return redirect(url_for('review_views.staff_show_all_reviews'))
+    flash("You are unauthorized to perform this action.")
+    return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    
 
 
 # Gets all votes for a given review

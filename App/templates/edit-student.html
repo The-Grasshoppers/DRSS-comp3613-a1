@@ -1,0 +1,21 @@
+{% extends "student-form.html" %}
+
+{{ super() }}
+
+{% block title %}Edit Student | Student Conduct Tracker{% endblock %}
+
+{% block form_action %}"{{ url_for("student_views.edit_student", school_id=student.school_id)}}"{% endblock %}
+
+{% block form_heading %}Edit Student{% endblock %}
+
+{% block disable %}disabled{% endblock %}
+
+{% block id_value %}value="{{student.school_id}}"{% endblock %}
+
+{% block name_value %}value="{{student.name}}"{% endblock %}
+
+{% block programme_value %}value="{{student.programme}}"{% endblock %}
+
+{% block faculty_value %}value="{{student.faculty}}"{% endblock %}
+
+{% block button_text %}Edit Student{% endblock %}

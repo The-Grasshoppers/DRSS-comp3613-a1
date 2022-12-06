@@ -23,6 +23,18 @@ def create_staff(username, password):
     except:
         return None
 
+
+# Creates a new staff given their username, password
+def create_staff(username, password):
+    new_staff = Staff(username=username, password=password)
+    try:
+        db.session.add(new_staff)
+        db.session.commit()
+        return new_staff
+    except:
+        return None
+
+
 # Gets admin by their username
 def get_admin_by_username(username):
     return Admin.query.filter_by(username=username).first()
@@ -31,6 +43,16 @@ def get_admin_by_username(username):
 # Gets staff by their username
 def get_staff_by_username(username):
     return Staff.query.filter_by(username=username).first()
+
+
+# Gets an admin by their id
+def get_admin(id):
+    return Admin.query.get(id)
+
+
+# Gets a staff by their id
+def get_staff(id):
+    return Staff.query.get(id)
 
 
 # Gets an admin by their id

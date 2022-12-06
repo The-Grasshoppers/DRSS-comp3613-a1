@@ -1,0 +1,161 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    width: 100vw;
+}
+
+.heading-container{
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0px;
+    width: 100vw;
+}
+
+.heading{
+    font-size: 40px;
+}
+
+.form{
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 15px 10px;
+}
+
+.form-heading{
+    font-size: 24px;
+    padding-bottom: 10px;
+}
+
+.materialize-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 25vw;
+}
+
+.row{
+    margin-bottom: 0px;
+}
+
+.form-btn{
+    margin-bottom: 20px;
+}
+
+.cards-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100vw;
+    padding-left: 40px;
+    padding-right: 40px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.cards-container > .card{
+    width: 18vw;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.card-content{
+    padding: 20px;
+}
+
+.card-label,
+.review-label{
+    font-size: larger;
+    font-weight: bold;
+}
+
+.card-btn > .card-content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.reviews-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review{
+    padding:15px 25px;
+    width: 80vw;
+}
+
+.review-header{
+    margin-bottom: 20px;
+    border-bottom: 1px black solid;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.review-buttons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.review-form-btns{
+    margin-top: 40px;
+    display: flex;
+    gap: 50px;
+}
+
+.upvote{
+    color: green;
+}
+
+.downvote{
+    color: red;
+}
+
+.upvote.btn-flat{
+    color: green;
+}
+
+.upvote.btn-flat:visited{
+    background-color: #66bb6a;
+}
+
+.upvote.btn-flat:hover{
+    background-color: #66bb6a;
+}
+
+.upvote.btn-flat:active{
+    background-color: #66bb6a;
+}
+
+.downvote.btn-flat{
+    color: red;
+}
+
+.downvote.btn-flat:visited{
+    background-color: #e57373;
+}
+
+.downvote.btn-flat:hover{
+    background-color: #e57373;
+}
+
+.downvote.btn-flat:active{
+    background-color: #e57373;
+}

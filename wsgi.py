@@ -1,7 +1,7 @@
 import click, pytest, sys
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
-
+from App.models.vote import Value
 from App.database import create_db, get_migrate
 from App.main import create_app
 from App.controllers import (
@@ -146,7 +146,9 @@ def list_review_command():
         print(review.staff_id)
         print(review.student_id)
         print(review.text)
-        print(get_review_votes(review.id))
+        votes = get_review_votes(review.id)
+        for vote in votes:
+            print(vote.value)
 
 @review_cli.command("upvotes", help="Lists staff in the database")
 @click.argument("review_id", default="1")

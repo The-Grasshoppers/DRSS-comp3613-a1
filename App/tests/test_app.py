@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from App.main import create_app
 from App.database import create_db
 from App.models import User, Student, Review, Admin, Staff
+from App.models.vote import Value
 from App.controllers.auth import authenticate
 from App.controllers.user import (
     create_user,
@@ -161,10 +162,6 @@ class ReviewUnitTests(unittest.TestCase):
         staff = Staff("Jill","jillpass")
         review = Review(1, 1, "good", 5)
         self.assertEqual(review.get_karma(), 5)
-
-    def test_review_get_all_votes(self):
-        staff = Staff("Jill","jillpass")
-        review = Review(1, 1, "good", 1)
 
 
 """
@@ -470,5 +467,17 @@ class ReviewIntegrationTests(unittest.TestCase):
             self.assertEqual(test_review.get_num_upvotes(), 0)
             self.assertEqual(test_review.get_num_downvotes(), 1)
             self.assertEqual(test_review.get_karma(), 4)
+
+    def test_review_get_all_votes(self):
+        test_admin = create_admin("finn", "pass")
+        test_staff = create_staff("finn", "pass")
+        test_staff2 = create_staff("polly", "pass")
+        test_student = create_student(test_admin.id,"larry",700, "CS", "FST")
+        test_review = create_review(test_student.id, test_staff.id, "good", 5) 
+        vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
+        vote_command2 = vote_on_review(test_review.id, test_staff2.id, "upvote")
+        votes = get_review_votes(test_review.id)
+        for vote in votes:
+            self.assertEqual(vote.value, Value.UPVOTE)
 
         

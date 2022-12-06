@@ -20,17 +20,15 @@ student_views = Blueprint("student_views", __name__, template_folder="../templat
 @student_views.route("/api/add-student", methods=["POST", "GET"])
 @jwt_required
 def add_student():
-    if request.method == "POST":
-        if current_user.access == "admin":
-            data = request.json
-            if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
-                student = create_student(
-                    admin_id=current_user.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"]
-                    )
-                if student:
-                    return jsonify(student.to_json()), 201
-            return jsonify({"error": "student not created"}), 400
-        return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
+    #if request.method == "POST":
+    if current_user.access == "admin":
+        data = request.json
+        if data["name"] and data["school_id"] and data["programme"] and data["faculty"]:
+            student = create_student(admin_id=current_user.id, name=data["name"], school_id=data["school_id"], programme=data["programme"], faculty=data["faculty"])
+            if student:
+                return jsonify(student.to_json()), 201
+        return jsonify({"error": "student not created"}), 400
+        #return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
 
 
 # Updates student given student id, name, programme and faculty for Postman

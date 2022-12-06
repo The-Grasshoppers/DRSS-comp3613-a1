@@ -21,7 +21,8 @@ from App.controllers import (
     get_user_by_username,
     get_staff_by_username,
     get_admin_by_username,
-    login_user
+    login_user,
+    authenticateStaff
 )
 
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
@@ -119,10 +120,9 @@ def staff_login_action():
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')
-    staff = get_staff_by_username(username)
-    if staff and staff.check_password(password):
-        login_user(staff)
-        return jsonify({ "message":f"Log in successful! Welcome, {current_user.username}!"}), 200
+    staff=authenticateStaff(username,password)
+    if staff:
+        return jsonify({ "message":f"Log in successful! Welcome!"}), 200
     return jsonify({"message": "Incorrect username or password"}), 401
 #return jsonify({"message": "Not a post"}), 401
 

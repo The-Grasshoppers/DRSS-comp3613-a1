@@ -8,6 +8,7 @@ from App.controllers import (
     get_all_reviews,
     update_review,
     delete_review,
+    vote_on_review
 )
 
 review_views = Blueprint("review_views", __name__, template_folder="../templates")
@@ -99,27 +100,23 @@ def get_review_action(review_id):
         return jsonify(review.to_json()), 200
     return jsonify({"error": "review not found"}), 404
 
-
-# Upvotes post given post id and user id
-@review_views.route("/api/reviews/<int:review_id>/upvote", methods=["PUT"])
-@jwt_required()
-def upvote_review_action(review_id):
+@review_views.route("/vote-review/<int:review_id>/<string:action>", methods=["PUT", "GET"])
+@login_required
+def vote_on_review_action(review_id, action):
+    staff_id=current_user.id
     review = get_review(review_id)
-    if review:
-        review.vote(current_identity.id, "up")
-        return jsonify(review.to_json()), 200
-    return jsonify({"error": "review not found"}), 404
-
-
-# Downvotes post given post id and user id
-@review_views.route("/api/reviews/<int:review_id>/downvote", methods=["PUT"])
-@jwt_required()
-def downvote_review_action(review_id):
-    review = get_review(review_id)
-    if review:
-        review.vote(current_identity.id, "down")
-        return jsonify(review.to_json()), 200
-    return jsonify({"error": "review not found"}), 404
+    flash("I see you trying to vote. ")
+    if not review:
+        return jsonify({"error": "review not found"}), 404
+    if current_user.access == "staff":
+        message = vote_on_review(review_id, staff_id, action)
+        if (message != "Must have a Staff account to vote"):
+            flash(f"Your vote has been recorded {message}")
+            return redirect(url_for('review_views.staff_show_all_reviews'))
+        flash("Error: There was a problem recording your vote.")
+        return redirect(url_for('review_views.staff_show_all_reviews'))
+    flash("You are unauthorized to perform this action.")
+    return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
 
 
 # Updates post given post id and new text

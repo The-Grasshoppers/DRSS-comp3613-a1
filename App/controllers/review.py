@@ -1,5 +1,8 @@
-from App.models import Review, Student, User, Staff
+from App.models import Review, Student, User, Staff, VoteCommand, Vote
 from App.database import db
+from App.models.vote import Value
+from App.models.voteCommand import Action
+from App.controllers.vote import get_votes
 
 
 # Creates a review given a student's school id, user id, review text, and rating
@@ -83,32 +86,37 @@ def get_reviews_by_user(user_id):
     reviews = Review.query.filter_by(user_id=user_id).all()
     return reviews
 
-
-# Upvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def upvote_review(review_id, user_id):
+#Handles voting on a review, updating a vote and removing a vote
+def vote_on_review(review_id, staff_id, action):
     review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "up")
-        db.session.add(review)
+    staff= Staff.query.get(staff_id)
+
+    if staff and review:
+
+        #converting string action to enum
+        if (action=="upvote"):
+            actionEnum=Action.UPVOTE    
+        elif (action=="downvote"):
+            actionEnum=Action.DOWNVOTE
+        else:
+            return("Invalid action")
+    
+        #checking for removing a vote. Will remove if an upvote is upvoted or a downvote is downvoted again
+        vote= Vote.query.filter_by(staff_id=staff_id, review_id=review_id).first()
+        if vote: 
+            print("vote found")
+            if (((vote.value==Value.UPVOTE) and (actionEnum==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (actionEnum==Action.DOWNVOTE))):
+                actionEnum=Action.REMOVE
+                print("Action changed to remove")
+
+        new_voteCommand= VoteCommand(staff_id, review_id,actionEnum)
+
+        db.session.add(new_voteCommand)
         db.session.commit()
-        return review
-    return None
-
-
-# Downvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def downvote_review(review_id, user_id):
-    review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "down")
-        db.session.add(review)
-        db.session.commit()
-        return review
-    return None
-
+        new_voteCommand.execute()
+        return new_voteCommand.to_json()
+    else:
+        return ('Must have a Staff account to vote')
 
 # Gets all votes for a review given the review id
 def get_review_votes(id):

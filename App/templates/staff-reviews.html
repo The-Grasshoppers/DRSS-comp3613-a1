@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block votes %}
-<a href="" class="upvote waves-effect waves-green btn-flat">{{review.get_num_upvotes()}} up</a>
-<a href="" class="downvote waves-effect waves-red btn-flat">{{review.get_num_downvotes()}} down</a>
+<a href="{{ url_for("review_views.vote_on_review_action", review_id=review.id, action="upvote") }}" class="upvote waves-effect waves-green btn-flat">{{review.get_num_upvotes()}} up</a>
+<a href="{{ url_for("review_views.vote_on_review_action", review_id=review.id, action="downvote") }}" class="downvote waves-effect waves-red btn-flat">{{review.get_num_downvotes()}} down</a>
 {% endblock %}
 
 {% block edit_button %}

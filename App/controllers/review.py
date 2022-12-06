@@ -6,7 +6,7 @@ from App.controllers.vote import get_votes
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise
-def create_review(student_id, staff_id, text, rating):
+def create_review_by_student_id(student_id, staff_id, text, rating):
     staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
     if staff and student:

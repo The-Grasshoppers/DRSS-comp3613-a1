@@ -127,16 +127,15 @@ def staff_login_action():
 
 
 # Admin Log in route for Postman
-@user_views.route("/api/admin-login", methods=["POST", "GET"])
+@user_views.route("/api/admin-login", methods=['GET'])
 def admin_login_action():
-    #if request.method == "POST":
-    data=request.get_json()
-    admin = get_admin_by_username(data["username"])
-    if admin and admin.check_password(data["password"]):
-        login_user(admin)
-        return jsonify({ "message":f"Log in successful! Welcome, {current_user.username}!"}), 200
+    data=request.form
+    username= request.args.get('username')
+    password= request.args.get('password')
+    admin= authenticate(username, password)
+    if admin and get_admin(admin.id):
+        return jsonify({"message":"Logged in"}), 200
     return jsonify({"message": "Incorrect username or password"}), 401
-    #return jsonify({"message": "User not logged in"}), 400
 
 # Staff Sign up route for Postman 
 @user_views.route("/api/staff-signup", methods=['GET'])

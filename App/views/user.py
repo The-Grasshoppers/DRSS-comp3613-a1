@@ -53,7 +53,7 @@ def add_header(response):
 def logout():
     logout_user()
     flash("Log out successful.")
-    return render_template("staff-signup.html")
+    return redirect(url_for('index_views.index_page'))
 
 
 # Log in route
@@ -97,21 +97,22 @@ def signup_action():
     return jsonify({"message": "User not created"}), 400
 
 
-@user_views.route("/", methods=["POST"])
+@user_views.route("/staff-signup", methods=["POST", "GET"])
 def staff_signup():
-    data = request.form
-    if data["username"] and data["password"]:
-        if get_staff_by_username(data["username"]):
-            flash("Username taken.")
-            return render_template("staff-signup.html")
-        user = create_staff(
-            username=data["username"], password=data["password"]
-        )
-        if user:
-            login_user(user)
-            flash(f"Account created! Welcome, {current_user.username}!")
-            return redirect(url_for('student_views.staff_show_all_students'))
-    flash("Error: There was a problem creating your account")
+    if request.method == "POST":
+        data = request.form
+        if data["username"] and data["password"]:
+            if get_staff_by_username(data["username"]):
+                flash("Username taken.")
+                return render_template("staff-signup.html")
+            user = create_staff(
+                username=data["username"], password=data["password"]
+            )
+            if user:
+                login_user(user)
+                flash(f"Account created! Welcome, {current_user.username}!")
+                return redirect(url_for('student_views.staff_show_all_students'))
+        flash("Error: There was a problem creating your account")
     return render_template("staff-signup.html")
 
 

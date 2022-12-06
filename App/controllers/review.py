@@ -16,6 +16,12 @@ def create_review_by_student_id(student_id, staff_id, text, rating):
             return "Review exists"
         try:
             review = Review(staff_id, student_id, text, rating)
+            db.session.add(review)
+            db.session.commit()
+            return review
+        except:
+            return None
+
 
 
 def create_review(school_id, staff_id, text, rating):

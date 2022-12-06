@@ -195,15 +195,12 @@ class UsersIntegrationTests(unittest.TestCase):
         assert staff.username == "rick" and staff.access =="staff"
 
     def test_get_admin(self):
-        test_admin = create_admin("joe","joepass")
-        admin = get_admin_by_username("joe")
-        assert test_admin.username == admin.username
-
+        admin = get_admin(1)
+        assert "rick" == admin.username
 
     def test_get_staff(self):
-        test_staff = create_staff("joe", "joepass")
-        user = get_staff_by_username("joe")
-        assert test_staff.username == user.username
+        staff = get_staff(1)
+        assert "rick" == staff.username
 
     def test_get_all_admins_json(self):
         admins = get_all_admins()
@@ -258,7 +255,7 @@ class StudentIntegrationTests(unittest.TestCase):
     
     def test_create_student(self):
         test_student = create_student(1, "billy", 1,"CS","FST")
-        student = get_student(1)
+        student = get_student_by_school_id(1)
         assert "billy" == student.name
 
     def test_get_students_by_name(self):
@@ -396,7 +393,8 @@ class ReviewIntegrationTests(unittest.TestCase):
          )
     
     def test_update_review(self):
-        test_review = create_review_by_student_id(1, 2, "good", 5)
+        test_staff = create_staff("bruce", "pass")
+        test_review = create_review_by_student_id(1, test_staff.id, "good", 5)
         assert test_review.text == "good"
         update_review(test_review.id, "bad")
         assert get_review(test_review.id).text == "bad"

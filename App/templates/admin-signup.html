@@ -1,0 +1,11 @@
+{% extends "form.html" %}
+
+{{ super() }}
+
+{% block title %}Admin Sign Up | Student Conduct Tracker{% endblock %}
+{% block form_action %}"{{ url_for("user_views.admin_signup")}}"{% endblock %}
+{% block form_heading %}Admin Sign Up{% endblock %}
+{% block button_text %}Sign Up{% endblock %}
+{% block question %}Already have an account?{% endblock %}
+{% block question_link %}"/admin-login"{% endblock %}
+{% block link_text %}Log in.{% endblock %}

@@ -1,15 +1,14 @@
 from flask import jsonify
-from App.models import Student
 from App.database import db
-
+from App.models import Student, Admin
 
 # Creates a new student given their name, programme and faculty
 # Commits the student to the database and returns the student
-def create_student(name, programme, faculty):
-    new_student = Student(name=name, programme=programme, faculty=faculty)
-    db.session.add(new_student)
-    db.session.commit()
-    return new_student
+def create_student(admin_id, name,school_id, programme, faculty):
+    admin= Admin.query.get(admin_id)
+    if admin:
+        return admin.create_student(name=name,school_id=school_id,programme=programme,faculty=faculty)
+    return False
 
 
 # Gets a student by their name
@@ -20,6 +19,11 @@ def get_students_by_name(name):
 # Gets a student by their id
 def get_student(id):
     return Student.query.get(id)
+
+
+# Gets a student by their school id
+def get_student_by_school_id(school_id):
+    return Student.query.filter_by(school_id=school_id).first()
 
 
 # Gets all students in the database
@@ -45,27 +49,9 @@ def get_all_student_reviews(id):
 
 
 # Updates a student given their id, name, programme and faculty
-# If name, programme or faculty is None, it is not updated
-def update_student(id, name=None, programme=None, faculty=None):
-    student = Student.query.get(id)
-    if student:
-        if name:
-            student.name = name
-        if programme:
-            student.programme = programme
-        if faculty:
-            student.faculty = faculty
-        db.session.add(student)
-        db.session.commit()
-        return student
-    return None
-
-
-# Deletes a student given their id
-def delete_student(id):
-    student = Student.query.get(id)
-    if student:
-        db.session.delete(student)
-        db.session.commit()
-        return True
+def update_student(admin_id, student_id, name,school_id, programme, faculty):
+    student = Student.query.get(student_id)
+    admin= Admin.query.get(admin_id)
+    if student and admin:
+        return admin.update_student(student, name, school_id, programme, faculty)
     return False

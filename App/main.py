@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, Response
 from flask_login import LoginManager, current_user
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
 from flask_cors import CORS
@@ -7,8 +7,9 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 from datetime import timedelta
 
+from App.models import User, Staff, Admin
 
-from App.database import create_db
+from App.database import create_db, db
 
 from App.controllers import setup_jwt
 
@@ -44,6 +45,10 @@ def loadConfig(app, config):
     for key, value in config.items():
         app.config[key] = config[key]
 
+login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
+    return Staff.query.get(user_id) or Admin.query.get(user_id)
 
 def create_app(config={}):
     app = Flask(__name__, static_url_path="/static")
@@ -57,6 +62,10 @@ def create_app(config={}):
     configure_uploads(app, photos)
     add_views(app, views)
     create_db(app)
+    login_manager.init_app(app)
     setup_jwt(app)
     app.app_context().push()
     return app
+
+# if __name__ == "__main__":
+    # app.run(host="0.0.0.0", port=8080, debug=True)

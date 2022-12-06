@@ -1,0 +1,45 @@
+{% extends "navbar2.html" %}
+
+{{ super() }}
+
+{% block title %}Reviews | Student Conduct Tracker{% endblock %}
+
+{% block content_heading %}All Reviews{% endblock %}
+
+{% block button %}{% endblock %}
+
+{% block content %}
+<div class="reviews-container">
+  {% if reviews %}
+    {% for review in reviews %}
+    <div class="review card">
+      <div class="review-header">
+        <div>
+          <span class="review-label">Student ID: </span><span>{{review.student_id}}</span>
+        </div>
+        <div>
+          <span class="review-label">Staff ID: </span><span>{{review.staff_id}}</span>
+        </div>
+        <div>
+          <span class="review-label">Rating: </span><span>{{review.rating}}</span>
+        </div>
+        <div>
+          {% block votes scoped %}{% endblock %}
+        </div>
+      </div>
+      <div class="review-text">
+        <div>{{review.text}}</div>
+      </div>
+      {% if current_user.id == review.staff_id %}
+      <div class="review-buttons">
+        {% block edit_button scoped %}{% endblock %}
+        {% block delete_button scoped %}{% endblock%}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <div>No reviews found.</div>
+  {% endif %}
+</div>
+{% endblock %}

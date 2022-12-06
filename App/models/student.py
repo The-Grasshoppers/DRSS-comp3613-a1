@@ -3,6 +3,7 @@ from App.database import db
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    school_id= db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     faculty = db.Column(db.String(100), nullable=False)
     programme = db.Column(db.String(100), nullable=False)
@@ -10,8 +11,9 @@ class Student(db.Model):
         "Review", backref="student", lazy=True, cascade="all, delete-orphan"
     )
 
-    def __init__(self, name, faculty, programme):
-        self.name = name
+    def __init__(self,school_id, name, faculty, programme):
+        self.school_id= school_id
+        self.name=name
         self.faculty = faculty
         self.programme = programme
 
@@ -24,6 +26,7 @@ class Student(db.Model):
     def to_json(self):
         return {
             "id": self.id,
+            "school_id": self.school_id,
             "name": self.name,
             "faculty": self.faculty,
             "programme": self.programme,

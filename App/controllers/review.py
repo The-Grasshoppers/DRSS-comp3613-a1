@@ -1,31 +1,33 @@
-from App.models import Review, Student, User
+from App.models import Review, Student, User, Staff
 from App.database import db
 
 
-# Creates a review given a student id, user id and review text
+# Creates a review given a student's school id, user id, review text, and rating
 # Returns the review object if successful, None otherwise
-def create_review(student_id, user_id, text):
-    user = User.query.get(user_id)
-    student = Student.query.get(student_id)
-    if user and student:
-        review = Review(user_id, student_id, text)
-        db.session.add(review)
-        db.session.commit()
-        user.reviews.append(review)
-        student.reviews.append(review)
-        db.session.add(user)
-        db.session.add(student)
-        db.session.commit()
-        return review
-    return None
+def create_review(school_id, staff_id, text, rating):
+    staff = Staff.query.get(staff_id)
+    student = Student.query.filter_by(school_id=school_id).first()
+    if staff and student:
+        review = Review.query.filter_by(staff_id=staff_id, student_id=student.id).first()
+        if review:
+            return None
+        try:
+            review = Review(staff_id=staff_id, student_id=student.id, text=text, rating=rating)
+            db.session.add(review)
+            db.session.commit()
+            return review
+        except:
+            return None
+
 
 
 # Updates a review given a review id and updated review text
 # Returns the review object as a json if successful, None otherwise
-def update_review(id, text):
+def update_review(id, text, rating):
     review = Review.query.get(id)
     if review:
         review.text = text
+        review.rating= rating
         db.session.add(review)
         db.session.commit()
         return review

@@ -1,0 +1,137 @@
+{% extends "review-form.html" %}
+
+{{ super() }}
+
+{% block title %}Edit Review | Student Conduct Tracker{% endblock %}
+{% block form_action %}"{{ url_for("review_views.edit_review", review_id=review.id) }}"{% endblock %}
+{% block form_heading %}Edit Review{% endblock %}
+{% block disable %}disabled{% endblock %}
+{% block id_value %}value="{{review.student_id}}"{% endblock %}
+{% block text_value %}{{review.text}}{% endblock %}
+{% block label %}Edit your review here{% endblock %}
+
+{% block options %}
+  {% if review.rating == 1 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1" selected>1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 2 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2" selected>2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 3 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3" selected>3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 4 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4" selected>4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 5 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5" selected>5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 6 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6" selected>6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 7 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7" selected>7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 8 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8" selected>8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 9 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9" selected>9 stars</option>
+    <option value="10">10 stars</option>
+  {% elif review.rating == 10 %}
+    <option value="" disabled>Choose your rating</option>
+    <option value="1">1 star</option>
+    <option value="2">2 stars</option>
+    <option value="3">3 stars</option>
+    <option value="4">4 stars</option>
+    <option value="5">5 stars</option>
+    <option value="6">6 stars</option>
+    <option value="7">7 stars</option>
+    <option value="8">8 stars</option>
+    <option value="9">9 stars</option>
+    <option value="10" selected>10 stars</option>
+  {% endif %}
+{% endblock %}
+
+{% block button_text %}Edit Review{% endblock %}

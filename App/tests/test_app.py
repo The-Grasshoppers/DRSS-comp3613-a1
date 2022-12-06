@@ -159,7 +159,6 @@ class ReviewUnitTests(unittest.TestCase):
         )
 
     def test_review_get_karma(self):
-        staff = Staff("Jill","jillpass")
         review = Review(1, 1, "good", 5)
         self.assertEqual(review.get_karma(), 5)
 

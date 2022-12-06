@@ -7,7 +7,6 @@ from App.models import User, Student, Review, Admin, Staff
 from App.models.vote import Value
 from App.controllers.auth import authenticate
 from App.controllers.user import (
-    create_user,
     create_admin,
     create_staff,
     get_admin_by_username,

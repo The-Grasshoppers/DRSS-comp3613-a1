@@ -2,17 +2,6 @@ from App.models import User, Staff, Admin
 from App.database import db
 
 
-# Creates a new user given their username, password and access level
-def create_user(username, password, access=1):
-    new_user = User(username=username, password=password)
-    try:
-        db.session.add(new_user)
-        db.session.commit()
-        return new_user
-    except:
-        return None
-
-
 # Creates a new admin given their username and password
 def create_admin(username, password):
     new_admin = Admin(username=username, password=password)

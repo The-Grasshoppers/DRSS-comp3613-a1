@@ -5,7 +5,6 @@ from App.models.vote import Value
 from App.database import create_db, get_migrate
 from App.main import create_app
 from App.controllers import (
-    create_user, 
     create_staff,
     create_admin, 
     create_student,

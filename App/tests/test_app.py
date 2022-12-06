@@ -281,22 +281,28 @@ class StudentIntegrationTests(unittest.TestCase):
     def test_update_student(self):
         with self.subTest("Update name"):
             test_student = create_student(1, "billy", 1,"CS","FST")
-            update_student(1, test_student.id, "bobby", 1, "CS", "FST")
-            assert get_student(test_student.id).name == "bobby"
+            assert get_student_by_school_id(test_student.school_id).name == "billy"
+            update_student(1, 1, "bobby",test_student.school_id , "CS", "FST")
+            assert get_student_by_school_id(test_student.school_id).name == "bobby"
         with self.subTest("Update programme"):
-            test_student = create_student(1, "billy", 1,"CS","FST")
-            update_student(1, test_student.id, test_student.name, 1, "IT", "FST")
-            assert get_student(test_student.id).programme == "IT"
+            test_student = create_student(1, "billy", 2,"CS","FST")
+            assert get_student_by_school_id(test_student.school_id).programme == "CS"
+            update_student(1, 1, test_student.name, test_student.school_id, "IT", "FST")
+            assert get_student_by_school_id(test_student.school_id).programme == "IT"
         with self.subTest("Update faculty"):
-            test_student = create_student(1, "billy", 1,"CS","FST")
-            update_student(1, test_student.id, test_student.name, 1, "CS", "FSS")
-            assert get_student(test_student.id).faculty == "FSS"
+            test_student = create_student(1, "billy", 3,"CS","FST")
+            assert get_student_by_school_id(test_student.school_id).faculty == "FST"
+            update_student(1, 1, test_student.name, test_student.school_id, "CS", "FSS")
+            assert get_student_by_school_id(test_student.school_id).faculty == "FSS"
         with self.subTest("Update all"):
-            test_student = create_student(1, "billy", 1,"CS","FST")
-            update_student(1, test_student.id, "bobby", 1, "IT", "FSS")
-            assert get_student(test_student.id).name == "bobby"
-            assert get_student(test_student.id).programme == "IT"
-            assert get_student(test_student.id).faculty == "FSS"
+            test_student = create_student(1, "billy", 4,"CS","FST")
+            assert get_student_by_school_id(test_student.school_id).name == "billy"
+            assert get_student_by_school_id(test_student.school_id).programme == "CS"
+            assert get_student_by_school_id(test_student.school_id).faculty == "FST"
+            update_student(1, 1, "bobby", test_student.school_id, "IT", "FSS")
+            assert get_student_by_school_id(test_student.school_id).name == "bobby"
+            assert get_student_by_school_id(test_student.school_id).programme == "IT"
+            assert get_student_by_school_id(test_student.school_id).faculty == "FSS"
     
     def test_delete_student(self):
         test_student = create_student(1, "billy", 1,"CS","FST")

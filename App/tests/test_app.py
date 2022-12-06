@@ -140,6 +140,15 @@ class ReviewUnitTests(unittest.TestCase):
             and review.staff_id == 1 
             and review.text == "good"
          )
+    
+    def test_get_review(self):
+        review = Review(1, 1, "good", 1)
+        test_review = get_review(review.id)
+        assert (
+            review.student_id == test_review.id
+            and review.staff_id == test_review.id 
+            and review.text == test_review.text
+         )
 
     def test_review_to_json(self):
         review = Review(1, 1, "good", 5)

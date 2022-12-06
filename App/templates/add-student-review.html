@@ -5,10 +5,12 @@
 {% block title %}Add Review | Student Conduct Tracker{% endblock %}
 
 {% block form_action %}
-    "{{ url_for("review_views.add_review")}}"
+    "{{ url_for("review_views.add_review_by_student", student_id=student_id)}}"
 {% endblock %}
 
-{% block form_heading %}Add Review{% endblock %}
+{% block form_heading %}Write Review for {{student_id}}{% endblock %}
+
+{% block id_value %}value="{{student_id}}"{% endblock %}
 
 {% block label %}Write your review here{% endblock %}
 

@@ -16,6 +16,6 @@
   <a href="{{ url_for("student_views.admin_show_all_reviews_for_student", student_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">View Reviews</a>
 </div>
 <div class="button">
-  <a href="{{ url_for("student_views.edit_student", school_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">Edit Student</a>
+  <a href="{{ url_for("student_views.edit_student", student_school_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">Edit Student</a>
 </div>
 {% endblock %}

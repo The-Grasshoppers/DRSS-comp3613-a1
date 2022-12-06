@@ -72,10 +72,10 @@ def update_student_action(student_id):
     return jsonify({"error": "unauthorized"}), 401
 
 
-@student_views.route("/edit-student/<school_id>", methods=["POST", "GET"])
+@student_views.route("/edit-student/<student_school_id>", methods=["POST", "GET"])
 @login_required
-def edit_student(school_id):
-    student = get_student_by_school_id(school_id)
+def edit_student(student_school_id):
+    student = get_student_by_school_id(student_school_id)
     if not student:
         return jsonify({"error": "student not found"}), 404
     if request.method == "POST":

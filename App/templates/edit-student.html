@@ -4,7 +4,7 @@
 
 {% block title %}Edit Student | Student Conduct Tracker{% endblock %}
 
-{% block form_action %}"{{ url_for("student_views.edit_student", school_id=student.school_id)}}"{% endblock %}
+{% block form_action %}"{{ url_for("student_views.edit_student", student_school_id=student.school_id)}}"{% endblock %}
 
 {% block form_heading %}Edit Student{% endblock %}
 

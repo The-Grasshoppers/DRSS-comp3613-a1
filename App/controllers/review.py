@@ -87,6 +87,11 @@ def get_reviews_by_user(user_id):
     reviews = Review.query.filter_by(user_id=user_id).all()
     return reviews
 
+# Returns the reviews posted by a staff given the staff id
+def get_reviews_by_staff(staff_id):
+    reviews = Review.query.filter_by(staff_id=staff_id).all()
+    return reviews
+
 #Handles voting on a review, updating a vote and removing a vote
 def vote_on_review(review_id, staff_id, action):
     review = Review.query.get(review_id)

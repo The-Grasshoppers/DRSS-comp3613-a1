@@ -167,7 +167,7 @@ class ReviewUnitTests(unittest.TestCase):
         review = Review(1, 1, "good", 5)
         self.assertEqual(review.get_num_upvotes(), 0)
 
-    def test_review_upvotes(self):
+    def test_review_downvotes(self):
         review = Review(1, 1, "good", 5)
         self.assertEqual(review.get_num_downvotes(), 0)
 

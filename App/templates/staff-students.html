@@ -7,9 +7,9 @@
 
 {% block card_buttons %}
 <div class="button">
-  <a href="{{ url_for("student_views.staff_show_all_reviews_for_student", student_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">View Reviews</a>
+  <a href="{{ url_for("student_views.staff_show_all_reviews_for_student", school_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">View Reviews</a>
 </div>
 <div class="button">
-  <a href="{{ url_for("review_views.add_review_by_student", student_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">Write Review</a>
+  <a href="{{ url_for("review_views.add_review_by_student", school_id=student.school_id) }}" class="waves-effect waves-light btn indigo lighten-2">Write Review</a>
 </div>
 {% endblock %}

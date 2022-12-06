@@ -137,17 +137,17 @@ def get_all_student_reviews_action(student_id):
     return jsonify(reviews), 200
 
 
-@student_views.route("/staff-students/<student_id>", methods=["GET", "DELETE"])
+@student_views.route("/staff-students/<school_id>", methods=["GET", "DELETE"])
 @login_required
-def staff_show_all_reviews_for_student(student_id):
-    student = get_student_by_school_id(student_id)
-    reviews = get_reviews_by_student(student_id)
+def staff_show_all_reviews_for_student(school_id):
+    student = get_student_by_school_id(school_id)
+    reviews = get_reviews_by_student(student.id)
     return render_template("staff-student-reviews.html", reviews=reviews, current_user=current_user, student=student)
 
 
-@student_views.route("/admin-students/<student_id>", methods=["GET", "DELETE"])
+@student_views.route("/admin-students/<school_id>", methods=["GET", "DELETE"])
 @login_required
-def admin_show_all_reviews_for_student(student_id):
-    student = get_student_by_school_id(student_id)
-    reviews = get_reviews_by_student(student_id)
+def admin_show_all_reviews_for_student(school_id):
+    student = get_student_by_school_id(school_id)
+    reviews = get_reviews_by_student(student.id)
     return render_template("admin-student-reviews.html", reviews=reviews, current_user=current_user, student=student)

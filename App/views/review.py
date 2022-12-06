@@ -32,9 +32,9 @@ def add_review():
     if request.method == "POST":
         if current_user.access == "staff":
             data = request.form
-            if data["student_id"] and data["text"] and data["rating"]:
+            if data["school_id"] and data["text"] and data["rating"]:
                 review = create_review(
-                    student_id=data["student_id"],
+                    school_id=data["school_id"],
                     staff_id=current_user.id, text=data["text"], rating=data["rating"]
                     )
                 if review:
@@ -47,25 +47,25 @@ def add_review():
     return render_template("add-review.html")
 
 
-@review_views.route("/add-review/<student_id>", methods=["POST", "GET"])
+@review_views.route("/add-review/<school_id>", methods=["POST", "GET"])
 @login_required
-def add_review_by_student(student_id):
+def add_review_by_student(school_id):
     if request.method == "POST":
         if current_user.access == "staff":
             data = request.form
-            if data["student_id"] and data["text"] and data["rating"]:
+            if data["school_id"] and data["text"] and data["rating"]:
                 review = create_review(
-                    student_id=data["student_id"],
+                    school_id=data["school_id"],
                     staff_id=current_user.id, text=data["text"], rating=data["rating"]
                     )
                 if review:
                     flash("Review successfully added!")
                     return redirect(url_for('review_views.staff_show_all_reviews'))
             flash("Error: There was a problem adding the review.")
-            return render_template("add-review.html", student_id=student_id)
+            return render_template("add-review.html", school_id=school_id)
         flash("You are unauthorized to perform this action.")
         return jsonify({"error": "unauthorized", "access":f"{current_user.access}", "username":f"{current_user.username}"}), 401
-    return render_template("add-review.html", student_id=student_id)
+    return render_template("add-review.html", school_id=school_id)
 
 
 # List all reviews

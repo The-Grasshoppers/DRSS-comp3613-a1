@@ -9,8 +9,8 @@
       <form class="materialize-form" action={% block form_action %}{% endblock %} method="POST">
         <div class="form-heading">{% block form_heading %}{% endblock %}</div>
         <div class="input-field col s12">
-          <input {% block disable %}{% endblock %} placeholder="eg. 816024000" id="student_id" name="student_id" type="text" class="validate" {% block id_value %}{% endblock %}>
-          <label for="student_id">Student ID</label>
+          <input {% block disable %}{% endblock %} placeholder="eg. 816024000" id="school_id" name="school_id" type="text" class="validate" {% block id_value %}{% endblock %}>
+          <label for="school_id">Student ID</label>
         </div>
         <div class="input-field col s12">
           <textarea id="review-text" name="text" class="materialize-textarea">{% block text_value %}{% endblock %}</textarea>

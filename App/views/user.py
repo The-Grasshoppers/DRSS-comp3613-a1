@@ -5,7 +5,6 @@ from flask_jwt import jwt_required, current_identity
 from App.controllers import (
     create_admin,
     create_staff,
-    get_user,
     get_admin,
     get_staff,
     get_all_users,

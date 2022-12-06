@@ -15,7 +15,6 @@ from App.controllers.user import (
     get_all_admins,
     get_all_admins_json,
     get_all_staff_json,
-    get_user,
     get_admin,
     get_staff,
     update_user,

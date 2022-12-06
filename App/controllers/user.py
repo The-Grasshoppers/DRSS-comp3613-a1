@@ -33,11 +33,6 @@ def get_staff_by_username(username):
     return Staff.query.filter_by(username=username).first()
 
 
-# Gets a user by their id
-def get_user(id):
-    return User.query.get(id)
-
-
 # Gets an admin by their id
 def get_admin(id):
     return Admin.query.get(id)

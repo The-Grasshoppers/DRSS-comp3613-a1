@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt import jwt_required, current_identity
 
 from App.controllers import (
-    create_review,
+    create_review_by_student_id,
     get_review,
     get_all_reviews,
     update_review,

@@ -36,7 +36,7 @@ from App.controllers.student import (
 )
 
 from App.controllers.review import (
-    create_review,
+    create_review_by_student_id,
     update_review,
     delete_review,
     get_review,
@@ -232,11 +232,12 @@ class UsersIntegrationTests(unittest.TestCase):
         assert get_staff(sid) is None
 
     def test_staff_get_votes(self):
+        test_admin = create_admin("brock", "pass")
         test_staff = create_staff("brock", "pass")
-        test_student1 = create_student(1, "billy", 998,"CS","FST")
-        test_student2 = create_student(1, "billy", 997,"CS","FST")
-        test_review1 = create_review(test_student1.id, test_staff.id, "good", 5)
-        test_review2 = create_review(test_student2.id, test_staff.id, "good", 5)
+        test_student1 = create_student(test_admin.id, "billy", 998,"CS","FST")
+        test_student2 = create_student(test_admin.id, "billy", 997,"CS","FST")
+        test_review1 = create_review_by_student_id(test_student1.id, test_staff.id, "good", 5)
+        test_review2 = create_review_by_student_id(test_student2.id, test_staff.id, "good", 5)
         vote_command1 = vote_on_review(test_review1.id, test_staff.id, "upvote")
         vote_command2 = vote_on_review(test_review2.id, test_staff.id, "upvote")
         votes = get_staff_votes(test_staff.id)
@@ -303,25 +304,25 @@ class StudentIntegrationTests(unittest.TestCase):
         with self.subTest("One review == 5"):
             test_staff = create_staff("reiner", "pass")
             test_student = create_student(1, "billy", 20 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             assert test_student.get_karma() == 5
 
         with self.subTest("One review > 5"):
             test_staff = create_staff("tommy", "pass")
             test_student = create_student(1, "billy", 30 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 6)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 6)
             assert test_student.get_karma() == 6
 
         with self.subTest("One review < 5"):
             test_staff = create_staff("arthur", "pass")
             test_student = create_student(1, "billy", 40 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 4)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 4)
             assert test_student.get_karma() == -6
 
         with self.subTest("One review == 5, one upvote"):
             test_staff = create_staff("armin", "pass")
             test_student = create_student(1, "billy",50 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             assert test_review.get_num_upvotes() == 1
             assert test_student.get_karma() == 6
@@ -329,7 +330,7 @@ class StudentIntegrationTests(unittest.TestCase):
         with self.subTest("One review == 5, one downvote"):
             test_staff = create_staff("annie", "pass")
             test_student = create_student(1, "billy",60 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
             assert test_review.get_num_downvotes() == 1
             assert test_student.get_karma() == 4
@@ -337,7 +338,7 @@ class StudentIntegrationTests(unittest.TestCase):
         with self.subTest("One review > 5, one upvote"):
             test_staff = create_staff("connie", "pass")
             test_student = create_student(1, "billy",70 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 6)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 6)
             vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             assert test_review.get_num_upvotes() == 1
             assert test_student.get_karma() == 7
@@ -345,7 +346,7 @@ class StudentIntegrationTests(unittest.TestCase):
         with self.subTest("One review > 5, one downvote"):
             test_staff = create_staff("hanji", "pass")
             test_student = create_student(1, "billy",80 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 6)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 6)
             vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
             assert test_review.get_num_downvotes() == 1
             assert test_student.get_karma() == 5
@@ -353,7 +354,7 @@ class StudentIntegrationTests(unittest.TestCase):
         with self.subTest("One review < 5, one upvote"):
             test_staff = create_staff("mikasa", "pass")
             test_student = create_student(1, "billy", 90 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 4)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 4)
             vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             assert test_review.get_num_upvotes() == 1
             assert test_student.get_karma() == -7
@@ -361,7 +362,7 @@ class StudentIntegrationTests(unittest.TestCase):
         with self.subTest("One review < 5, one downvote"):
             test_staff = create_staff("erwin", "pass")
             test_student = create_student(1, "billy", 11 ,"CS","FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 1)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 1)
             vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
             assert test_review.get_num_downvotes() == 1
             assert test_student.get_karma() == -5
@@ -372,14 +373,14 @@ class StudentIntegrationTests(unittest.TestCase):
 # # Integration tests for Review model
 class ReviewIntegrationTests(unittest.TestCase):
     
-    def test_create_review(self):
-        test_review = create_review(1, 1, "good", 5)
+    def test_create_review_by_student_id(self):
+        test_review = create_review_by_student_id(1, 1, "good", 5)
         review = get_review(test_review.id)
         assert test_review.text == review.text
     
     def test_get_review(self):
         test_staff = create_staff("ash", "pass")
-        review = create_review(1, test_staff.id, "good", 5)
+        review = create_review_by_student_id(1, test_staff.id, "good", 5)
         test_review = get_review(review.id)
         assert (
             review.id == test_review.id
@@ -389,20 +390,20 @@ class ReviewIntegrationTests(unittest.TestCase):
          )
     
     def test_update_review(self):
-        test_review = create_review(1, 2, "good", 5)
+        test_review = create_review_by_student_id(1, 2, "good", 5)
         assert test_review.text == "good"
         update_review(test_review.id, "bad")
         assert get_review(test_review.id).text == "bad"
 
     def test_delete_review(self):
-        test_review = create_review(1, 4, "good", 5)
+        test_review = create_review_by_student_id(1, 4, "good", 5)
         assert test_review.text == "good"
         delete_review(test_review.id)
         assert get_review(test_review.id) == None
 
     def test_get_review_json(self):
         test_staff = create_staff("kimber", "pass")
-        test_review = create_review(1, test_staff.id, "good", 5)
+        test_review = create_review_by_student_id(1, test_staff.id, "good", 5)
         review_json = get_review_json(test_review.id)
         assert review_json == test_review.to_json()
 
@@ -413,7 +414,7 @@ class ReviewIntegrationTests(unittest.TestCase):
 
     def test_upvote_review(self):
         test_staff = create_staff("jimmy", "pass")
-        test_review = create_review(1, test_staff.id, "good", 5)
+        test_review = create_review_by_student_id(1, test_staff.id, "good", 5)
         i = test_review.get_num_upvotes()
         vote_command = vote_on_review(test_review.id, 1, "upvote")
         assert i == 0
@@ -421,7 +422,7 @@ class ReviewIntegrationTests(unittest.TestCase):
 
     def test_downvote_review(self):
         test_staff = create_staff("johnathon", "pass")
-        test_review = create_review(1, test_staff.id, "good", 5)
+        test_review = create_review_by_student_id(1, test_staff.id, "good", 5)
         i = test_review.get_num_downvotes()
         vote_command = vote_on_review(test_review.id, 1, "downvote")
         assert i == 0
@@ -432,14 +433,14 @@ class ReviewIntegrationTests(unittest.TestCase):
             test_admin = create_admin("winston", "pass")
             test_staff = create_staff("winston", "pass")
             test_student = create_student(test_admin.id,"larry",100, "CS", "FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             self.assertEqual(test_review.get_karma(), 5)
         
         with self.subTest("One upvote"):
             test_admin = create_admin("vinny", "pass")
             test_staff = create_staff("vinny", "pass")
             test_student = create_student(test_admin.id,"larry",200, "CS", "FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             self.assertEqual(test_review.get_num_upvotes(), 1)
             self.assertEqual(test_review.get_karma(), 6)
@@ -448,7 +449,7 @@ class ReviewIntegrationTests(unittest.TestCase):
             test_admin = create_admin("jean", "pass")
             test_staff = create_staff("jean", "pass")
             test_student = create_student(test_admin.id,"larry",300, "CS", "FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             self.assertEqual(test_review.get_num_upvotes(), 1)
             self.assertEqual(test_review.get_karma(), 6)
@@ -460,7 +461,7 @@ class ReviewIntegrationTests(unittest.TestCase):
             test_admin = create_admin("gerald", "pass")
             test_staff = create_staff("gerald", "pass")
             test_student = create_student(test_admin.id,"larry",400, "CS", "FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
             self.assertEqual(test_review.get_num_downvotes(), 1)
             self.assertEqual(test_review.get_karma(), 4)
@@ -469,7 +470,7 @@ class ReviewIntegrationTests(unittest.TestCase):
             test_admin = create_admin("eren", "pass")
             test_staff = create_staff("eren", "pass")
             test_student = create_student(test_admin.id,"larry",500, "CS", "FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "downvote")
             self.assertEqual(test_review.get_num_downvotes(), 1)
             self.assertEqual(test_review.get_karma(), 4)
@@ -481,7 +482,7 @@ class ReviewIntegrationTests(unittest.TestCase):
             test_admin = create_admin("levi", "pass")
             test_staff = create_staff("levi", "pass")
             test_student = create_student(test_admin.id,"larry",600, "CS", "FST")
-            test_review = create_review(test_student.id, test_staff.id, "good", 5)
+            test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)
             vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
             self.assertEqual(test_review.get_num_upvotes(), 1)
             self.assertEqual(test_review.get_karma(), 6)
@@ -495,7 +496,7 @@ class ReviewIntegrationTests(unittest.TestCase):
         test_staff = create_staff("finn", "pass")
         test_staff2 = create_staff("polly", "pass")
         test_student = create_student(test_admin.id,"larry",700, "CS", "FST")
-        test_review = create_review(test_student.id, test_staff.id, "good", 5) 
+        test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5) 
         vote_command = vote_on_review(test_review.id, test_staff.id, "upvote")
         vote_command2 = vote_on_review(test_review.id, test_staff2.id, "upvote")
         votes = get_review_votes(test_review.id)
@@ -506,7 +507,7 @@ class ReviewIntegrationTests(unittest.TestCase):
         test_admin = create_admin("misty", "pass")
         test_staff = create_staff("misty", "pass")
         test_student = create_student(test_admin.id,"larry",800, "CS", "FST")
-        test_review = create_review(test_student.id, test_staff.id, "good", 5)       
+        test_review = create_review_by_student_id(test_student.id, test_staff.id, "good", 5)       
         reviews = get_reviews_by_student(test_student.id)
         for review in reviews:
             self.assertEqual(test_review.id, review.id)

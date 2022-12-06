@@ -3,7 +3,7 @@ from flask_jwt import jwt_required, current_identity
 from flask_login import current_user, login_required
 
 from App.controllers import (
-    create_review_by_student_id,
+    create_review,
     get_review,
     get_all_reviews,
     update_review,

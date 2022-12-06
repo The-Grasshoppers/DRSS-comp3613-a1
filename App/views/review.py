@@ -53,9 +53,9 @@ def add_review_by_student(school_id):
     if request.method == "POST":
         if current_user.access == "staff":
             data = request.form
-            if data["school_id"] and data["text"] and data["rating"]:
+            if data["text"] and data["rating"]:
                 review = create_review(
-                    school_id=data["school_id"],
+                    school_id=school_id,
                     staff_id=current_user.id, text=data["text"], rating=data["rating"]
                     )
                 if review:

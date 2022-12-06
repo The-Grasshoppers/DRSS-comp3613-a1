@@ -18,7 +18,6 @@ from App.controllers.user import (
     get_user,
     get_admin,
     get_staff,
-    get_user_by_username,
     update_user,
     update_admin,
     update_staff,

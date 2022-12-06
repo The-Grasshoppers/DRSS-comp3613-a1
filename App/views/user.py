@@ -16,7 +16,6 @@ from App.controllers import (
     get_all_staff_json,
     get_users_by_access,
     delete_user,
-    get_user_by_username,
 )
 
 user_views = Blueprint("user_views", __name__, template_folder="../templates")

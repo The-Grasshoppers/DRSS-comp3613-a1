@@ -23,12 +23,6 @@ def create_staff(username, password):
     except:
         return None
 
-
-# Gets a user by their username
-def get_user_by_username(username):
-    return User.query.filter_by(username=username).first()
-
-
 # Gets admin by their username
 def get_admin_by_username(username):
     return Admin.query.filter_by(username=username).first()

@@ -116,15 +116,14 @@ def get_user_by_access_action(access):
 # Staff Log in route for Postman
 @user_views.route("/api/staff-login", methods=['GET'])
 def staff_login_action():
-    #if request.method == 'POST':
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')
     staff=authenticateStaff(username,password)
     if staff:
-        return jsonify({ "message":f"Log in successful! Welcome!"}), 200
+        return jsonify({ "message":"Log in successful! Welcome!"}), 200
     return jsonify({"message": "Incorrect username or password"}), 401
-#return jsonify({"message": "Not a post"}), 401
+
 
 # Admin Log in route for Postman
 @user_views.route("/api/admin-login", methods=["POST", "GET"])

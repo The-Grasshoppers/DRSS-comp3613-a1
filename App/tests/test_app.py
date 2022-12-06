@@ -48,8 +48,6 @@ from App.controllers.review import (
     get_all_reviews,
     get_all_reviews_json,
     vote_on_review
-    # upvote_review,
-    # downvote_review,
 )
 
 from wsgi import app
@@ -139,15 +137,6 @@ class ReviewUnitTests(unittest.TestCase):
             review.student_id == 1
             and review.staff_id == 1 
             and review.text == "good"
-         )
-    
-    def test_get_review(self):
-        review = Review(1, 1, "good", 1)
-        test_review = get_review(review.id)
-        assert (
-            review.student_id == test_review.id
-            and review.staff_id == test_review.id 
-            and review.text == test_review.text
          )
 
     def test_review_to_json(self):
@@ -374,7 +363,18 @@ class ReviewIntegrationTests(unittest.TestCase):
         test_review = create_review(1, 1, "good", 5)
         review = get_review(test_review.id)
         assert test_review.text == review.text
-
+    
+    def test_get_review(self):
+        test_staff = create_staff("ash", "pass")
+        review = create_review(1, test_staff.id, "good", 5)
+        test_review = get_review(review.id)
+        assert (
+            review.id == test_review.id
+            and review.student_id == test_review.student_id
+            and review.staff_id == test_review.staff_id
+            and review.text == test_review.text
+         )
+    
     def test_update_review(self):
         test_review = create_review(1, 2, "good", 5)
         assert test_review.text == "good"

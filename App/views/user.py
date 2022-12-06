@@ -150,15 +150,14 @@ def staff_signup_postman():
         return jsonify({"message": "User not created"}), 400
 
 #Admin Sign up route for Postman
-@user_views.route("/api/admin-signup", methods=['GET'])
+@user_views.route("/api/admin-signup", methods=["POST"])
 def admin_signup_postman():
-    data=request.form
-    username= request.args.get('username')
-    password= request.args.get('password')
-    user = create_admin(username=username, password=password)
+    data=request.get_json()
+    if get_admin_by_username(data["username"]):
+        return jsonify({"message": "Username taken."}), 400
+    user = create_admin(username=data["username"], password=data["password"])
     if user:
-        return jsonify({"message": f"user {username} created"}), 201
-    else:
-       return jsonify({"message": "User not created"}), 400
+        return jsonify({"message": f"user {data['username']} created"}), 201
+    return jsonify({"message": "User not created"}), 400
 
     

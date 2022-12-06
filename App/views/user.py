@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, send_from_directory
 from flask_jwt import jwt_required, current_identity
 from flask import request
 import flask_login
+from flask_jwt import JWT
 
 from App.controllers import (
     create_user,
@@ -22,7 +23,7 @@ from App.controllers import (
     get_staff_by_username,
     get_admin_by_username,
     login_user,
-    authenticateStaff
+    authenticate
 )
 
 user_views = Blueprint("user_views", __name__, template_folder="../templates")
@@ -119,9 +120,9 @@ def staff_login_action():
     data=request.form
     username= request.args.get('username')
     password= request.args.get('password')
-    staff=authenticateStaff(username,password)
-    if staff:
-        return jsonify({ "message":"Log in successful! Welcome!"}), 200
+    staff=authenticate(username,password)
+    if staff and get_staff(staff.id):
+        return jsonify({"message":"Logged in"}), 200
     return jsonify({"message": "Incorrect username or password"}), 401
 
 

@@ -412,8 +412,10 @@ class ReviewIntegrationTests(unittest.TestCase):
         test_staff = create_staff("bruce", "pass")
         test_review = create_review_by_student_id(1, test_staff.id, "good", 5)
         assert test_review.text == "good"
-        update_review(test_review.id, "bad")
+        assert test_review.rating == 5
+        update_review(test_review.id, "bad", 2)
         assert get_review(test_review.id).text == "bad"
+        assert get_review(test_review.id).rating == 2
 
     def test_delete_review(self):
         test_review = create_review_by_student_id(1, 4, "good", 5)

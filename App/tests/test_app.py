@@ -162,6 +162,16 @@ class ReviewUnitTests(unittest.TestCase):
     def test_review_get_karma(self):
         review = Review(1, 1, "good", 5)
         self.assertEqual(review.get_karma(), 5)
+    
+    def test_review_upvotes(self):
+        review = Review(1, 1, "good", 5)
+        self.assertEqual(review.get_num_upvotes(), 0)
+
+    def test_review_upvotes(self):
+        review = Review(1, 1, "good", 5)
+        self.assertEqual(review.get_num_downvotes(), 0)
+
+
 
 
 """

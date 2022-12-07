@@ -39,6 +39,19 @@ def create_review(school_id, staff_id, text, rating):
         except:
             return None
 
+# Creates a review given a student id, user id and review text
+# Returns the review object if successful, None otherwise
+def create_review_postman(student_id, staff_id, text, rating):
+    staff = Staff.query.get(staff_id)
+    student = Student.query.get(student_id)
+    try:
+        review = Review(staff_id, student_id, text, rating)
+        db.session.add(review)
+        db.session.commit()
+        return review
+    except:
+        return ("Review not created")
+
 
 
 # Updates a review given a review id and updated review text
@@ -110,28 +123,34 @@ def vote_on_review(review_id, staff_id, action):
     review = Review.query.get(review_id)
     staff= Staff.query.get(staff_id)
 
-    if review and staff:
+    if staff and review:
 
         #converting string action to enum
         if (action=="upvote"):
-            action=Action.UPVOTE    
+            actionEnum=Action.UPVOTE    
         elif (action=="downvote"):
-            action=Action.DOWNVOTE
+            actionEnum=Action.DOWNVOTE
         else:
-            return ('invalid action')
-        
+            return("Invalid action")
+    #if ((action!="upvote")and(action!="downvote")):
+    #    return ('invalid action')
+    
+    #actionEnum= Action[action]
+    
         #checking for removing a vote. Will remove if an upvote is upvoted or a downvote is downvoted again
         vote= Vote.query.filter_by(staff_id=staff_id, review_id=review_id).first()
-        if vote:
-            if (((vote.value==Value.UPVOTE) and (action==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (action==Action.DOWNVOTE))):
-                action=Action.REMOVE
+        if vote: 
+            print("vote found")
+            if (((vote.value==Value.UPVOTE) and (actionEnum==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (actionEnum==Action.DOWNVOTE))):
+                actionEnum=Action.REMOVE
+                print("Action changed to remove")
 
-        new_voteCommand= VoteCommand(staff_id, review_id,action)
+        new_voteCommand= VoteCommand(staff_id, review_id,actionEnum)
+
         db.session.add(new_voteCommand)
         db.session.commit()
         new_voteCommand.execute()
         return new_voteCommand.to_json()
-    
     else:
         return ('Must have a Staff account to vote')
 

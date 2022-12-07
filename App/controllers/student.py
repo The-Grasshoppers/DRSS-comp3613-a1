@@ -7,8 +7,11 @@ from App.models import Student, Admin
 def create_student(admin_id, name,school_id, programme, faculty):
     admin= Admin.query.get(admin_id)
     if admin:
-        return admin.create_student(name=name,school_id=school_id,programme=programme,faculty=faculty)
-    return False
+        try:
+            return admin.create_student(name=name,school_id=school_id,programme=programme,faculty=faculty)
+        except:
+            print("Student not created")
+            return None
 
 
 # Gets a student by their name
@@ -53,7 +56,7 @@ def update_student(admin_id, student_id, name,school_id, programme, faculty):
     student = Student.query.get(student_id)
     admin= Admin.query.get(admin_id)
     if student and admin:
-        return admin.update_student(student, name, school_id, programme, faculty)
+        return admin.update_student(student, name, school_id, programme, faculty) #??COME BACK AND FIX
     return False
 
 # Deletes a student given their id

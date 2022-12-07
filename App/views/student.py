@@ -30,10 +30,11 @@ def add_student_postman():
 
 # Updates student given student id, name, programme and faculty for Postman
 # Must be an admin to access this route
-@student_views.route("/api/students/<int:student_id>", methods=["PUT"])
+@student_views.route("/api/students/<int:student_id>/<int:admin_id>", methods=["PUT"])
 @jwt_required()
 def update_student_action_postman(student_id):
-    if current_identity.is_admin():
+    admin= get_admin(admin_id)
+    if admin:
         data = request.json
         student = update_student(
             student_id,

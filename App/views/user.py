@@ -65,20 +65,20 @@ def signup_action():
 
 # Get all users route for Postman
 # Must be an admin to access this route
-@user_views.route("/api/users", methods=["GET"])
+@user_views.route("/api/users/<int:admin_id>", methods=["GET"])
 @jwt_required()
-def get_users_action():
-    if current_identity.is_admin():
+def get_users_action_postman():
+    if get_admin(admin_id):
         users = get_all_users_json()
         return jsonify(users), 200
     return jsonify({"message": "Access denied"}), 403
 
 # Get user by id route
 # Must be an admin to access this route
-@user_views.route("/api/users/<int:user_id>", methods=["GET"])
+@user_views.route("/api/user/<int:admin_id>", methods=["GET"])
 @jwt_required()
-def get_user_action(user_id):
-    if not current_identity.is_admin():
+def get_user_action_postman(user_id):
+    if get_admin(admin_id):
         return jsonify({"message": "Access denied"}), 403
     user = get_user(user_id)
     if user:
@@ -88,10 +88,10 @@ def get_user_action(user_id):
 
 # Delete user route
 # Must be an admin to access this route
-@user_views.route("/api/users/<int:user_id>", methods=["DELETE"])
+@user_views.route("/api/users/<int:admin_id>", methods=["DELETE"])
 @jwt_required()
 def delete_user_action(user_id):
-    if not current_identity.is_admin():
+    if get_admin(admin_id):
         return jsonify({"message": "Access denied"}), 403
     user = get_user(user_id)
     if user:
@@ -105,7 +105,7 @@ def delete_user_action(user_id):
 @user_views.route("/api/users/access/<string:access>", methods=["GET"])
 @jwt_required()
 def get_user_by_access_action(access):
-    if not current_identity.is_admin():
+    if not get_admin(current_identity.id):
         return jsonify({"message": "Access denied"}), 403
     users = get_users_by_access(access_level)
     if users:

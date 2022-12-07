@@ -1,31 +1,42 @@
-from App.models import Review, Student, User
+from App.models import Review, Student, User, Staff, VoteCommand, Vote
 from App.database import db
-
+from App.models.vote import Value
+from App.models.voteCommand import Action
+from App.controllers.vote import get_votes
 
 # Creates a review given a student id, user id and review text
 # Returns the review object if successful, None otherwise
-def create_review(student_id, user_id, text):
-    user = User.query.get(user_id)
+def create_review(student_id, staff_id, text, rating):
+    staff = Staff.query.get(staff_id)
     student = Student.query.get(student_id)
-    if user and student:
-        review = Review(user_id, student_id, text)
+
+   # review=Review.query.filter_by(staff_id=staff_id, student_id=student_id)
+   # if review:
+    #    return("You already left a review on this student")
+   # else:
+    #if staff and student:
+    try:
+        review = Review(staff_id, student_id, text, rating)
         db.session.add(review)
         db.session.commit()
-        user.reviews.append(review)
-        student.reviews.append(review)
-        db.session.add(user)
-        db.session.add(student)
-        db.session.commit()
-        return review
-    return None
+        #staff.reviews.append(review)
+        # student.reviews.append(review)
+        # db.session.add(staff)
+        #db.session.add(student)
+        #db.session.commit()
+        return ("Review made")
+    except:
+        return ("Review not created")
+
 
 
 # Updates a review given a review id and updated review text
 # Returns the review object as a json if successful, None otherwise
-def update_review(id, text):
+def update_review(id, text, rating):
     review = Review.query.get(id)
     if review:
         review.text = text
+        review.rating= rating
         db.session.add(review)
         db.session.commit()
         return review
@@ -81,39 +92,51 @@ def get_reviews_by_user(user_id):
     reviews = Review.query.filter_by(user_id=user_id).all()
     return reviews
 
-
-# Upvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def upvote_review(review_id, user_id):
+#Handles voting on a review, updating a vote and removing a vote
+def vote_on_review(review_id, staff_id, action):
     review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "up")
-        db.session.add(review)
-        db.session.commit()
-        return review
-    return None
+    staff= Staff.query.get(staff_id)
 
+    if staff and review:
 
-# Downvotes a post given a review id and user id
-# Returns the review object if successful, None otherwise
-def downvote_review(review_id, user_id):
-    review = Review.query.get(review_id)
-    user = User.query.get(user_id)
-    if review and user:
-        review.vote(user_id, "down")
-        db.session.add(review)
+        #converting string action to enum
+        if (action=="upvote"):
+            actionEnum=Action.UPVOTE    
+        elif (action=="downvote"):
+            actionEnum=Action.DOWNVOTE
+        else:
+            return("Invalid action")
+    #if ((action!="upvote")and(action!="downvote")):
+    #    return ('invalid action')
+    
+    #actionEnum= Action[action]
+    
+        #checking for removing a vote. Will remove if an upvote is upvoted or a downvote is downvoted again
+        vote= Vote.query.filter_by(staff_id=staff_id, review_id=review_id).first()
+        if vote: 
+            print("vote found")
+            if (((vote.value==Value.UPVOTE) and (actionEnum==Action.UPVOTE)) or ((vote.value==Value.DOWNVOTE) and (actionEnum==Action.DOWNVOTE))):
+                actionEnum=Action.REMOVE
+                print("Action changed to remove")
+
+        new_voteCommand= VoteCommand(staff_id, review_id,actionEnum)
+
+        db.session.add(new_voteCommand)
         db.session.commit()
-        return review
-    return None
+        new_voteCommand.execute()
+        return new_voteCommand.to_json()
+    else:
+        return ('Must have a Staff account to vote')
 
 
 # Gets all votes for a review given the review id
 def get_review_votes(id):
     review = Review.query.get(id)
     if review:
-        return review.get_votes()
-    return None
+        votes = get_votes(id)
+        if votes:
+            return votes
+    return None 
 
 
 # Gets a review's karma given the review id
@@ -122,3 +145,7 @@ def get_review_karma(id):
     if review:
         return review.get_karma()
     return None
+        
+
+
+

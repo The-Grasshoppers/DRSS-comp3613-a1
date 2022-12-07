@@ -12,15 +12,21 @@
     {% endif %}
 {% endblock %}
 
-{% if school_id %}
-    {% block disable %}disabled{% endblock %}
-{% endif %}
+
+{% block disable %}
+    {% if school_id %}
+        disabled
+    {% endif %}
+{% endblock %}
+
 
 {% block form_heading %}Add Review{% endblock %}
 
-{% if school_id %}
-    {% block id_value %}value="{{school_id}}"{% endblock %}
-{% endif %}
+{% block id_value %}
+    {% if school_id %}
+        value="{{school_id}}"
+    {% endif %}
+{% endblock %}
 
 {% block label %}Write your review here{% endblock %}
 

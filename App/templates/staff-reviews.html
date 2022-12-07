@@ -1,0 +1,29 @@
+{% extends "reviews.html" %}
+
+{{ super() }}
+
+{% block students_link %}"/staff-students"{% endblock %}
+{% block reviews_link %}"/staff-reviews"{% endblock %}
+
+{% block button %}
+<div class="button">
+  <a href="/add-review" class="waves-effect waves-light btn indigo lighten-2">Add Review +</a>
+</div>
+{% endblock %}
+
+{% block votes %}
+<a href="" class="upvote waves-effect waves-green btn-flat">{{review.get_num_upvotes()}} up</a>
+<a href="" class="downvote waves-effect waves-red btn-flat">{{review.get_num_downvotes()}} down</a>
+{% endblock %}
+
+{% block edit_button %}
+<div class="button">
+  <a href="{{ url_for("review_views.edit_review", review_id=review.id) }}" class="waves-effect waves-light btn indigo lighten-2">Edit</a>
+</div>
+{% endblock %}
+
+{% block delete_button %}
+<div class="button">
+  <a href="{{ url_for("review_views.remove_review", review_id=review.id) }}" class="waves-effect waves-light btn indigo lighten-2">Delete</a>
+</div>
+{% endblock%}

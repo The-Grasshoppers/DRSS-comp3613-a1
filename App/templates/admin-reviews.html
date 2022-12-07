@@ -1,0 +1,11 @@
+{% extends "reviews.html" %}
+
+{{ super() }}
+
+{% block students_link %}"/admin-students"{% endblock %}
+{% block reviews_link %}"/admin-reviews"{% endblock %}
+
+{% block votes %}
+<span class="upvote">{{review.get_num_upvotes()}} up</span>
+<span class="downvote">{{review.get_num_downvotes()}} down</span>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "review-form.html" %}
+
+{{ super() }}
+
+{% block title %}Add Review | Student Conduct Tracker{% endblock %}
+
+{% block form_action %}
+    {% if school_id %}
+        "{{ url_for("review_views.add_review_by_student", school_id=school_id)}}"
+    {% else %}
+        "{{ url_for("review_views.add_review")}}"
+    {% endif %}
+{% endblock %}
+
+
+{% block disable %}
+    {% if school_id %}
+        disabled
+    {% endif %}
+{% endblock %}
+
+
+{% block form_heading %}Add Review{% endblock %}
+
+{% block id_value %}
+    {% if school_id %}
+        value="{{school_id}}"
+    {% endif %}
+{% endblock %}
+
+{% block label %}Write your review here{% endblock %}
+
+{% block options %}
+<option value="" disabled selected>Choose your rating</option>
+<option value="1">1 star</option>
+<option value="2">2 stars</option>
+<option value="3">3 stars</option>
+<option value="4">4 stars</option>
+<option value="5">5 stars</option>
+<option value="6">6 stars</option>
+<option value="7">7 stars</option>
+<option value="8">8 stars</option>
+<option value="9">9 stars</option>
+<option value="10">10 stars</option>
+{% endblock %}
+
+{% block button_text %}Add Review{% endblock %}

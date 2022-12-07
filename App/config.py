@@ -1,4 +1,4 @@
 SQLALCHEMY_DATABASE_URI = "sqlite:///temp-database.db"
-SECRET_KEY = "secret key"
+SECRET_KEY = "secret key1"
 JWT_EXPIRATION_DELTA = 7
 ENV = "DEVELOPMENT"

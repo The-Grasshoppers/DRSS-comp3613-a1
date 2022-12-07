@@ -96,7 +96,7 @@ def update_review_action_postman(review_id):
 def delete_review_action_postman(review_id):
     review = get_review(review_id)
     if review:
-        if current_identity.id == review.user_id or current_identity.is_admin():
+        if current_identity.id == review.user_id or get_admin(current_identity.id):
             delete_review(review_id)
             return jsonify({"message": "post deleted successfully"}), 200
         else:

@@ -19,7 +19,6 @@ from App.controllers import (
     delete_user,
     login_user,
     logout_user,
-    get_user_by_username,
     get_staff_by_username,
     get_admin_by_username,
     authenticate
